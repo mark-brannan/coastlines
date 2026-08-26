@@ -58,9 +58,9 @@ asked to trust**, and the trust is meant to be checkable.
   ```
 
   If a published file does not reproduce from its own stated provenance,
-  **report it privately** — that is the one failure here that could hide a
-  deliberately altered file, and it is indistinguishable from an honest mistake
-  until it is looked at.
+  report it privately. It is almost certainly an honest mistake, but it is the
+  one failure here that could hide an altered file, so it gets looked at before
+  it is discussed.
 
 - **A discrepancy between npm and this repository** at the corresponding tag,
   or anything shipped in `files` that should not be there.

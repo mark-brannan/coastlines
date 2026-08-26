@@ -2,7 +2,7 @@ blank_issues_enabled: true
 contact_links:
   - name: Security vulnerability
     url: https://github.com/mark-brannan/coastlines/security/advisories/new
-    about: Report privately, not as a public issue. A file that does not reproduce from its own provenance is one of these. See SECURITY.md.
+    about: Report privately, not as a public issue. See SECURITY.md.
   - name: The shape itself is wrong
     url: https://github.com/mark-brannan/portolani/issues
     about: Simplification, clipping and the antimeridian belong to the generator. This package is only the output of running it.
