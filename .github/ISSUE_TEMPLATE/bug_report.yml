@@ -19,8 +19,8 @@ body:
 
         Security problems go through a
         [private advisory](https://github.com/mark-brannan/coastlines/security/advisories/new)
-        instead. **A file that does not reproduce from its own provenance is
-        one of those** — see SECURITY.md.
+        instead — including a file that does not reproduce from its own
+        provenance. See SECURITY.md.
 
   - type: dropdown
     id: kind
