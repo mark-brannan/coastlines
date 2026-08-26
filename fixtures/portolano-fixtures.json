@@ -1,0 +1,320 @@
+{
+  "format": "portolano-fixtures/1",
+  "generator": {
+    "name": "portolani",
+    "version": "0.1.0"
+  },
+  "vectors": [
+    {
+      "name": "lon-lat-order",
+      "note": "Decoded as [lat, lon] this is off the map: latitude 122 does not exist.",
+      "precision": 1,
+      "encoded": "jkAmV",
+      "fixed": [
+        [
+          -1222,
+          375
+        ]
+      ],
+      "degrees": [
+        [
+          -122.2,
+          37.5
+        ]
+      ]
+    },
+    {
+      "name": "origin",
+      "note": "A single point at 0,0 encodes to two zero varints.",
+      "precision": 1,
+      "encoded": "??",
+      "fixed": [
+        [
+          0,
+          0
+        ]
+      ],
+      "degrees": [
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "negative-deltas",
+      "note": "Successive points moving south-west; every delta is negative.",
+      "precision": 1,
+      "encoded": "gEgERRRR",
+      "fixed": [
+        [
+          100,
+          100
+        ],
+        [
+          90,
+          90
+        ],
+        [
+          80,
+          80
+        ]
+      ],
+      "degrees": [
+        [
+          10,
+          10
+        ],
+        [
+          9,
+          9
+        ],
+        [
+          8,
+          8
+        ]
+      ]
+    },
+    {
+      "name": "repeated-point",
+      "note": "A zero delta is legal and encodes to \"?\"; decoders must not skip it.",
+      "precision": 1,
+      "encoded": "cBcB??",
+      "fixed": [
+        [
+          50,
+          50
+        ],
+        [
+          50,
+          50
+        ]
+      ],
+      "degrees": [
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ]
+      ]
+    },
+    {
+      "name": "multi-byte-varint",
+      "note": "A jump large enough to need three continuation bytes per axis.",
+      "precision": 1,
+      "encoded": "??ooBfw@",
+      "fixed": [
+        [
+          0,
+          0
+        ],
+        [
+          1800,
+          -900
+        ]
+      ],
+      "degrees": [
+        [
+          0,
+          0
+        ],
+        [
+          180,
+          -90
+        ]
+      ]
+    },
+    {
+      "name": "backslash",
+      "note": "A delta of -15 encodes to a literal backslash. In JSON it is escaped as \\\\.",
+      "precision": 1,
+      "encoded": "??\\?",
+      "fixed": [
+        [
+          0,
+          0
+        ],
+        [
+          -15,
+          0
+        ]
+      ],
+      "degrees": [
+        [
+          0,
+          0
+        ],
+        [
+          -1.5,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "closed-ring",
+      "note": "A closed ring repeats its first point last; the closing delta is not zero.",
+      "precision": 1,
+      "encoded": "??S??SRR",
+      "fixed": [
+        [
+          0,
+          0
+        ],
+        [
+          10,
+          0
+        ],
+        [
+          10,
+          10
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "degrees": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "finer-precision",
+      "note": "The same shape at precision 3; the divisor comes from encoding.precision.",
+      "precision": 3,
+      "encoded": "~`nFoyhASS",
+      "fixed": [
+        [
+          -122400,
+          37800
+        ],
+        [
+          -122390,
+          37810
+        ]
+      ],
+      "degrees": [
+        [
+          -122.4,
+          37.8
+        ],
+        [
+          -122.39,
+          37.81
+        ]
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "path": "coastline-110m.json",
+      "kind": "lines",
+      "precision": 1,
+      "digest": "sha256:b62cff62fbcea90ee017c33ba9bad468a84d3beaf492dbe5b60888579dd11252",
+      "counts": {
+        "shapes": 128,
+        "rings": 128,
+        "points": 2709
+      },
+      "bounds": [
+        -180,
+        -85.6,
+        180,
+        83.5
+      ],
+      "firstPoints": [
+        [
+          -163.7,
+          -78.6
+        ],
+        [
+          -163.1,
+          -78.2
+        ],
+        [
+          -161.2,
+          -78.4
+        ]
+      ]
+    },
+    {
+      "path": "coastline-50m.json",
+      "kind": "lines",
+      "precision": 2,
+      "digest": "sha256:66983549f2b938e61a0fbad5c1c9c7b3bb61cd34071ca1f8a5230a001d030258",
+      "counts": {
+        "shapes": 507,
+        "rings": 507,
+        "points": 11166
+      },
+      "bounds": [
+        -180,
+        -85.19,
+        180,
+        83.59
+      ],
+      "firstPoints": [
+        [
+          180,
+          -16.15
+        ],
+        [
+          178.58,
+          -16.62
+        ],
+        [
+          178.5,
+          -16.79
+        ]
+      ]
+    },
+    {
+      "path": "land-110m.json",
+      "kind": "polygons",
+      "precision": 1,
+      "digest": "sha256:45dd9038fe78fe377c3747845007d5049c2020878830b3c424437190c192ab8e",
+      "counts": {
+        "shapes": 121,
+        "rings": 122,
+        "points": 2764
+      },
+      "bounds": [
+        -180,
+        -90,
+        180,
+        83.6
+      ],
+      "firstPoints": [
+        [
+          -59.6,
+          -80
+        ],
+        [
+          -60.2,
+          -81
+        ],
+        [
+          -64.5,
+          -80.9
+        ]
+      ]
+    }
+  ]
+}

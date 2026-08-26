@@ -1,0 +1,45 @@
+{
+  "name": "coastlines",
+  "version": "0.0.1-alpha.0",
+  "description": "Ready-made coastline and land geometry as portolani: fidelity profiles from Natural Earth, a few kilobytes each, with provenance and cross-language decoder fixtures",
+  "type": "module",
+  "main": "data/coastline-110m.json",
+  "exports": {
+    "./coastline-110m": "./data/coastline-110m.json",
+    "./coastline-50m": "./data/coastline-50m.json",
+    "./land-110m": "./data/land-110m.json",
+    "./fixtures": "./fixtures/portolano-fixtures.json",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "portolani": "^0.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "coastline",
+    "land",
+    "map",
+    "geojson",
+    "natural-earth",
+    "portolano",
+    "marine",
+    "signalk"
+  ],
+  "license": "MIT",
+  "author": "Mark Brannan",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mark-brannan/coastlines.git"
+  },
+  "files": [
+    "data",
+    "fixtures",
+    "LICENSE"
+  ]
+}
