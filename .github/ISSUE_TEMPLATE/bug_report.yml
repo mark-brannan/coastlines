@@ -1,0 +1,93 @@
+name: Bug report
+description: A published file is wrong, or a decoder cannot read it
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Check which repository first** — it saves a round trip:
+
+        - The *shape* is wrong (a missing island, a line across a strait, an
+          over-simplified bay) → that is how the geometry was generated:
+          [portolani](https://github.com/mark-brannan/portolani/issues).
+        - The JSON is right and the *picture* is wrong →
+          [coast-wright](https://github.com/mark-brannan/coast-wright/issues).
+        - Which files exist, at what settings, or a decoder disagreeing with a
+          shipped file → here.
+
+        When in doubt, file it here and it will be moved.
+
+        Security problems go through a
+        [private advisory](https://github.com/mark-brannan/coastlines/security/advisories/new)
+        instead. **A file that does not reproduce from its own provenance is
+        one of those** — see SECURITY.md.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of problem
+      options:
+        - My decoder disagrees with a shipped file
+        - A file does not match the fixtures
+        - An import path or export does not resolve
+        - The provenance does not reproduce the file
+        - The profile table in the README does not match the data
+        - Something else
+    validations:
+      required: true
+
+  - type: dropdown
+    id: profile
+    attributes:
+      label: Which file
+      multiple: true
+      options:
+        - coastlines/coastline-110m
+        - coastlines/coastline-50m
+        - coastlines/land-110m
+        - coastlines/fixtures
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened, and what you expected
+      description: >
+        If a decoder disagrees, give a coordinate it produced and the one you
+        expected. Two decoding mistakes are silent and worth ruling out first:
+        reading `[lat, lon]` because that is what Google's polyline format
+        stores, and forgetting that the encoding alphabet contains a backslash
+        that JSON escapes.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: coastlines version
+      description: '`npm ls coastlines`.'
+      placeholder: '0.0.1-alpha.0'
+    validations:
+      required: true
+
+  - type: input
+    id: decoder
+    attributes:
+      label: What is reading it
+      description: >
+        coast-wright, your own decoder and in which language, or something else.
+      placeholder: 'my own decoder, in MicroPython'
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: fixtures
+    attributes:
+      label: Fixtures
+      description: >
+        `coastlines/fixtures` exists to catch exactly this class of bug before
+        a decoder ships. Running it first usually answers the question.
+      options:
+        - label: My decoder passes coastlines/fixtures
+          required: false

@@ -1,0 +1,72 @@
+name: New profile or capability
+description: Ask for a file that does not exist yet
+labels: ['enhancement']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Every profile is bytes in every install of this package, forever, for
+        everyone who wanted a different one — so the use case decides it, not
+        the settings.
+
+        If you need one file for one project, you do not need this package:
+        run [portolani](https://github.com/mark-brannan/portolani), commit the
+        output, and the provenance stamp keeps it honest. That is a completely
+        reasonable answer and it costs nobody else anything.
+
+  - type: textarea
+    id: use
+    attributes:
+      label: What is on screen?
+      description: >
+        The display, roughly how large the map is, and what the reader is doing
+        with it. This is the field that decides the issue.
+      placeholder: >
+        A tide-station overview for one estuary, in a page that has to stay
+        under 30 KB total. The 50 m world file is mostly coastline I never show.
+    validations:
+      required: true
+
+  - type: input
+    id: budget
+    attributes:
+      label: Byte budget
+      description: Roughly what the file can cost. The README's table gives the current sizes.
+      placeholder: 'under 15 KB'
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of change is it
+      options:
+        - A new global profile (different tolerance, precision, or island cutoff)
+        - A regional extract
+        - Polygons where only lines exist today, or the reverse
+        - A different source layer entirely
+        - Something about packaging, exports, or types
+        - Something else
+    validations:
+      required: true
+
+  - type: input
+    id: settings
+    attributes:
+      label: Suggested source and knobs, if you know them
+      description: >
+        A portolani command line. Optional — the use case above is what decides
+        it, and the knobs follow from that.
+      placeholder: '-s ne_10m_coastline -t 0.005 -p 4 -b -71,41,-69,43'
+    validations:
+      required: false
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What do you use today?
+      description: >
+        A file you generated yourself, a larger profile you subset at runtime,
+        a TopoJSON plus a decoder library.
+    validations:
+      required: false
