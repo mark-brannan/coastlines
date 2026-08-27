@@ -14,7 +14,8 @@ import coastline from 'coastlines/coastline-110m' with { type: 'json' }
 Zero dependencies. Plain JSON. The decoder is
 [nine lines](https://github.com/mark-brannan/portolani/blob/main/docs/portolano-format.md#3-encoding)
 in whatever language your display runs, including a microcontroller with no
-JavaScript anywhere near it.
+JavaScript anywhere near it. Skeptical that 8 KB is enough?
+[Move the slider and watch](https://mark-brannan.github.io/portolani/).
 
 ## Profiles
 
