@@ -31,7 +31,9 @@ The format is [specified][spec] independently of this package.
 
 ## Reading one
 
-In a browser or Node, [`coast-wright`][cw] decodes and draws:
+In a browser or Node, [`coast-wright`][cw] decodes and draws — its
+[projection gallery][cwdemo] is this package's 50m profile through fourteen
+projections:
 
 ```js
 import coastline from 'coastlines/coastline-110m' with { type: 'json' }
@@ -97,4 +99,5 @@ anyway:
 [enc]: https://github.com/mark-brannan/portolani/blob/main/docs/portolano-format.md#3-encoding
 [gen]: https://github.com/mark-brannan/portolani
 [cw]: https://github.com/mark-brannan/coast-wright
+[cwdemo]: https://mark-brannan.github.io/coast-wright/
 [ne]: https://www.naturalearthdata.com/
