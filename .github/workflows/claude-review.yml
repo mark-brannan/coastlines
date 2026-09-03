@@ -1,0 +1,28 @@
+name: Claude PR Review
+
+# An independent reviewer for every pull request -- advisory, and gated on the
+# pull request's content fingerprint so a Mergify update that changes nothing
+# costs nothing. The reviewer itself is shared: mark-brannan/.github holds the
+# workflow, the gate and the argument for both; this file is only the trigger
+# and this repository's brief for it.
+#
+# Auth: the CLAUDE_CODE_OAUTH_TOKEN secret (mint one with `claude setup-token`,
+# then `gh secret set CLAUDE_CODE_OAUTH_TOKEN`). Until it exists the review
+# skips with a warning rather than failing every pull request.
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+
+# The called workflow asks for exactly these; a caller may grant no less.
+permissions:
+  contents: read
+  pull-requests: write
+  issues: read
+  id-token: write
+
+jobs:
+  review:
+    uses: mark-brannan/.github/.github/workflows/claude-review.yml@main
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
