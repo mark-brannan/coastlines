@@ -1,3 +1,6 @@
+# npm weekly for runtime + dev deps (grouped — this repo is small enough
+# that one PR beats N), github-actions weekly for the workflow pins.
+# commit-message prefixes match CONTRIBUTING.md's conventional-commit rule.
 version: 2
 
 updates:
@@ -7,11 +10,16 @@ updates:
       interval: weekly
     open-pull-requests-limit: 3
     groups:
-      dev-dependencies:
+      dependencies:
         patterns: ['*']
+    commit-message:
+      prefix: build
+      prefix-development: chore
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
     open-pull-requests-limit: 3
+    commit-message:
+      prefix: ci
