@@ -15,6 +15,7 @@ updates:
     commit-message:
       prefix: build
       prefix-development: chore
+      include: scope
 
   - package-ecosystem: github-actions
     directory: /
@@ -23,3 +24,4 @@ updates:
     open-pull-requests-limit: 3
     commit-message:
       prefix: ci
+      include: scope
