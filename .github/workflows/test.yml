@@ -27,8 +27,10 @@ jobs:
   # the merge base (a stray commit reverted it) merges cleanly and lands
   # nothing. Listed in ci-gate's needs, so it needs no ruleset entry.
   nonempty:
-    # It reads nothing and writes nothing; the diff check needs no token.
-    permissions: {}
+    # The reusable workflow checks out the repo to diff against base, so it
+    # needs contents: read -- the least it can be granted and still run.
+    permissions:
+      contents: read
     uses: mark-brannan/.github/.github/workflows/nonempty-diff.yml@7b15aea59f53dcb5762a091f585b3d83d6dad545
 
   # The single required status check, shared across repositories: the
