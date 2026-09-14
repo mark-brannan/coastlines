@@ -31,7 +31,7 @@ jobs:
     # needs contents: read -- the least it can be granted and still run.
     permissions:
       contents: read
-    uses: mark-brannan/.github/.github/workflows/nonempty-diff.yml@7b15aea59f53dcb5762a091f585b3d83d6dad545
+    uses: mark-brannan/.github/.github/workflows/nonempty-diff.yml@main
 
   # The single required status check, shared across repositories: the
   # `gate` job of mark-brannan/.github's reusable ci-gate workflow, which fails
