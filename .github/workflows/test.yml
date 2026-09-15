@@ -33,6 +33,13 @@ jobs:
       contents: read
     uses: mark-brannan/.github/.github/workflows/nonempty-diff.yml@main
 
+  # No docs/budgets.json here yet, so this runs config-optional; wiring a real
+  # budget config is later, separate work.
+  prose-budget:
+    uses: mark-brannan/.github/.github/workflows/prose-budget.yml@main
+    with:
+      require-config: false
+
   # The single required status check, shared across repositories: the
   # `gate` job of mark-brannan/.github's reusable ci-gate workflow, which fails
   # unless every result in `needs` is green. The reported context is
@@ -42,7 +49,7 @@ jobs:
   # evaluate when a dependency failed or was skipped, so it reports an explicit
   # pass or fail of its own rather than inheriting the skip.
   ci-gate:
-    needs: [test, nonempty]
+    needs: [test, nonempty, prose-budget]
     if: always()
     # It reads nothing and writes nothing; the results go in as an input.
     permissions: {}
