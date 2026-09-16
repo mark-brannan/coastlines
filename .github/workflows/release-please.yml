@@ -1,0 +1,71 @@
+name: Release
+
+# The whole release mechanism. A merge to main updates a standing "chore:
+# release" pull request -- version bump, CHANGELOG entry -- and merging THAT
+# pull request is the release. Nothing else decides when to ship, and no
+# feature pull request carries a version.
+#
+# Batching is the default and needs no timer: work piles into the open release
+# pull request until you merge it. Ship now by merging it now; hold by leaving
+# it open. Edit its CHANGELOG diff before merging when a release deserves
+# notes written by a human rather than assembled from commit subjects.
+#
+# SQUASH-MERGE THE RELEASE PULL REQUEST. main requires linear history and
+# release-please's commits are unsigned; squashing replaces them with one
+# commit signed by GitHub's own key, which the ruleset accepts. A merge commit
+# is refused outright by required_linear_history.
+#
+# `include-component-in-tag: false` in the config is load-bearing. With a
+# package-name set, release-please's default tag format is
+# `<name>-vX.Y.Z`; no such tag exists here, so it finds no previous release,
+# sweeps the entire history for conventional commits, and proposes a version
+# off an ancient breaking change. Tags here are plain `vX.Y.Z`.
+#
+# Version policy lives in release-please-config.json, not here:
+# `versioning: always-bump-patch` pins every release to a patch bump of the
+# current 0.x line (regardless of commit type) -- deliberate, until Mark
+# decides coastlines is ready for a minor/major bump. Same convention as the
+# other vended repos; see mark-brannan/colregs-engine's copy of this file
+# for the fuller rationale.
+#
+# This repo has no publish.yml yet (nothing dispatches an npm publish on
+# release): this job's only job is the version bump / CHANGELOG PR and, on
+# merge, the tag and GitHub Release. Same pattern as mark-brannan/searoom's
+# release-please.yml, which is also tag-and-release only.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write # create the tag and the GitHub Release
+  pull-requests: write # open and update the release pull request
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      # release-please's own commits, PR and tag are all authored through
+      # whatever token we hand it. The default GITHUB_TOKEN doesn't fire
+      # other workflows for anything it creates -- GitHub's own loop
+      # prevention -- so a release PR opened with it never gets CI to run
+      # against it. Minting an installation token for a repo-scoped GitHub
+      # App gives it a real actor identity instead, so the PR's
+      # `pull_request` event fires CI normally.
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ secrets.RELEASE_PLEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_PLEASE_APP_PRIVATE_KEY }}
+
+      - uses: googleapis/release-please-action@v5
+        id: release
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
