@@ -1,0 +1,63 @@
+name: Publish
+
+# Publishes to npm using OIDC trusted publishing: npm verifies this workflow's
+# short-lived, workflow-scoped identity, so there is no npm token to store,
+# rotate, or leak. Provenance attestations are generated automatically.
+#
+# Prerequisite, done once on npmjs.com: package settings -> Trusted publishers
+# -> GitHub Actions, with repository mark-brannan/coastlines and workflow file
+# `publish.yml`. Until that exists this workflow will fail authentication,
+# which is the correct failure mode.
+
+on:
+  workflow_dispatch:
+  # Deliberately no `push: tags` trigger. release-please.yml tags through a
+  # GitHub App installation token (not the default GITHUB_TOKEN), so that
+  # push DOES fire workflows -- and a `push: tags` listener here would start
+  # a second, racing publish alongside the explicit `gh workflow run
+  # publish.yml --ref <tag>` dispatch release-please.yml already does.
+  # workflow_dispatch is also the only trigger npm's OIDC trusted publisher
+  # is configured for on npmjs.com (this file, this repo). So a tag alone,
+  # pushed by hand, does not publish; run `gh workflow run publish.yml --ref
+  # vX.Y.Z` instead.
+
+permissions:
+  contents: read # release-please.yml creates the tag and the GitHub Release
+  id-token: write # required: this is what mints the OIDC token
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    # workflow_dispatch can target a branch, not just a tag. A branch named
+    # to match package.json's version (e.g. "v0.1.1") would pass the tag
+    # check below despite not being an actual release tag -- npm trusted
+    # publishing doesn't restrict which ref a workflow_dispatch can run on.
+    # Refusing anything but a real tag closes that.
+    if: github.ref_type == 'tag'
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing requires npm >= 11.5.1, newer than what ships with
+      # Node 22.
+      - run: npm install -g npm@latest
+
+      - name: Refuse to publish a tag that disagrees with package.json
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          PKG=$(node -p "require('./package.json').version")
+          if [ "${TAG#v}" != "$PKG" ]; then
+            echo "tag $TAG does not match package.json version $PKG" >&2
+            exit 1
+          fi
+
+      # No install step: coastlines has no runtime dependencies, same as
+      # test.yml.
+      - run: npm test
+
+      # No NODE_AUTH_TOKEN. Authentication is the OIDC identity above.
+      - run: npm publish
