@@ -27,11 +27,6 @@ name: Release
 # decides coastlines is ready for a minor/major bump. Same convention as the
 # other vended repos; see mark-brannan/colregs-engine's copy of this file
 # for the fuller rationale.
-#
-# This repo has no publish.yml yet (nothing dispatches an npm publish on
-# release): this job's only job is the version bump / CHANGELOG PR and, on
-# merge, the tag and GitHub Release. Same pattern as mark-brannan/searoom's
-# release-please.yml, which is also tag-and-release only.
 
 on:
   push:
@@ -41,6 +36,7 @@ on:
 permissions:
   contents: write # create the tag and the GitHub Release
   pull-requests: write # open and update the release pull request
+  actions: write # dispatch publish.yml below
 
 concurrency:
   group: release-main
@@ -69,3 +65,37 @@ jobs:
           token: ${{ steps.app-token.outputs.token }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+      # release-please's tag is now pushed as the App, which DOES fire
+      # workflows -- but publish.yml's `push: tags` trigger has been
+      # removed so that doesn't start a second, racing publish. This
+      # dispatch stays the one path to it. It's also the one npm's OIDC
+      # trusted publisher is configured for -- workflow_dispatch is what
+      # both a human and this job use (see mark-brannan/colregs's copy of
+      # this file for why workflow_call was rejected there).
+      #
+      # `gh` shells out to `git` to find the repo unless told otherwise, and
+      # this job never checks the repo out -- GH_REPO stands in for that.
+      - name: Trigger the npm publish, and wait for it to actually succeed
+        if: steps.release.outputs.release_created == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.release.outputs.tag_name }}
+        run: |
+          BEFORE=$(gh run list --workflow=publish.yml --json databaseId --jq '.[0].databaseId // 0')
+          gh workflow run publish.yml --ref "$TAG"
+
+          RUN_ID=""
+          for i in $(seq 1 20); do
+            sleep 5
+            RUN_ID=$(gh run list --workflow=publish.yml --json databaseId,event,headBranch \
+              --jq "[.[] | select(.event == \"workflow_dispatch\" and .headBranch == \"$TAG\" and .databaseId > $BEFORE)][0].databaseId // empty")
+            if [ -n "$RUN_ID" ]; then break; fi
+          done
+          if [ -z "$RUN_ID" ]; then
+            echo "Could not find the triggered publish run for $TAG" >&2
+            exit 1
+          fi
+          echo "Watching publish run $RUN_ID for $TAG"
+          gh run watch "$RUN_ID" --exit-status
