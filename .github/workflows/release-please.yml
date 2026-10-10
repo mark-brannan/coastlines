@@ -7,8 +7,9 @@ name: Release
 # rationale (batching, squash-merge requirement, tag format, version
 # policy).
 #
-# This repo has no publish.yml -- nothing to dispatch on release -- so the
-# caller opts out with `publish: false`.
+# This repo has a publish.yml (#14), so the shared workflow's default
+# `publish: true` applies: on a release it dispatches publish.yml and
+# waits for it to succeed.
 
 on:
   push:
@@ -23,8 +24,6 @@ permissions:
 jobs:
   release:
     uses: mark-brannan/.github/.github/workflows/release-please.yml@main
-    with:
-      publish: false
     secrets:
       RELEASE_PLEASE_APP_CLIENT_ID: ${{ secrets.RELEASE_PLEASE_APP_CLIENT_ID }}
       RELEASE_PLEASE_APP_PRIVATE_KEY: ${{ secrets.RELEASE_PLEASE_APP_PRIVATE_KEY }}
