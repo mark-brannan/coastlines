@@ -6,7 +6,7 @@ GeoJSON today and as a Signal K resource provider next.
 
 ## Which repository
 
-- **This repository** decides *which* Natural Earth files ship, under which
+- **This repository** decides _which_ Natural Earth files ship, under which
   ids, grouped into which charts, drawn with which styles. The data itself is
   never edited here.
 - **A shape that is wrong is a [Natural Earth](https://github.com/nvkelso/natural-earth-vector/issues)

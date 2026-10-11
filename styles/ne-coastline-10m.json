@@ -8,9 +8,7 @@
   "sources": {
     "coastlines": {
       "type": "vector",
-      "tiles": [
-        "/plugins/coastlines/charts/ne-coastline-10m/{z}/{x}/{y}.pbf"
-      ],
+      "tiles": ["/plugins/coastlines/charts/ne-coastline-10m/{z}/{x}/{y}.pbf"],
       "minzoom": 0,
       "maxzoom": 12
     }
@@ -24,21 +22,7 @@
       "minzoom": 0,
       "paint": {
         "line-color": "#5f7f9b",
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0.6,
-          7,
-          1.4,
-          12,
-          2
-        ]
+        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 0.6, 7, 1.4, 12, 2]
       }
     }
   ]

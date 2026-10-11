@@ -8,9 +8,7 @@
   "sources": {
     "coastlines": {
       "type": "vector",
-      "tiles": [
-        "/plugins/coastlines/charts/ne-110m/{z}/{x}/{y}.pbf"
-      ],
+      "tiles": ["/plugins/coastlines/charts/ne-110m/{z}/{x}/{y}.pbf"],
       "minzoom": 0,
       "maxzoom": 4
     }
@@ -89,10 +87,7 @@
       "paint": {
         "line-color": "#b89a8a",
         "line-width": 1,
-        "line-dasharray": [
-          4,
-          2
-        ]
+        "line-dasharray": [4, 2]
       }
     },
     {
@@ -103,21 +98,7 @@
       "minzoom": 0,
       "paint": {
         "line-color": "#5f7f9b",
-        "line-width": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0.6,
-          7,
-          1.4,
-          12,
-          2
-        ]
+        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 0.6, 7, 1.4, 12, 2]
       }
     },
     {
@@ -129,10 +110,7 @@
       "paint": {
         "line-color": "#9fb3c1",
         "line-width": 0.8,
-        "line-dasharray": [
-          6,
-          4
-        ]
+        "line-dasharray": [6, 4]
       }
     },
     {
