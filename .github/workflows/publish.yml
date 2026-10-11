@@ -44,7 +44,7 @@ jobs:
 
       # Trusted publishing requires npm >= 11.5.1, newer than what ships with
       # Node 22.
-      - run: npm install -g npm@latest
+      - run: npm install -g npm@11 # 12 refuses git dependencies by default (EALLOWGIT)
 
       - name: Refuse to publish a tag that disagrees with package.json
         run: |
