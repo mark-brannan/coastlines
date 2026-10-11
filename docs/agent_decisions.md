@@ -6,3 +6,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261011t034643z
 - Styles: countries a faint outline, places dots, no text labels (no glyph server on a boat) Undo: add glyphs and symbol layers ([#21](https://github.com/mark-brannan/coastlines/pull/21))
+
+### 20261011t034658z
+- Demo: ne-50m on by default; MapLibre 5.6.0 from unpkg Undo: edit demo/ ([#21](https://github.com/mark-brannan/coastlines/pull/21))
