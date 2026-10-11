@@ -9,3 +9,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261011t034658z
 - Demo: ne-50m on by default; MapLibre 5.6.0 from unpkg Undo: edit demo/ ([#21](https://github.com/mark-brannan/coastlines/pull/21))
+
+### 20261011t034713z
+- sync job in ci-gate needs: a GitHub raw outage reds the gate Undo: drop it from needs ([#21](https://github.com/mark-brannan/coastlines/pull/21))
