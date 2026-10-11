@@ -6,10 +6,10 @@ This package is alpha and maintained as a single moving line. Only the latest
 version published to npm gets fixes; there are no maintenance branches, and a
 pre-1.0 release may change a published file in a patch.
 
-| Version | Supported |
-| ------- | --------- |
-| latest `0.0.x-alpha` on [npm](https://www.npmjs.com/package/coastlines) | yes |
-| anything older | no — upgrade first |
+| Version                                                                 | Supported          |
+| ----------------------------------------------------------------------- | ------------------ |
+| latest `0.0.x-alpha` on [npm](https://www.npmjs.com/package/coastlines) | yes                |
+| anything older                                                          | no — upgrade first |
 
 Two things make that less alarming than it reads:
 

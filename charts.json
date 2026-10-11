@@ -10,9 +10,24 @@
       { "id": "ne-land-110m", "name": "land", "minzoom": 0, "maxzoom": 4 },
       { "id": "ne-glaciated-areas-110m", "name": "glaciated_areas", "minzoom": 2, "maxzoom": 4 },
       { "id": "ne-lakes-110m", "name": "lakes", "minzoom": 2, "maxzoom": 4 },
-      { "id": "ne-rivers-lake-centerlines-110m", "name": "rivers_lake_centerlines", "minzoom": 3, "maxzoom": 4 },
-      { "id": "ne-admin-0-countries-110m", "name": "admin_0_countries", "minzoom": 2, "maxzoom": 4 },
-      { "id": "ne-admin-0-boundary-lines-land-110m", "name": "admin_0_boundary_lines_land", "minzoom": 1, "maxzoom": 4 },
+      {
+        "id": "ne-rivers-lake-centerlines-110m",
+        "name": "rivers_lake_centerlines",
+        "minzoom": 3,
+        "maxzoom": 4
+      },
+      {
+        "id": "ne-admin-0-countries-110m",
+        "name": "admin_0_countries",
+        "minzoom": 2,
+        "maxzoom": 4
+      },
+      {
+        "id": "ne-admin-0-boundary-lines-land-110m",
+        "name": "admin_0_boundary_lines_land",
+        "minzoom": 1,
+        "maxzoom": 4
+      },
       { "id": "ne-coastline-110m", "name": "coastline", "minzoom": 0, "maxzoom": 4 },
       { "id": "ne-geographic-lines-110m", "name": "geographic_lines", "minzoom": 0, "maxzoom": 4 },
       { "id": "ne-populated-places-110m", "name": "populated_places", "minzoom": 2, "maxzoom": 4 }
@@ -27,13 +42,33 @@
     "layers": [
       { "id": "ne-ocean-50m", "name": "ocean", "minzoom": 0, "maxzoom": 7 },
       { "id": "ne-land-50m", "name": "land", "minzoom": 0, "maxzoom": 7 },
-      { "id": "ne-antarctic-ice-shelves-polys-50m", "name": "antarctic_ice_shelves_polys", "minzoom": 2, "maxzoom": 7 },
+      {
+        "id": "ne-antarctic-ice-shelves-polys-50m",
+        "name": "antarctic_ice_shelves_polys",
+        "minzoom": 2,
+        "maxzoom": 7
+      },
       { "id": "ne-glaciated-areas-50m", "name": "glaciated_areas", "minzoom": 3, "maxzoom": 7 },
       { "id": "ne-lakes-50m", "name": "lakes", "minzoom": 3, "maxzoom": 7 },
-      { "id": "ne-rivers-lake-centerlines-50m", "name": "rivers_lake_centerlines", "minzoom": 4, "maxzoom": 7 },
+      {
+        "id": "ne-rivers-lake-centerlines-50m",
+        "name": "rivers_lake_centerlines",
+        "minzoom": 4,
+        "maxzoom": 7
+      },
       { "id": "ne-admin-0-countries-50m", "name": "admin_0_countries", "minzoom": 3, "maxzoom": 7 },
-      { "id": "ne-admin-0-boundary-lines-land-50m", "name": "admin_0_boundary_lines_land", "minzoom": 2, "maxzoom": 7 },
-      { "id": "ne-admin-0-boundary-lines-maritime-indicator-50m", "name": "admin_0_boundary_lines_maritime_indicator", "minzoom": 3, "maxzoom": 7 },
+      {
+        "id": "ne-admin-0-boundary-lines-land-50m",
+        "name": "admin_0_boundary_lines_land",
+        "minzoom": 2,
+        "maxzoom": 7
+      },
+      {
+        "id": "ne-admin-0-boundary-lines-maritime-indicator-50m",
+        "name": "admin_0_boundary_lines_maritime_indicator",
+        "minzoom": 3,
+        "maxzoom": 7
+      },
       { "id": "ne-coastline-50m", "name": "coastline", "minzoom": 0, "maxzoom": 7 },
       { "id": "ne-geographic-lines-50m", "name": "geographic_lines", "minzoom": 0, "maxzoom": 7 },
       { "id": "ne-populated-places-50m", "name": "populated_places", "minzoom": 3, "maxzoom": 7 }
@@ -45,8 +80,6 @@
     "description": "The finest coastline alone, to zoom 12, the layer a distance-to-shore reads",
     "minzoom": 0,
     "maxzoom": 12,
-    "layers": [
-      { "id": "ne-coastline-10m", "name": "coastline", "minzoom": 0, "maxzoom": 12 }
-    ]
+    "layers": [{ "id": "ne-coastline-10m", "name": "coastline", "minzoom": 0, "maxzoom": 12 }]
   }
 ]
