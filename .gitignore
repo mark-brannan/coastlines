@@ -1,3 +1,8 @@
 node_modules/
 *.tgz
 package-lock.json
+# Natural Earth files: fetched by `npm run sync`, verified against manifest.json,
+# never committed (48 MB raw, and git history does not forgive it).
+/data/
+# Built demo site, deployed by pages.yml.
+/_site/

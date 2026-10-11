@@ -1,5 +1,5 @@
 name: Bug report
-description: A published file is wrong, or a decoder cannot read it
+description: A published file, id, chart or style is wrong
 labels: ['bug']
 body:
   - type: markdown
@@ -7,45 +7,39 @@ body:
       value: |
         **Check which repository first** — it saves a round trip:
 
-        - The *shape* is wrong (a missing island, a line across a strait, an
-          over-simplified bay) → that is how the geometry was generated:
-          [portolani](https://github.com/mark-brannan/portolani/issues).
-        - The JSON is right and the *picture* is wrong →
+        - The *shape* is wrong (a missing island, a line across a strait) →
+          this package ships Natural Earth's file unchanged:
+          [natural-earth-vector](https://github.com/nvkelso/natural-earth-vector/issues).
+        - The GeoJSON is right and the *picture* is wrong in coast-wright →
           [coast-wright](https://github.com/mark-brannan/coast-wright/issues).
-        - Which files exist, at what settings, or a decoder disagreeing with a
-          shipped file → here.
+        - Which files ship, under which ids, in which charts, with which
+          styles, or a file disagreeing with its manifest entry → here.
 
         When in doubt, file it here and it will be moved.
 
         Security problems go through a
         [private advisory](https://github.com/mark-brannan/coastlines/security/advisories/new)
-        instead — including a file that does not reproduce from its own
-        provenance. See SECURITY.md.
+        instead — including a file that does not match its manifest entry.
+        See SECURITY.md.
 
   - type: dropdown
     id: kind
     attributes:
       label: What kind of problem
       options:
-        - My decoder disagrees with a shipped file
-        - A file does not match the fixtures
+        - A file does not match its manifest entry
         - An import path or export does not resolve
-        - The provenance does not reproduce the file
-        - The profile table in the README does not match the data
+        - A chart or style draws the wrong thing
+        - The catalogue table in the README does not match the manifest
         - Something else
     validations:
       required: true
 
-  - type: dropdown
-    id: profile
+  - type: input
+    id: file
     attributes:
-      label: Which file
-      multiple: true
-      options:
-        - coastlines/coastline-110m
-        - coastlines/coastline-50m
-        - coastlines/land-110m
-        - coastlines/fixtures
+      label: Which id, chart or style
+      placeholder: 'ne-coastline-50m'
     validations:
       required: true
 
@@ -54,11 +48,8 @@ body:
     attributes:
       label: What happened, and what you expected
       description: >
-        If a decoder disagrees, give a coordinate it produced and the one you
-        expected. Two decoding mistakes are silent and worth ruling out first:
-        reading `[lat, lon]` because that is what Google's polyline format
-        stores, and forgetting that the encoding alphabet contains a backslash
-        that JSON escapes.
+        If a file looks altered, give the sha256 you computed and the one the
+        manifest records.
     validations:
       required: true
 
@@ -76,18 +67,8 @@ body:
     attributes:
       label: What is reading it
       description: >
-        coast-wright, your own decoder and in which language, or something else.
-      placeholder: 'my own decoder, in MicroPython'
+        coast-wright, MapLibre, a Signal K plugin, or something else.
+      placeholder: 'Freeboard 3.2.1'
     validations:
       required: true
 
-  - type: checkboxes
-    id: fixtures
-    attributes:
-      label: Fixtures
-      description: >
-        `coastlines/fixtures` exists to catch exactly this class of bug before
-        a decoder ships. Running it first usually answers the question.
-      options:
-        - label: My decoder passes coastlines/fixtures
-          required: false

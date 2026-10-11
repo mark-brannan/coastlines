@@ -1,22 +1,29 @@
 {
   "name": "coastlines",
   "version": "0.0.1-alpha.0",
-  "description": "Ready-made coastline and land geometry as portolani: fidelity profiles from Natural Earth, a few kilobytes each, with provenance and cross-language decoder fixtures",
+  "description": "Natural Earth geography on a boat, installed rather than fetched: the marine catalogue at three scales, byte-for-byte as published, sha256-pinned, as plain GeoJSON today and a Signal K resource provider next",
   "type": "module",
-  "main": "data/coastline-110m.json",
+  "main": "lib/index.js",
   "exports": {
-    "./coastline-110m": "./data/coastline-110m.json",
-    "./coastline-50m": "./data/coastline-50m.json",
-    "./land-110m": "./data/land-110m.json",
-    "./fixtures": "./fixtures/portolano-fixtures.json",
+    ".": "./lib/index.js",
+    "./manifest.json": "./manifest.json",
+    "./charts.json": "./charts.json",
+    "./data/*": "./data/*.geojson",
+    "./styles/*": "./styles/*.json",
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "test": "node --test"
+    "test": "node --test",
+    "sync": "node scripts/sync.mjs",
+    "sync:check": "node scripts/sync.mjs --check",
+    "sync:refresh": "node scripts/sync.mjs --refresh",
+    "prepack": "node scripts/sync.mjs",
+    "build:sheet": "node scripts/render-sheet.mjs",
+    "build:readme": "node scripts/catalogue-table.mjs",
+    "build:pages": "node scripts/build-pages.mjs"
   },
   "devDependencies": {
-    "portolani": "^0.1.0"
+    "@napi-rs/canvas": "^0.1.88"
   },
   "engines": {
     "node": ">=20"
@@ -27,7 +34,6 @@
     "map",
     "geojson",
     "natural-earth",
-    "portolano",
     "marine",
     "signalk"
   ],
@@ -38,8 +44,11 @@
     "url": "git+https://github.com/mark-brannan/coastlines.git"
   },
   "files": [
+    "lib",
     "data",
-    "fixtures",
+    "styles",
+    "manifest.json",
+    "charts.json",
     "LICENSE"
   ]
 }

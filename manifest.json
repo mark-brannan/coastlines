@@ -1,0 +1,308 @@
+{
+  "source": {
+    "name": "Natural Earth",
+    "repository": "https://github.com/nvkelso/natural-earth-vector",
+    "ref": "v5.1.2",
+    "base": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/",
+    "licence": "public domain"
+  },
+  "files": [
+    {
+      "id": "ne-coastline-110m",
+      "layer": "coastline",
+      "scale": "110m",
+      "geometry": "lines",
+      "about": "The line",
+      "bytes": 139907,
+      "sha256": "sha256:851f581ff5ffb844deed8ae1a9ce22e3c4bb3d74fa342cadb5d8e39b41ae7c3c"
+    },
+    {
+      "id": "ne-land-110m",
+      "layer": "land",
+      "scale": "110m",
+      "geometry": "polygons",
+      "about": "Fill, land masks",
+      "bytes": 138160,
+      "sha256": "sha256:9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9"
+    },
+    {
+      "id": "ne-ocean-110m",
+      "layer": "ocean",
+      "scale": "110m",
+      "geometry": "polygons",
+      "about": "The complement; sea fill",
+      "bytes": 117438,
+      "sha256": "sha256:5cf3eb6fb202ff7f1cc0b27b49235a05703687f6cd81e45115d4250aa15b8a76"
+    },
+    {
+      "id": "ne-geographic-lines-110m",
+      "layer": "geographic_lines",
+      "scale": "110m",
+      "geometry": "lines",
+      "about": "Equator, tropics, polar circles, International Date Line",
+      "bytes": 60565,
+      "sha256": "sha256:c09c7883df618dfefb56fb37c349fedb38e7f926d5eb85d11648f33c8bdf5fbf"
+    },
+    {
+      "id": "ne-admin-0-boundary-lines-land-110m",
+      "layer": "admin_0_boundary_lines_land",
+      "scale": "110m",
+      "geometry": "lines",
+      "about": "Borders",
+      "bytes": 340010,
+      "sha256": "sha256:d42479fd79552cca4eec7f85fcdca717a790d29ff06be7676f1af0568c6d3f7c"
+    },
+    {
+      "id": "ne-admin-0-countries-110m",
+      "layer": "admin_0_countries",
+      "scale": "110m",
+      "geometry": "polygons",
+      "about": "Courtesy flag, VHF scheme, customs",
+      "bytes": 838726,
+      "sha256": "sha256:6866c877d39cba9c357620878839b336d569f8c662d3cfab4cb1dbe2d39c977f"
+    },
+    {
+      "id": "ne-populated-places-110m",
+      "layer": "populated_places",
+      "scale": "110m",
+      "geometry": "points",
+      "about": "Labels",
+      "bytes": 654324,
+      "sha256": "sha256:a86028b083182b68c7620fc6e1a8a47ee547cb9cd2fb62ccbb78bea786440899"
+    },
+    {
+      "id": "ne-lakes-110m",
+      "layer": "lakes",
+      "scale": "110m",
+      "geometry": "polygons",
+      "about": "Inland context",
+      "bytes": 36648,
+      "sha256": "sha256:eb02ecc86c82004fccbf979058bfabbbd6c2d07968c7844d38eb1c9152d2ffc9"
+    },
+    {
+      "id": "ne-rivers-lake-centerlines-110m",
+      "layer": "rivers_lake_centerlines",
+      "scale": "110m",
+      "geometry": "lines",
+      "about": "Inland context",
+      "bytes": 38087,
+      "sha256": "sha256:55aa4497405afc07cdc931b7fbe062c4d6693ba2a550c0d24899953f5d507c8d"
+    },
+    {
+      "id": "ne-glaciated-areas-110m",
+      "layer": "glaciated_areas",
+      "scale": "110m",
+      "geometry": "polygons",
+      "about": "Polar context",
+      "bytes": 21720,
+      "sha256": "sha256:e61e3f45e22f087f861ac2fda6258fc15c849a216d74c27ccf0164eeafbd950a"
+    },
+    {
+      "id": "ne-coastline-50m",
+      "layer": "coastline",
+      "scale": "50m",
+      "geometry": "lines",
+      "about": "The line",
+      "bytes": 1640858,
+      "sha256": "sha256:271f1c4c1908312bac6b29d158ea1356544beafc129f260005300913aa5ea283"
+    },
+    {
+      "id": "ne-land-50m",
+      "layer": "land",
+      "scale": "50m",
+      "geometry": "polygons",
+      "about": "Fill, land masks",
+      "bytes": 1636166,
+      "sha256": "sha256:e874b27a51d146452be360cafb3cc50c86001074a67d534113e6534682f9826b"
+    },
+    {
+      "id": "ne-ocean-50m",
+      "layer": "ocean",
+      "scale": "50m",
+      "geometry": "polygons",
+      "about": "The complement; sea fill",
+      "bytes": 1383426,
+      "sha256": "sha256:5b810162af4b20805838cfd766ef1a445c350cf6aafc8b589515daef30033adf"
+    },
+    {
+      "id": "ne-geographic-lines-50m",
+      "layer": "geographic_lines",
+      "scale": "50m",
+      "geometry": "lines",
+      "about": "Equator, tropics, polar circles, International Date Line",
+      "bytes": 60564,
+      "sha256": "sha256:c74270a34cdc465e8c865642bf03ede9ef24ff4eb204b08ab7c66d735c20f559"
+    },
+    {
+      "id": "ne-admin-0-boundary-lines-land-50m",
+      "layer": "admin_0_boundary_lines_land",
+      "scale": "50m",
+      "geometry": "lines",
+      "about": "Borders",
+      "bytes": 760189,
+      "sha256": "sha256:2faac4f6b34386f3d21b6e018cf151f241f00e5c936d44dd17d7d9bfb147fa48"
+    },
+    {
+      "id": "ne-admin-0-boundary-lines-maritime-indicator-50m",
+      "layer": "admin_0_boundary_lines_maritime_indicator",
+      "scale": "50m",
+      "geometry": "lines",
+      "about": "The maritime boundaries Natural Earth draws",
+      "bytes": 198113,
+      "sha256": "sha256:4720d2c8dc0ed170051bca681c9ba93babedc81c4a06e54fad369db7e0063413"
+    },
+    {
+      "id": "ne-admin-0-countries-50m",
+      "layer": "admin_0_countries",
+      "scale": "50m",
+      "geometry": "polygons",
+      "about": "Courtesy flag, VHF scheme, customs",
+      "bytes": 3083490,
+      "sha256": "sha256:3e458fc036ad0a66411f2c1e6cac49c5d7bfb81cb1123bc513b22511a2b7fdeb"
+    },
+    {
+      "id": "ne-populated-places-50m",
+      "layer": "populated_places",
+      "scale": "50m",
+      "geometry": "points",
+      "about": "Labels",
+      "bytes": 3350885,
+      "sha256": "sha256:da4662b7bbfeb897d02f228c5839131dce27acff5717630f91ccff4f67828ee7"
+    },
+    {
+      "id": "ne-lakes-50m",
+      "layer": "lakes",
+      "scale": "50m",
+      "geometry": "polygons",
+      "about": "Inland context",
+      "bytes": 876018,
+      "sha256": "sha256:d350b75978b26fe839b797c2c529b2fb8f47fb3983c03f4964e36d5df9378a52"
+    },
+    {
+      "id": "ne-rivers-lake-centerlines-50m",
+      "layer": "rivers_lake_centerlines",
+      "scale": "50m",
+      "geometry": "lines",
+      "about": "Inland context",
+      "bytes": 827318,
+      "sha256": "sha256:f286e0ce978fde999ca2d7a78c764be08542e19b63cded52b05c12d5173ccc51"
+    },
+    {
+      "id": "ne-glaciated-areas-50m",
+      "layer": "glaciated_areas",
+      "scale": "50m",
+      "geometry": "polygons",
+      "about": "Polar context",
+      "bytes": 512453,
+      "sha256": "sha256:c7a097b4b8e0d360dc82c90ab20c34b78aa5939a5ec8ab157c18945938e9c0a7"
+    },
+    {
+      "id": "ne-antarctic-ice-shelves-polys-50m",
+      "layer": "antarctic_ice_shelves_polys",
+      "scale": "50m",
+      "geometry": "polygons",
+      "about": "Polar context",
+      "bytes": 131055,
+      "sha256": "sha256:fedf866d20e20e37d037fa19968b6d3022fbe5323fd8728527b0f0ddb547e790"
+    },
+    {
+      "id": "ne-coastline-10m",
+      "layer": "coastline",
+      "scale": "10m",
+      "geometry": "lines",
+      "about": "The line, finest",
+      "bytes": 10110735,
+      "sha256": "sha256:6f75ae0e0de157b14946e2255eb1f5486d9a13819032e26d4610852d296788f6"
+    },
+    {
+      "id": "ne-land-10m",
+      "layer": "land",
+      "scale": "10m",
+      "geometry": "polygons",
+      "about": "Fill, land masks, finest",
+      "bytes": 10157965,
+      "sha256": "sha256:1ac90796408bc6ad6911d69448485d3c4dbf2190370080368a09976e1c9f7416"
+    },
+    {
+      "id": "ne-minor-islands-10m",
+      "layer": "minor_islands",
+      "scale": "10m",
+      "geometry": "polygons",
+      "about": "The islands 50m drops",
+      "bytes": 1320514,
+      "sha256": "sha256:8c933ca7a4760256bdc46408355706e39764b0fa01c160c28888b90b4faec29f"
+    },
+    {
+      "id": "ne-reefs-10m",
+      "layer": "reefs",
+      "scale": "10m",
+      "geometry": "lines",
+      "about": "Hazards",
+      "bytes": 460003,
+      "sha256": "sha256:4dcfb7cb57e7c04108df66ca0ac1bb4125b2b40b6bb45d7d2aa589bd4e46dc57"
+    },
+    {
+      "id": "ne-geographic-lines-10m",
+      "layer": "geographic_lines",
+      "scale": "10m",
+      "geometry": "lines",
+      "about": "Equator, tropics, polar circles, International Date Line",
+      "bytes": 60564,
+      "sha256": "sha256:e0d96b65c4f08856096550db5e4507d2822f05fe1cc07aadb16ad5ccb3a948e7"
+    },
+    {
+      "id": "ne-time-zones-10m",
+      "layer": "time_zones",
+      "scale": "10m",
+      "geometry": "polygons",
+      "about": "Local time from position",
+      "bytes": 3527701,
+      "sha256": "sha256:aa52ab97e5f906693f31fe2e625c9d6be78a4e74fcd4142a7261235b355cacfe"
+    },
+    {
+      "id": "ne-admin-0-boundary-lines-land-10m",
+      "layer": "admin_0_boundary_lines_land",
+      "scale": "10m",
+      "geometry": "lines",
+      "about": "Borders",
+      "bytes": 2284669,
+      "sha256": "sha256:74d9c16229c095fde65943a9919e337682f044bcebccb120764f38edf3b70f4a"
+    },
+    {
+      "id": "ne-admin-0-boundary-lines-maritime-indicator-10m",
+      "layer": "admin_0_boundary_lines_maritime_indicator",
+      "scale": "10m",
+      "geometry": "lines",
+      "about": "The maritime boundaries Natural Earth draws",
+      "bytes": 284392,
+      "sha256": "sha256:9cfe9cb1e06431abb14ddb41412991cc9933402622e32a3e5739b6fa9cf1ef1a"
+    },
+    {
+      "id": "ne-admin-0-disputed-areas-10m",
+      "layer": "admin_0_disputed_areas",
+      "scale": "10m",
+      "geometry": "polygons",
+      "about": "Honesty on the borders layer",
+      "bytes": 701323,
+      "sha256": "sha256:9cafef8b7dfb6b164dc58f218f981f4ace9f716f6c03795d4c62d1ac9f3d50f5"
+    },
+    {
+      "id": "ne-ports-10m",
+      "layer": "ports",
+      "scale": "10m",
+      "geometry": "points",
+      "about": "Harbours",
+      "bytes": 279075,
+      "sha256": "sha256:c5a5028f5187a5e1b9fe7f0fab99804a8be7482099a2365d404fb7e9dd6b5457"
+    },
+    {
+      "id": "ne-antarctic-ice-shelves-polys-10m",
+      "layer": "antarctic_ice_shelves_polys",
+      "scale": "10m",
+      "geometry": "polygons",
+      "about": "Polar context",
+      "bytes": 561580,
+      "sha256": "sha256:8f9bf62368695f5664b5fcd9bc0e2baea66da295aea014ce0e9cf510f209898d"
+    }
+  ]
+}
