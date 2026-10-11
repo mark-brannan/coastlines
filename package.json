@@ -20,10 +20,13 @@
     "prepack": "node scripts/sync.mjs",
     "build:sheet": "node scripts/render-sheet.mjs",
     "build:readme": "node scripts/catalogue-table.mjs",
-    "build:pages": "node scripts/build-pages.mjs"
+    "build:pages": "node scripts/build-pages.mjs",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "@napi-rs/canvas": "^0.1.88"
+    "@napi-rs/canvas": "^0.1.88",
+    "prettier": "3.6.2"
   },
   "engines": {
     "node": ">=20"
