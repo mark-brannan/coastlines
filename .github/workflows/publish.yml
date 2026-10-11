@@ -60,4 +60,14 @@ jobs:
       - run: npm test
 
       # No NODE_AUTH_TOKEN. Authentication is the OIDC identity above.
-      - run: npm publish
+      # npm refuses a prerelease version without an explicit dist-tag, so that
+      # an alpha never becomes `latest`. 0.0.2-alpha.0 -> `alpha`; a stable
+      # version -> `latest`.
+      - name: Publish
+        run: |
+          PKG=$(node -p "require('./package.json').version")
+          case "$PKG" in
+            *-*) DIST_TAG=$(echo "${PKG#*-}" | cut -d. -f1) ;;
+            *)   DIST_TAG=latest ;;
+          esac
+          npm publish --tag "$DIST_TAG"
