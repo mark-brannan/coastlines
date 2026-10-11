@@ -12,3 +12,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261011t034713z
 - sync job in ci-gate needs: a GitHub raw outage reds the gate Undo: drop it from needs ([#21](https://github.com/mark-brannan/coastlines/pull/21))
+
+### 20261011t034727z
+- GitHub Pages enabled on the repo via API, build_type workflow Undo: disable in settings ([#21](https://github.com/mark-brannan/coastlines/pull/21))
