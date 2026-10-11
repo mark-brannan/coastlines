@@ -20,7 +20,21 @@ jobs:
       - uses: actions/setup-node@v7
         with: { node-version: '${{ matrix.node }}' }
       # No install step: coastlines has no runtime dependencies, and the tests must
-      # pass with the network unavailable.
+      # pass with the network unavailable. Without data/ the per-file tests skip;
+      # the sync job below is where the bytes are proven.
+      - run: npm test
+
+  # Fetches the pinned Natural Earth release (45 MB, ~15 s) and fails if any
+  # file disagrees with manifest.json, then runs the per-file tests over it.
+  # Once per PR, one Node: the manifest is the product, and this is its proof.
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+      - uses: actions/setup-node@v7
+        with: { node-version: '22' }
+      - run: npm run sync
       - run: npm test
 
   # Refuses to call an empty PR green: a branch whose tree equals its base at
@@ -50,7 +64,7 @@ jobs:
   # evaluate when a dependency failed or was skipped, so it reports an explicit
   # pass or fail of its own rather than inheriting the skip.
   ci-gate:
-    needs: [test, nonempty]
+    needs: [test, sync, nonempty]
     if: always()
     # It reads nothing and writes nothing; the results go in as an input.
     permissions: {}

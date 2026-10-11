@@ -1,0 +1,45 @@
+{
+  "version": 8,
+  "name": "ne-coastline-10m",
+  "metadata": {
+    "coastlines:chart": "ne-coastline-10m",
+    "coastlines:source": "Natural Earth v5.1.2, public domain"
+  },
+  "sources": {
+    "coastlines": {
+      "type": "vector",
+      "tiles": [
+        "/plugins/coastlines/charts/ne-coastline-10m/{z}/{x}/{y}.pbf"
+      ],
+      "minzoom": 0,
+      "maxzoom": 12
+    }
+  },
+  "layers": [
+    {
+      "id": "coastline",
+      "type": "line",
+      "source": "coastlines",
+      "source-layer": "coastline",
+      "minzoom": 0,
+      "paint": {
+        "line-color": "#5f7f9b",
+        "line-width": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          0,
+          0.6,
+          7,
+          1.4,
+          12,
+          2
+        ]
+      }
+    }
+  ]
+}

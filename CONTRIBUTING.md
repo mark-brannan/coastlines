@@ -1,109 +1,73 @@
 # Contributing
 
-Thanks for looking. coastlines publishes **ready-made** coastline and land
-geometry — a few kilobytes each — for anything that draws a map without a tile
-server.
-
-It ships data and a build script. No runtime code: the decoder is
-[nine lines][enc] in whatever language your display runs, and
-[coast-wright](https://github.com/mark-brannan/coast-wright) is one
-implementation of it, not a required one.
-
-> **This package is alpha.** The data is real and the tests pass; the format is
-> still settling. See [the spec's change policy][changes].
+Thanks for looking. coastlines puts Natural Earth geography on a boat: the
+marine catalogue at three scales, byte for byte as published, as plain
+GeoJSON today and as a Signal K resource provider next.
 
 ## Which repository
 
-Three packages, and the boundary between them decides where an issue goes:
-
-- **[portolani](https://github.com/mark-brannan/portolani)** is the generator.
-  How simplification works, what the knobs do, what lands in `provenance` — all
-  of that is decided there. **A shape that comes out wrong is almost always a
-  portolani issue**, because this package is only the output of running it.
-- **This repository** decides *which* files to publish and at what settings —
-  the profile table in the README — and holds an independent decoder in its
-  tests.
-- **[coast-wright](https://github.com/mark-brannan/coast-wright)** draws them.
-  If the JSON is right and the picture is wrong, it belongs there.
+- **This repository** decides *which* Natural Earth files ship, under which
+  ids, grouped into which charts, drawn with which styles. The data itself is
+  never edited here.
+- **A shape that is wrong is a [Natural Earth](https://github.com/nvkelso/natural-earth-vector/issues)
+  issue.** This package ships their file unchanged, and the manifest's sha256
+  proves it.
+- **[coast-wright](https://github.com/mark-brannan/coast-wright)** draws
+  GeoJSON to a canvas. If the file is right and the picture is wrong, it
+  belongs there.
 
 When in doubt, file it here; it will be moved.
-
-## You can check this package rather than trust it
-
-Every file records the generator version, the source URL, a digest of the raw
-fetched bytes, and every knob value. So the claim is falsifiable in one line:
-
-```shell
-npx portolani -s ne_110m_coastline -t 0.25 -p 1 -m 1 | diff - data/coastline-110m.json
-```
-
-**A pull request that changes a data file must show that diff coming back
-clean**, or explain precisely why it cannot. Derived data whose provenance no
-longer reproduces it is worse than no provenance at all — it looks checkable
-and is not.
-
-## Proposing a new profile
-
-This is the most likely reason to open an issue here, and the bar is real:
-every profile is bytes in every install of this package, forever, for everyone
-who wanted a different one.
-
-So say **what it is for** — the display, roughly how large on screen, and the
-byte budget — and what you use today instead. Say the source layer and the knob
-values if you have them, but the use is what decides it; the knobs follow.
-
-If you need one file for one project rather than a profile for everyone, you do
-not need this package at all: run the generator, commit the output, and the
-provenance stamp keeps it honest.
 
 ## Setting up
 
 ```shell
 git clone https://github.com/mark-brannan/coastlines.git
 cd coastlines
-npm install
-npm test
+npm test          # passes offline: the manifest, charts and styles
+npm run sync      # fetches the pinned release into data/ (45 MB, ~15 s)
+npm test          # now also verifies every file
 ```
 
-Node 20 or newer. The one devDependency is `portolani`, the generator; there
-are no runtime dependencies, and `npm test` runs with the network unavailable.
+Node 20 or newer. No runtime dependencies. The one devDependency,
+`@napi-rs/canvas`, is only for `npm run build:sheet`, which draws the README's
+layer sheet; `npm install` is optional otherwise.
 
-To regenerate the data files:
+## The manifest is the product
 
-```shell
-npm run build
-```
+`manifest.json` is the whole promise: id, source file, bytes, sha256. `data/`
+is gitignored and regenerated from it. So:
 
-That one **does** reach the network — it fetches from Natural Earth. It should
-produce no diff unless you changed a profile's settings or the generator moved.
+- **Adding a file** is one manifest entry without `bytes` or `sha256`, then
+  `npm run sync:refresh`, then a look at the diff. The id is
+  `ne-<layer>-<scale>`, underscores to hyphens; the tests enforce it.
+- **Moving the pin** to a newer Natural Earth release is `source.ref` and
+  `source.base`, then `npm run sync:refresh`. Every sha256 changes; that is a
+  minor version at least, because somebody's coastline moves.
+- **This package's share** is every 50m and 110m file, and at 10m the
+  coastline, the land and whatever fits a 5 MB response body, bathymetry
+  excluded. The rest belongs to the companion packages. A test holds that
+  line.
 
-## The tests decode independently, on purpose
+## Charts and styles
 
-`test/data.test.mjs` is a decoder written against [the spec][enc], and it
-deliberately does not import the code that wrote the files. If it imported the
-encoder, an encoder bug would round-trip cleanly and prove nothing.
+`charts.json` says which ids a plotter sees as one tickable layer and the
+zoom range of each. `styles/<chart>.json` is the Mapbox style the plugin will
+serve, hand-written. The tests cross-check them: a style draws only layers
+the chart cuts, inside their zooms, and every cut layer is styled.
 
-Keep that. The two mistakes every decoder makes are silent — reading
-`[lat, lon]` because that is what Google's polyline format stores, and
-forgetting that the encoding alphabet contains a backslash that JSON escapes —
-and `fixtures/` exists so an implementation in any language can catch both
-before it ships.
+To see a change: `npm run build:pages`, then serve `_site/` with anything
+(`python3 -m http.server --directory _site`). The page is what GitHub Pages
+deploys.
 
 ## Before you open a pull request
 
 ```shell
 npm test
+npm run build:readme   # if the manifest changed: regenerates the README table
+npm run build:sheet    # if the manifest changed: regenerates docs/layers.png
 ```
 
-Then:
-
-- **A changed data file shows its numbers**: shapes, points, bytes, before and
-  after. The README's profile table quotes all three and has to be updated in
-  the same pull request.
-- **A changed data file shows the reproduce-and-diff command coming back
-  clean.**
-- **Tests assert values** — counts, coordinates, digests — never printed
-  layout, and never by importing the encoder.
+- **Tests assert values**, never printed layout.
 - **Branch from latest `main`**, and rebase onto it rather than merging it in.
 - **One logical change per pull request.**
 - **Commits are conventional**: `<type>(<scope>): <subject>`, imperative,
@@ -111,29 +75,21 @@ Then:
 
 ## Versions
 
-Pre-1.0 and alpha, so this can still move — but consumers import these files
-directly and some ship them to a browser, so:
+Pre-1.0, so this can still move, but consumers import these files directly
+and some ship them to a browser:
 
-- **Any change to a published file's bytes is at least a minor**, including a
-  regeneration against a newer Natural Earth ref. Somebody's page gets larger
-  or their coastline moves.
-- A new profile is a minor. Removing one, or changing an export path, is a
-  major.
-- A change that takes a new `format` value under the [spec's change
-  policy][changes] is a major, and coordinates with portolani.
+- **Any change to a published file's bytes is at least a minor**, including
+  moving the Natural Earth pin.
+- A new id is a minor. Removing one, or renaming it, is a major.
+- A chart or style change is a minor: a plotter's picture changes.
 
 ## Code of Conduct
 
 Participation is governed by the
-[Code of Conduct](https://github.com/mark-brannan/.github/blob/main/CODE_OF_CONDUCT.md),
-the org-wide default now that this repo doesn't carry its own copy.
+[Code of Conduct](https://github.com/mark-brannan/.github/blob/main/CODE_OF_CONDUCT.md).
 
 ## Licence
 
 Contributions are licensed under the [MIT licence](LICENSE) that covers this
-project. The geometry derives from Natural Earth, which is public domain and
-carries its own attribution — recorded inside each file's `provenance`. Do not
-strip it.
-
-[enc]: https://github.com/mark-brannan/portolani/blob/main/docs/portolano-format.md#3-encoding
-[changes]: https://github.com/mark-brannan/portolani/blob/main/docs/portolano-format.md#8-changes
+project. The geometry is Natural Earth, public domain, credited in the README
+and the manifest. Do not strip it.

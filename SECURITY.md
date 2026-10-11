@@ -13,17 +13,16 @@ pre-1.0 release may change a published file in a patch.
 
 Two things make that less alarming than it reads:
 
-- **This package ships data and no runtime code.** Nothing in it executes in
-  your process. What an old version costs you is a coastline that is out of date
-  relative to Natural Earth, not a vulnerability sitting in your dependency
-  tree.
-- **The format is versioned separately** from the package, by the `format`
-  field inside each file, under the spec's
-  [change policy](https://github.com/mark-brannan/portolani/blob/main/docs/portolano-format.md#8-changes).
-  A decoder written against a `format` value keeps working.
+- **The data is Natural Earth's, unchanged, and provably so.** Every file's
+  sha256 is in `manifest.json` and checked on every sync and every pack. What
+  an old version costs you is a coastline that is out of date relative to
+  Natural Earth, not a tampered file.
+- **The code is small and has no runtime dependencies.** `lib/` reads the
+  manifest and resolves paths; nothing fetches at runtime. The Signal K plugin
+  face, when it lands, will serve files from disk and will be covered here.
 
 If you ship these files to a browser, pin an exact version and read the release
-notes before moving — a regeneration changes bytes.
+notes before moving — moving the Natural Earth pin changes bytes.
 
 ## Reporting a vulnerability
 
@@ -46,52 +45,43 @@ up.
 
 ## What is in scope
 
-The interesting property of this package is that it is **derived data you are
-asked to trust**, and the trust is meant to be checkable.
+The interesting property of this package is that it is **somebody else's data
+you are asked to trust**, and the trust is meant to be checkable.
 
-- **Provenance that does not reproduce the file.** Every file records the
-  generator version, the source URL, a digest of the raw fetched bytes, and
-  every knob value, so that this works:
+- **A file that does not match its manifest entry.** Every entry carries the
+  pinned source URL, the byte count and the sha256 of the published file, so
+  that this works:
 
   ```shell
-  npx portolani -s ne_110m_coastline -t 0.25 -p 1 -m 1 | diff - node_modules/coastlines/data/coastline-110m.json
+  curl -sL https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_coastline.geojson | sha256sum
+  node -p "require('coastlines/manifest.json').files.find(f => f.id === 'ne-coastline-110m').sha256"
   ```
 
-  If a published file does not reproduce from its own stated provenance,
-  report it privately. It is almost certainly an honest mistake, but it is the
-  one failure here that could hide an altered file, so it gets looked at before
-  it is discussed.
+  If a file in a published tarball does not match, report it privately. It is
+  almost certainly an honest mistake, but it is the one failure here that
+  could hide an altered file, so it gets looked at before it is discussed.
 
 - **A discrepancy between npm and this repository** at the corresponding tag,
   or anything shipped in `files` that should not be there.
 
-- **JSON that harms a consumer.** These files are parsed by decoders in several
-  languages, some on small hardware. A structure that crashes or hangs a
-  reasonable parser is in scope.
+- **The sync script fetching anything but the pinned URL**, or accepting a
+  byte it should refuse.
 
 ## What is out of scope
 
-- **How the geometry is produced.** Simplification, clipping, the antimeridian,
-  what lands in `provenance` — all of that belongs to
-  [portolani](https://github.com/mark-brannan/portolani/security), the
-  generator. A crafted source document, or the fetching of one, is its surface,
-  not this package's.
-- **Drawing.** [coast-wright](https://github.com/mark-brannan/coast-wright)
-  decodes and renders; injection into a page through a canvas or an SVG belongs
-  there.
 - **Natural Earth's own data and its accuracy.** This package records a digest
-  of what they publish and does not vouch for the cartography.
-- **Geometry that looks wrong** — a missing island, an over-simplified bay.
-  That is a public issue, usually against portolani.
-- **Navigational use.** This is coarse, deliberately lossy geometry for
-  annotating a display. It is not a chart and must not be used for pilotage.
+  of what they publish and does not vouch for the cartography; a missing
+  island is [their issue](https://github.com/nvkelso/natural-earth-vector/issues).
+- **Drawing.** [coast-wright](https://github.com/mark-brannan/coast-wright)
+  and MapLibre render; injection into a page through a canvas belongs there.
+- **Navigational use.** Natural Earth is small-scale cartography for a world
+  map. It is not a chart and must not be used for pilotage.
 
 ## Notes on how this package is built
 
-- **No runtime dependencies.** The single devDependency is the generator.
-- **The tests decode the shipped files independently**, against the published
-  spec, without importing the code that wrote them — an encoder bug cannot
-  round-trip its way past them.
-- `npm test` runs with the network unavailable. `npm run build` does not: it
-  fetches from Natural Earth, by design, and is a maintainer step rather than
-  part of installing this package.
+- **No runtime dependencies.** The single devDependency draws the README's
+  layer sheet and is not needed to install, test or sync.
+- **`npm test` runs with the network unavailable.** `npm run sync` does not:
+  it fetches from the pinned Natural Earth release, refuses any byte that
+  disagrees with the manifest, and runs before every `npm pack`, so a tarball
+  never carries a file the manifest did not promise.

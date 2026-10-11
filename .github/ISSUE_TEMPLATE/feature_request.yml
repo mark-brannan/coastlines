@@ -1,38 +1,29 @@
-name: New profile or capability
-description: Ask for a file that does not exist yet
+name: New file, chart or capability
+description: Ask for a Natural Earth file, a chart or a style that does not ship yet
 labels: ['enhancement']
 body:
   - type: markdown
     attributes:
       value: |
-        Every profile is bytes in every install of this package, forever, for
-        everyone who wanted a different one — so the use case decides it, not
-        the settings.
+        Every file is bytes in every install of this package, forever, for
+        everyone who wanted a different one, and this package has a size line
+        to hold. So the use case decides it, not the file.
 
         If you need one file for one project, you do not need this package:
-        run [portolani](https://github.com/mark-brannan/portolani), commit the
-        output, and the provenance stamp keeps it honest. That is a completely
-        reasonable answer and it costs nobody else anything.
+        fetch it from the [Natural Earth tree](https://github.com/nvkelso/natural-earth-vector/tree/v5.1.2/geojson)
+        at the pinned tag, record its sha256, and commit it. That is a
+        completely reasonable answer and it costs nobody else anything.
 
   - type: textarea
     id: use
     attributes:
-      label: What is on screen?
+      label: What is on screen, or what is the plugin deciding?
       description: >
-        The display, roughly how large the map is, and what the reader is doing
-        with it. This is the field that decides the issue.
+        The display and what the reader is doing with it, or the plugin and
+        what it looks up. This is the field that decides the issue.
       placeholder: >
-        A tide-station overview for one estuary, in a page that has to stay
-        under 30 KB total. The 50 m world file is mostly coastline I never show.
-    validations:
-      required: true
-
-  - type: input
-    id: budget
-    attributes:
-      label: Byte budget
-      description: Roughly what the file can cost. The README's table gives the current sizes.
-      placeholder: 'under 15 KB'
+        A routing plugin that wants the 10m ocean polygon as a sea mask; the
+        50m one misses channels we sail.
     validations:
       required: true
 
@@ -41,23 +32,20 @@ body:
     attributes:
       label: What kind of change is it
       options:
-        - A new global profile (different tolerance, precision, or island cutoff)
-        - A regional extract
-        - Polygons where only lines exist today, or the reverse
-        - A different source layer entirely
-        - Something about packaging, exports, or types
+        - A Natural Earth file this package does not ship
+        - A new chart, or a layer added to one
+        - A style change
+        - Something about packaging, exports, or ids
         - Something else
     validations:
       required: true
 
   - type: input
-    id: settings
+    id: file
     attributes:
-      label: Suggested source and knobs, if you know them
-      description: >
-        A portolani command line. Optional — the use case above is what decides
-        it, and the knobs follow from that.
-      placeholder: '-s ne_10m_coastline -t 0.005 -p 4 -b -71,41,-69,43'
+      label: The Natural Earth file, if you know it
+      description: Its name in the v5.1.2 geojson tree, and its raw size.
+      placeholder: 'ne_10m_ocean.geojson, 10.2 MB'
     validations:
       required: false
 
@@ -66,7 +54,6 @@ body:
     attributes:
       label: What do you use today?
       description: >
-        A file you generated yourself, a larger profile you subset at runtime,
-        a TopoJSON plus a decoder library.
+        A file you bundle yourself, a tile server, another package.
     validations:
       required: false

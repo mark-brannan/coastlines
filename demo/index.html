@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>coastlines: Natural Earth basemap</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.css" integrity="sha384-Nq6PQ+9vJPvw7U/VfDELyrWoGQMsy0gi6QShhaSrGzkpF5KkM40csg2leky+YMTd" crossorigin="anonymous">
+<style>
+  html, body { margin: 0; height: 100%; font: 14px/1.4 system-ui, sans-serif; }
+  #map { position: absolute; inset: 0; }
+  #panel { position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,.94); border-radius: 6px; padding: 10px 14px; box-shadow: 0 1px 4px rgba(0,0,0,.25); max-width: 320px; }
+  #panel h1 { font-size: 15px; margin: 0 0 6px; }
+  #panel label { display: block; margin: 4px 0; }
+  #panel small { color: #555; display: block; margin-top: 8px; }
+  #zoom { font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="panel">
+  <h1>coastlines</h1>
+  <div id="charts"></div>
+  <small>Three charts, one per Natural Earth scale, drawn with the style each will be served with on a boat.
+  Zoom <span id="zoom">–</span>. <a href="https://github.com/mark-brannan/coastlines">Source and catalogue</a>.
+  Made with Natural Earth, public domain.</small>
+</div>
+<script src="https://unpkg.com/maplibre-gl@5.6.0/dist/maplibre-gl.js" integrity="sha384-GfxBM9x46BaAFxtCq39Fxir8fNZ4VDnwgfi6Kzi5/F1tAFsm0amuuV8kd+Pxzuf/" crossorigin="anonymous"></script>
+<script type="module" src="map.js"></script>
+</body>
+</html>

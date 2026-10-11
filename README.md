@@ -1,103 +1,139 @@
 # coastlines
 
-> **Alpha.** The data is real and the tests pass; the format is still settling.
-> See [the spec's change policy](https://github.com/mark-brannan/portolani/blob/main/docs/portolano-format.md#8-changes).
+> **Reset.** Before 0.1.0 this package shipped a compact derived format, since
+> withdrawn ([post-mortem](https://github.com/mark-brannan/portolani/issues/25)).
+> The name stays and gets a new job, below.
 
-Ready-made coastline and land geometry, a few kilobytes each, for anything
-that draws a map without a tile server.
-
-```js
-import coastline from 'coastlines/coastline-110m' with { type: 'json' }
-// 128 lines, 2709 points, 8 KB -- the whole world
-```
-
-Zero dependencies. Plain JSON. The decoder is
-[nine lines](https://github.com/mark-brannan/portolani/blob/main/docs/portolano-format.md#3-encoding)
-in whatever language your display runs, including a microcontroller with no
-JavaScript anywhere near it. Skeptical that 8 KB is enough?
-[Move the slider and watch](https://mark-brannan.github.io/portolani/).
-
-## Profiles
-
-| Import | Kind | Shapes | Points | Bytes | For |
-| --- | --- | --- | --- | --- | --- |
-| `coastlines/coastline-110m` | lines | 128 | 2 709 | 8 151 | Annotating a coarse data grid. Finer than any global model's cell. |
-| `coastlines/coastline-50m` | lines | 507 | 11 166 | 41 592 | A world map the reader looks at rather than through. |
-| `coastlines/land-110m` | polygons | 121 | 2 764 | 8 445 | The same coarse world, fillable — outer rings and holes. |
-| `coastlines/fixtures` | — | — | — | 5 295 | Self-check vectors for a decoder in another language. |
-
-Each file is a **portolano**: geometry plus the provenance to regenerate it.
-The format is [specified][spec] independently of this package.
-
-## Reading one
-
-In a browser or Node, [`coast-wright`][cw] decodes and draws — its
-[projection gallery][cwdemo] is this package's 50m profile through fourteen
-projections:
+Natural Earth geography on a boat, installed rather than fetched. One
+package holds the marine catalogue at all three scales, byte for byte as
+Natural Earth published it, sha256-pinned, as plain GeoJSON. A browser page
+imports a file; a Signal K plugin (next) serves the same files to every
+chart plotter and plugin on the boat, so nobody ships the same coastline
+twice.
 
 ```js
-import coastline from 'coastlines/coastline-110m' with { type: 'json' }
-import { rings, limn } from 'coast-wright'
+import { manifest, find, localUrl } from 'coastlines'
+import { readFile } from 'node:fs/promises'
 
-limn(ctx, rings(coastline), x, y, { color: '#8ab' })
+const entry = find('ne-coastline-50m')          // { bytes: 1640858, sha256: 'sha256:…', … }
+const world = JSON.parse(await readFile(localUrl(entry), 'utf8'))
 ```
 
-Anywhere else, write the decoder from [§3 of the spec][enc] and prove it right
-against `coastlines/fixtures` — which exists because the two mistakes everyone
-makes are silent: reading `[lat, lon]` because that is what Google's polyline
-format stores, and forgetting that the encoding alphabet contains a backslash
-that JSON escapes. `test/data.test.mjs` in this repo is one such independent
-decoder, deliberately not importing the code that wrote the files.
+The subpath `coastlines/data/<id>` resolves to the `.geojson` file for any
+tool that can load one; `manifest.json` and `charts.json` are plain JSON.
 
-## Provenance
+**See it:** [the basemap on GitHub Pages](https://mark-brannan.github.io/coastlines/),
+the three default charts, drawn with the styles the plugin will serve.
 
-Every file records where it came from and exactly what was done to it:
+[![The 50m chart over Europe: land, sea, lakes, borders, places](docs/pages-map.png)](https://mark-brannan.github.io/coastlines/)
 
-```json
-"provenance": {
-  "generator": { "name": "portolani", "version": "0.1.0" },
-  "source": {
-    "id": "ne_110m_coastline",
-    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_coastline.geojson",
-    "ref": "v5.1.2",
-    "sha256": "sha256:851f581f…"
-  },
-  "options": { "kind": "lines", "tolerance": 0.25, "precision": 1, "minExtent": 1 }
-}
+## One provider, four consumers
+
+```mermaid
+flowchart LR
+  NE[(Natural Earth v5.1.2<br>pinned, sha256-checked)] -->|npm run sync| C[coastlines<br>manifest + data/]
+  C -->|charts: tiles cut on request| F[Freeboard, any plotter]
+  C -->|charts| D[distance-to-shore,<br>routing, grounding]
+  C -->|geojson: the file| S[space-weather, polar views]
+  C -->|geojson, in-process| P[other plugins:<br>time zone, courtesy flag]
 ```
 
-Which means you can check this package rather than trust it:
+The plugin faces, `charts` and `geojson`, are the next work item; the
+design is written up in [#17](https://github.com/mark-brannan/coastlines/issues/17).
+This release is the data and the authored styles, which the demo already
+draws.
+
+## The catalogue
+
+33 files. Every 50m and 110m file in the marine catalogue, and at 10m the
+coastline, the land and every other file that fits a 5 MB response body.
+The rest of 10m and the bathymetry set belong to companion packages.
+
+<!-- catalogue:start -->
+| Import `coastlines/data/…` | Layer | Scale | Geometry | Raw | Why a boat wants it |
+| --- | --- | --- | --- | ---: | --- |
+| `ne-coastline-110m` | coastline | 110m | lines | 137 KB | The line |
+| `ne-land-110m` | land | 110m | polygons | 135 KB | Fill, land masks |
+| `ne-ocean-110m` | ocean | 110m | polygons | 115 KB | The complement; sea fill |
+| `ne-geographic-lines-110m` | geographic_lines | 110m | lines | 59 KB | Equator, tropics, polar circles, International Date Line |
+| `ne-admin-0-boundary-lines-land-110m` | admin_0_boundary_lines_land | 110m | lines | 332 KB | Borders |
+| `ne-admin-0-countries-110m` | admin_0_countries | 110m | polygons | 819 KB | Courtesy flag, VHF scheme, customs |
+| `ne-populated-places-110m` | populated_places | 110m | points | 639 KB | Labels |
+| `ne-lakes-110m` | lakes | 110m | polygons | 36 KB | Inland context |
+| `ne-rivers-lake-centerlines-110m` | rivers_lake_centerlines | 110m | lines | 37 KB | Inland context |
+| `ne-glaciated-areas-110m` | glaciated_areas | 110m | polygons | 21 KB | Polar context |
+| `ne-coastline-50m` | coastline | 50m | lines | 1.6 MB | The line |
+| `ne-land-50m` | land | 50m | polygons | 1.6 MB | Fill, land masks |
+| `ne-ocean-50m` | ocean | 50m | polygons | 1.3 MB | The complement; sea fill |
+| `ne-geographic-lines-50m` | geographic_lines | 50m | lines | 59 KB | Equator, tropics, polar circles, International Date Line |
+| `ne-admin-0-boundary-lines-land-50m` | admin_0_boundary_lines_land | 50m | lines | 742 KB | Borders |
+| `ne-admin-0-boundary-lines-maritime-indicator-50m` | admin_0_boundary_lines_maritime_indicator | 50m | lines | 193 KB | The maritime boundaries Natural Earth draws |
+| `ne-admin-0-countries-50m` | admin_0_countries | 50m | polygons | 2.9 MB | Courtesy flag, VHF scheme, customs |
+| `ne-populated-places-50m` | populated_places | 50m | points | 3.2 MB | Labels |
+| `ne-lakes-50m` | lakes | 50m | polygons | 855 KB | Inland context |
+| `ne-rivers-lake-centerlines-50m` | rivers_lake_centerlines | 50m | lines | 808 KB | Inland context |
+| `ne-glaciated-areas-50m` | glaciated_areas | 50m | polygons | 500 KB | Polar context |
+| `ne-antarctic-ice-shelves-polys-50m` | antarctic_ice_shelves_polys | 50m | polygons | 128 KB | Polar context |
+| `ne-coastline-10m` | coastline | 10m | lines | 9.6 MB | The line, finest |
+| `ne-land-10m` | land | 10m | polygons | 9.7 MB | Fill, land masks, finest |
+| `ne-minor-islands-10m` | minor_islands | 10m | polygons | 1.3 MB | The islands 50m drops |
+| `ne-reefs-10m` | reefs | 10m | lines | 449 KB | Hazards |
+| `ne-geographic-lines-10m` | geographic_lines | 10m | lines | 59 KB | Equator, tropics, polar circles, International Date Line |
+| `ne-time-zones-10m` | time_zones | 10m | polygons | 3.4 MB | Local time from position |
+| `ne-admin-0-boundary-lines-land-10m` | admin_0_boundary_lines_land | 10m | lines | 2.2 MB | Borders |
+| `ne-admin-0-boundary-lines-maritime-indicator-10m` | admin_0_boundary_lines_maritime_indicator | 10m | lines | 278 KB | The maritime boundaries Natural Earth draws |
+| `ne-admin-0-disputed-areas-10m` | admin_0_disputed_areas | 10m | polygons | 685 KB | Honesty on the borders layer |
+| `ne-ports-10m` | ports | 10m | points | 273 KB | Harbours |
+| `ne-antarctic-ice-shelves-polys-10m` | antarctic_ice_shelves_polys | 10m | polygons | 548 KB | Polar context |
+<!-- catalogue:end -->
+
+![Every file, rendered equirectangular](docs/layers.png)
+
+Ids follow the file: `ne-<layer>-<scale>` is `ne_<scale>_<layer>.geojson` in
+the Natural Earth tree. `coastlines/manifest.json` is the machine-readable
+form of this table, with the bytes and sha256 of each file.
+
+## The charts
+
+A plotter does not want 33 files; it wants a basemap to tick. `charts.json`
+groups the files into three charts, each at one scale, and gives every layer
+its zoom range. `styles/<chart>.json` is a Mapbox style, hand-written, one
+per chart; the demo draws it over GeoJSON sources, and the plugin will serve
+it over tiles cut at request time.
+
+| chart | layers | zooms | for |
+| --- | --- | --- | --- |
+| `ne-110m` | the 110m files | 0–4 | zoomed out to oceans |
+| `ne-50m` | the 50m files | 0–7 | the default: a world under any ENC |
+| `ne-coastline-10m` | `coastline` only | 0–12 | what a distance-to-shore reads |
+
+MVT layer names drop the scale, `coastline` not `ne-coastline-50m`, so a
+consumer written against one chart reads any.
+
+## Provenance, and checking rather than trusting
+
+`data/` is not in git. `npm run sync` fetches each file from the pinned
+release and refuses any byte that disagrees with `manifest.json`; `npm pack`
+runs it first, so a tarball never ships a file the manifest did not promise.
 
 ```shell
-npx portolani -s ne_110m_coastline -t 0.25 -p 1 -m 1 | diff - node_modules/coastlines/data/coastline-110m.json
+npm run sync          # fetch what is missing, verify everything (45 MB, ~15 s)
+npm run sync:check    # verify only, no network
+npm run sync:refresh  # move the pin: refetch all and rewrite bytes and sha256
 ```
 
-Simplification is lossy and has knobs. Derived data without the knob values is
-a file somebody made once; with them it is reproducible, which is the whole
-reason the [generator][gen] is published separately.
-
-## Regenerating
+To check a published tarball against Natural Earth yourself:
 
 ```shell
-npm install && npm run build
+curl -sL https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_50m_coastline.geojson | sha256sum
+node -p "require('coastlines/manifest.json').files.find(f => f.id === 'ne-coastline-50m').sha256"
 ```
-
-Needs the network. While `portolani` is unpublished, link it first:
-`npm install --no-save ../portolani`. `scripts/build.mjs` holds one entry per profile and no
-generation logic of its own — if you want a fidelity that is not here, that is
-a four-line addition, or just run [`portolani`][gen] yourself.
 
 ## Licence
 
-The code is MIT. The geometry derives from [Natural Earth][ne], which is
-public domain — no permission needed, no attribution required. Credited
-anyway:
+The code is MIT. The geometry is [Natural Earth][ne], public domain: no
+permission needed, no attribution required. Credited anyway:
 
 > Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com
 
-[spec]: https://github.com/mark-brannan/portolani/blob/main/docs/portolano-format.md
-[enc]: https://github.com/mark-brannan/portolani/blob/main/docs/portolano-format.md#3-encoding
-[gen]: https://github.com/mark-brannan/portolani
-[cw]: https://github.com/mark-brannan/coast-wright
-[cwdemo]: https://mark-brannan.github.io/coast-wright/
 [ne]: https://www.naturalearthdata.com/
