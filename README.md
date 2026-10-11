@@ -1,9 +1,8 @@
 # coastlines
 
-> **Reset, October 2026.** This package used to ship a compact derived format;
-> that format is withdrawn ([post-mortem](https://github.com/mark-brannan/portolani/issues/25)).
-> The name stays and gets a new job, below. Nothing published before 0.1.0 is
-> related to what follows.
+> **Reset.** Before 0.1.0 this package shipped a compact derived format, since
+> withdrawn ([post-mortem](https://github.com/mark-brannan/portolani/issues/25)).
+> The name stays and gets a new job, below.
 
 Natural Earth geography on a boat, installed rather than fetched. One
 package holds the marine catalogue at all three scales, byte for byte as
@@ -20,7 +19,8 @@ const entry = find('ne-coastline-50m')          // { bytes: 1640858, sha256: 'sh
 const world = JSON.parse(await readFile(localUrl(entry), 'utf8'))
 ```
 
-Or, from a bundler, `import world from 'coastlines/data/ne-coastline-50m'`.
+The subpath `coastlines/data/<id>` resolves to the `.geojson` file for any
+tool that can load one; `manifest.json` and `charts.json` are plain JSON.
 
 **See it:** [the basemap on GitHub Pages](https://mark-brannan.github.io/coastlines/),
 the three default charts, drawn with the styles the plugin will serve.

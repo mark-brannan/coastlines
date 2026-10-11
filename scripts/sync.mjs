@@ -10,7 +10,7 @@
 //
 // data/ is gitignored, so the manifest is the record: an entry's sha256 is the
 // promise that `coastlines/data/<id>` is the published file, byte for byte.
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, rename, writeFile } from 'node:fs/promises'
 import { manifest, localUrl, upstreamUrl } from '../lib/catalogue.js'
 import { digest, verify } from '../lib/verify.js'
 
@@ -35,6 +35,13 @@ async function onDisk(entry) {
   }
 }
 
+/** Write to a sibling, then rename: an interrupted sync leaves no truncated file to fail every later run. */
+async function writeAtomically(url, bytes) {
+  const partial = new URL(url.href + '.partial')
+  await writeFile(partial, bytes)
+  await rename(partial, url)
+}
+
 /** One entry: returns 'ok', 'fetched', 'missing' or throws on a mismatch. */
 async function syncOne(entry) {
   const existing = refresh ? null : await onDisk(entry)
@@ -46,7 +53,7 @@ async function syncOne(entry) {
   const bytes = await fetchBytes(upstreamUrl(entry))
   if (refresh) Object.assign(entry, { bytes: bytes.byteLength, sha256: digest(bytes) })
   else verify(entry, bytes)
-  await writeFile(localUrl(entry), bytes)
+  await writeAtomically(localUrl(entry), bytes)
   return 'fetched'
 }
 
