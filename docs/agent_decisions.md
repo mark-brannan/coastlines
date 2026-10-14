@@ -24,3 +24,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261014t074613z
 - The design's 30 MB packed line (§2e, R4) is a CI guard: the sync job fails past it. Measured 28.1 MB packed on this branch. Undo: delete the npm pack step from the sync job in test.yml ([#25](https://github.com/mark-brannan/coastlines/pull/25))
+
+### 20261014t074616z
+- package.json license stays MIT while the tarball ships unmodified LGPL-3.0-or-later GSHHG data with its notices; the declaration is left for the owner, thread open. Undo: set package.json license to MIT AND LGPL-3.0-or-later and point LICENSE at data/gshhg-*.txt ([#25](https://github.com/mark-brannan/coastlines/pull/25))
