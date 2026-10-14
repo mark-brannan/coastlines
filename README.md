@@ -123,7 +123,7 @@ hierarchical, high-resolution shoreline database, _J. Geophys. Res._, 101(B4),
 
 ## The charts
 
-A plotter does not want 33 files; it wants a basemap to tick. `charts.json`
+A plotter does not want 36 files; it wants a basemap to tick. `charts.json`
 groups the files into three charts, each at one scale, and gives every layer
 its zoom range. `styles/<chart>.json` is a Mapbox style, hand-written, one
 per chart; the demo draws it over GeoJSON sources, and the plugin will serve
