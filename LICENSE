@@ -19,3 +19,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+---
+
+The code and documentation are MIT, above. The data ships under its own
+terms, unchanged: Natural Earth is public domain; the GSHHG shoreline is
+LGPL-3.0-or-later, with its copyright and permission notice at
+data/gshhg-licence.txt and the licence text at data/gshhg-copying-lesser.txt.
+The package's SPDX expression, `MIT AND LGPL-3.0-or-later`, names both.
