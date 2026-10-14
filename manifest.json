@@ -199,6 +199,16 @@
       "sha256": "sha256:da4662b7bbfeb897d02f228c5839131dce27acff5717630f91ccff4f67828ee7"
     },
     {
+      "id": "ne-urban-areas-50m",
+      "source": "ne",
+      "layer": "urban_areas",
+      "scale": "50m",
+      "geometry": "polygons",
+      "about": "Built-up footprints of cities",
+      "bytes": 1232325,
+      "sha256": "sha256:f134958140343a8e156d47805e4d0c362e244c194408c9d1a8e80e132fc67b48"
+    },
+    {
       "id": "ne-lakes-50m",
       "source": "ne",
       "layer": "lakes",

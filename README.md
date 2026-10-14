@@ -82,6 +82,7 @@ published shapefile, with the two licence notices that travel with it.
 | `ne-admin-0-boundary-lines-maritime-indicator-50m` | admin_0_boundary_lines_maritime_indicator | 50m | lines | 193 KB | The maritime boundaries Natural Earth draws |
 | `ne-admin-0-countries-50m` | admin_0_countries | 50m | polygons | 2.9 MB | Courtesy flag, VHF scheme, customs |
 | `ne-populated-places-50m` | populated_places | 50m | points | 3.2 MB | Labels |
+| `ne-urban-areas-50m` | urban_areas | 50m | polygons | 1.2 MB | Built-up footprints of cities |
 | `ne-lakes-50m` | lakes | 50m | polygons | 855 KB | Inland context |
 | `ne-rivers-lake-centerlines-50m` | rivers_lake_centerlines | 50m | lines | 808 KB | Inland context |
 | `ne-glaciated-areas-50m` | glaciated_areas | 50m | polygons | 500 KB | Polar context |
