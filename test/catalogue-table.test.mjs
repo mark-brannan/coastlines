@@ -12,8 +12,14 @@ test('the README carries the table the manifest generates', async () => {
 test('one row per id, sizes humanised', () => {
   const table = catalogueTable();
   assert.equal(table.split('\n').length, manifest.files.length + 2);
-  assert.match(table, /`ne-coastline-10m` \| coastline \| 10m \| lines \| 9\.6 MB/);
-  assert.match(table, /`ne-coastline-110m` \| coastline \| 110m \| lines \| 137 KB/);
+  assert.match(table, /`ne-coastline-10m` \| ne \| coastline \| 10m \| lines \| 9\.6 MB/);
+  assert.match(table, /`ne-coastline-110m` \| ne \| coastline \| 110m \| lines \| 137 KB/);
+});
+
+test('a non-GeoJSON entry shows its import suffix; a notice shows no layer', () => {
+  const table = catalogueTable();
+  assert.match(table, /`gshhg-land-h\.shp` \| gshhg \| land \| h \| polygons \| 32\.5 MB/);
+  assert.match(table, /`gshhg-licence\.txt` \| gshhg \| — \| — \| — \| 1 KB/);
 });
 
 test('splice refuses a README without markers and replaces only between them', () => {

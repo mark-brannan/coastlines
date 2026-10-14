@@ -40,8 +40,8 @@ is gitignored and regenerated from it. So:
 - **Adding a file** is one manifest entry without `bytes` or `sha256`, then
   `npm run sync:refresh`, then a look at the diff. The id is
   `ne-<layer>-<scale>`, underscores to hyphens; the tests enforce it.
-- **Moving the pin** to a newer Natural Earth release is `source.ref` and
-  `source.base`, then `npm run sync:refresh`. Every sha256 changes; that is a
+- **Moving the pin** to a newer Natural Earth release is `sources.ne.ref` and
+  `sources.ne.base`, then `npm run sync:refresh`. Every sha256 changes; that is a
   minor version at least, because somebody's coastline moves.
 - **This package's share** is every 50m and 110m file, and at 10m the
   coastline, the land and whatever fits a 5 MB response body, bathymetry

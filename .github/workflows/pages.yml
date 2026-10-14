@@ -17,7 +17,8 @@ jobs:
       - uses: actions/setup-node@v7
         with: { node-version: '22' }
       # No install: the demo has no build dependencies. sync fetches the pinned
-      # Natural Earth release (45 MB, ~15 s) and refuses any byte that disagrees
+      # Natural Earth release (45 MB) and the GSHHG zip (149 MB, ~90 s together)
+      # and refuses any byte that disagrees
       # with manifest.json; build:pages copies the three charts' files into _site.
       - run: npm run sync
       - run: npm run build:pages

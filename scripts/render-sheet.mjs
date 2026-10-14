@@ -6,10 +6,12 @@
 //   node scripts/render-sheet.mjs [docs/layers.png]
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createCanvas } from '@napi-rs/canvas';
-import { manifest, localUrl } from '../lib/catalogue.js';
+import { manifest, format, localUrl } from '../lib/catalogue.js';
 import { drawCollection, equirectangular } from '../lib/draw.js';
 
 const out = new URL(`../${process.argv[2] ?? 'docs/layers.png'}`, import.meta.url);
+// The sheet draws GeoJSON; a shapefile or a licence text has no tile here.
+const files = manifest.files.filter((entry) => format(entry) === 'geojson');
 const COLUMNS = 3;
 const TILE = { width: 360, height: 180, label: 34, gap: 12 };
 const INK = {
@@ -18,7 +20,7 @@ const INK = {
   points: { fill: '#8a5a44', radius: 1.2 },
 };
 
-const rows = Math.ceil(manifest.files.length / COLUMNS);
+const rows = Math.ceil(files.length / COLUMNS);
 const cell = { width: TILE.width + TILE.gap, height: TILE.height + TILE.label + TILE.gap };
 const canvas = createCanvas(COLUMNS * cell.width + TILE.gap, rows * cell.height + TILE.gap);
 const ctx = canvas.getContext('2d');
@@ -30,7 +32,7 @@ const kb = (bytes) =>
     ? `${(bytes / 1024 / 1024).toFixed(1)} MB`
     : `${Math.round(bytes / 1024)} KB`;
 
-for (const [index, entry] of manifest.files.entries()) {
+for (const [index, entry] of files.entries()) {
   const x = TILE.gap + (index % COLUMNS) * cell.width;
   const y = TILE.gap + Math.floor(index / COLUMNS) * cell.height;
   const collection = JSON.parse(await readFile(localUrl(entry), 'utf8'));

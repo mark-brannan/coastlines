@@ -6,7 +6,7 @@
 // files it will cut. Needs data/ (`npm run sync`).
 import { cp, mkdir, rm, stat } from 'node:fs/promises';
 import { charts } from '../lib/charts.js';
-import { find, localUrl } from '../lib/catalogue.js';
+import { find, format, localUrl } from '../lib/catalogue.js';
 
 const site = new URL('../_site/', import.meta.url);
 const root = new URL('../', import.meta.url);
@@ -25,6 +25,8 @@ for (const chart of charts) {
 }
 for (const id of ids) {
   const entry = find(id);
+  // The page's sources are GeoJSON; a chart that named a shapefile would need a cutter first.
+  if (format(entry) !== 'geojson') throw new Error(`${id}: a chart layer must be GeoJSON`);
   await cp(localUrl(entry), new URL(`data/${id}.geojson`, site));
   bytes += (await stat(localUrl(entry))).size;
 }

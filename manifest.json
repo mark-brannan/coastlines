@@ -1,14 +1,26 @@
 {
-  "source": {
-    "name": "Natural Earth",
-    "repository": "https://github.com/nvkelso/natural-earth-vector",
-    "ref": "v5.1.2",
-    "base": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/",
-    "licence": "public domain"
+  "sources": {
+    "ne": {
+      "name": "Natural Earth",
+      "repository": "https://github.com/nvkelso/natural-earth-vector",
+      "ref": "v5.1.2",
+      "base": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/",
+      "licence": "public domain"
+    },
+    "gshhg": {
+      "name": "GSHHG",
+      "version": "2.3.7",
+      "url": "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
+      "bytes": 149157845,
+      "sha256": "sha256:8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41",
+      "licence": "LGPL-3.0-or-later",
+      "site": "https://www.soest.hawaii.edu/pwessel/gshhg/"
+    }
   },
   "files": [
     {
       "id": "ne-coastline-110m",
+      "source": "ne",
       "layer": "coastline",
       "scale": "110m",
       "geometry": "lines",
@@ -18,6 +30,7 @@
     },
     {
       "id": "ne-land-110m",
+      "source": "ne",
       "layer": "land",
       "scale": "110m",
       "geometry": "polygons",
@@ -27,6 +40,7 @@
     },
     {
       "id": "ne-ocean-110m",
+      "source": "ne",
       "layer": "ocean",
       "scale": "110m",
       "geometry": "polygons",
@@ -36,6 +50,7 @@
     },
     {
       "id": "ne-geographic-lines-110m",
+      "source": "ne",
       "layer": "geographic_lines",
       "scale": "110m",
       "geometry": "lines",
@@ -45,6 +60,7 @@
     },
     {
       "id": "ne-admin-0-boundary-lines-land-110m",
+      "source": "ne",
       "layer": "admin_0_boundary_lines_land",
       "scale": "110m",
       "geometry": "lines",
@@ -54,6 +70,7 @@
     },
     {
       "id": "ne-admin-0-countries-110m",
+      "source": "ne",
       "layer": "admin_0_countries",
       "scale": "110m",
       "geometry": "polygons",
@@ -63,6 +80,7 @@
     },
     {
       "id": "ne-populated-places-110m",
+      "source": "ne",
       "layer": "populated_places",
       "scale": "110m",
       "geometry": "points",
@@ -72,6 +90,7 @@
     },
     {
       "id": "ne-lakes-110m",
+      "source": "ne",
       "layer": "lakes",
       "scale": "110m",
       "geometry": "polygons",
@@ -81,6 +100,7 @@
     },
     {
       "id": "ne-rivers-lake-centerlines-110m",
+      "source": "ne",
       "layer": "rivers_lake_centerlines",
       "scale": "110m",
       "geometry": "lines",
@@ -90,6 +110,7 @@
     },
     {
       "id": "ne-glaciated-areas-110m",
+      "source": "ne",
       "layer": "glaciated_areas",
       "scale": "110m",
       "geometry": "polygons",
@@ -99,6 +120,7 @@
     },
     {
       "id": "ne-coastline-50m",
+      "source": "ne",
       "layer": "coastline",
       "scale": "50m",
       "geometry": "lines",
@@ -108,6 +130,7 @@
     },
     {
       "id": "ne-land-50m",
+      "source": "ne",
       "layer": "land",
       "scale": "50m",
       "geometry": "polygons",
@@ -117,6 +140,7 @@
     },
     {
       "id": "ne-ocean-50m",
+      "source": "ne",
       "layer": "ocean",
       "scale": "50m",
       "geometry": "polygons",
@@ -126,6 +150,7 @@
     },
     {
       "id": "ne-geographic-lines-50m",
+      "source": "ne",
       "layer": "geographic_lines",
       "scale": "50m",
       "geometry": "lines",
@@ -135,6 +160,7 @@
     },
     {
       "id": "ne-admin-0-boundary-lines-land-50m",
+      "source": "ne",
       "layer": "admin_0_boundary_lines_land",
       "scale": "50m",
       "geometry": "lines",
@@ -144,6 +170,7 @@
     },
     {
       "id": "ne-admin-0-boundary-lines-maritime-indicator-50m",
+      "source": "ne",
       "layer": "admin_0_boundary_lines_maritime_indicator",
       "scale": "50m",
       "geometry": "lines",
@@ -153,6 +180,7 @@
     },
     {
       "id": "ne-admin-0-countries-50m",
+      "source": "ne",
       "layer": "admin_0_countries",
       "scale": "50m",
       "geometry": "polygons",
@@ -162,6 +190,7 @@
     },
     {
       "id": "ne-populated-places-50m",
+      "source": "ne",
       "layer": "populated_places",
       "scale": "50m",
       "geometry": "points",
@@ -171,6 +200,7 @@
     },
     {
       "id": "ne-lakes-50m",
+      "source": "ne",
       "layer": "lakes",
       "scale": "50m",
       "geometry": "polygons",
@@ -180,6 +210,7 @@
     },
     {
       "id": "ne-rivers-lake-centerlines-50m",
+      "source": "ne",
       "layer": "rivers_lake_centerlines",
       "scale": "50m",
       "geometry": "lines",
@@ -189,6 +220,7 @@
     },
     {
       "id": "ne-glaciated-areas-50m",
+      "source": "ne",
       "layer": "glaciated_areas",
       "scale": "50m",
       "geometry": "polygons",
@@ -198,6 +230,7 @@
     },
     {
       "id": "ne-antarctic-ice-shelves-polys-50m",
+      "source": "ne",
       "layer": "antarctic_ice_shelves_polys",
       "scale": "50m",
       "geometry": "polygons",
@@ -207,6 +240,7 @@
     },
     {
       "id": "ne-coastline-10m",
+      "source": "ne",
       "layer": "coastline",
       "scale": "10m",
       "geometry": "lines",
@@ -216,6 +250,7 @@
     },
     {
       "id": "ne-land-10m",
+      "source": "ne",
       "layer": "land",
       "scale": "10m",
       "geometry": "polygons",
@@ -225,6 +260,7 @@
     },
     {
       "id": "ne-minor-islands-10m",
+      "source": "ne",
       "layer": "minor_islands",
       "scale": "10m",
       "geometry": "polygons",
@@ -234,6 +270,7 @@
     },
     {
       "id": "ne-reefs-10m",
+      "source": "ne",
       "layer": "reefs",
       "scale": "10m",
       "geometry": "lines",
@@ -243,6 +280,7 @@
     },
     {
       "id": "ne-geographic-lines-10m",
+      "source": "ne",
       "layer": "geographic_lines",
       "scale": "10m",
       "geometry": "lines",
@@ -252,6 +290,7 @@
     },
     {
       "id": "ne-time-zones-10m",
+      "source": "ne",
       "layer": "time_zones",
       "scale": "10m",
       "geometry": "polygons",
@@ -261,6 +300,7 @@
     },
     {
       "id": "ne-admin-0-boundary-lines-land-10m",
+      "source": "ne",
       "layer": "admin_0_boundary_lines_land",
       "scale": "10m",
       "geometry": "lines",
@@ -270,6 +310,7 @@
     },
     {
       "id": "ne-admin-0-boundary-lines-maritime-indicator-10m",
+      "source": "ne",
       "layer": "admin_0_boundary_lines_maritime_indicator",
       "scale": "10m",
       "geometry": "lines",
@@ -279,6 +320,7 @@
     },
     {
       "id": "ne-admin-0-disputed-areas-10m",
+      "source": "ne",
       "layer": "admin_0_disputed_areas",
       "scale": "10m",
       "geometry": "polygons",
@@ -288,6 +330,7 @@
     },
     {
       "id": "ne-ports-10m",
+      "source": "ne",
       "layer": "ports",
       "scale": "10m",
       "geometry": "points",
@@ -297,12 +340,43 @@
     },
     {
       "id": "ne-antarctic-ice-shelves-polys-10m",
+      "source": "ne",
       "layer": "antarctic_ice_shelves_polys",
       "scale": "10m",
       "geometry": "polygons",
       "about": "Polar context",
       "bytes": 561580,
       "sha256": "sha256:8f9bf62368695f5664b5fcd9bc0e2baea66da295aea014ce0e9cf510f209898d"
+    },
+    {
+      "id": "gshhg-land-h",
+      "source": "gshhg",
+      "member": "GSHHS_shp/h/GSHHS_h_L1.shp",
+      "format": "shp",
+      "layer": "land",
+      "scale": "h",
+      "geometry": "polygons",
+      "about": "Land, the GSHHS shoreline at high resolution; 144,749 polygons",
+      "bytes": 34129516,
+      "sha256": "sha256:d870bdbc90a074f87a8c09a9630abb5f18916314b9a196dba2e6866fd51ef325"
+    },
+    {
+      "id": "gshhg-licence",
+      "source": "gshhg",
+      "member": "LICENSE.TXT",
+      "format": "txt",
+      "about": "The GSHHG copyright and permission notice; travels with every copy",
+      "bytes": 1375,
+      "sha256": "sha256:dc53a4833bf9121360a5286917683f041439327353ffe0231206c6b746005b81"
+    },
+    {
+      "id": "gshhg-copying-lesser",
+      "source": "gshhg",
+      "member": "COPYING.LESSERv3",
+      "format": "txt",
+      "about": "The GNU Lesser General Public License, version 3",
+      "bytes": 7816,
+      "sha256": "sha256:ea7d049c7705dc13afc202dd18e1827f3484f8212fd3fa7b82fc4a0c363432c9"
     }
   ]
 }
