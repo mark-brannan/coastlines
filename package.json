@@ -9,6 +9,8 @@
     "./manifest.json": "./manifest.json",
     "./charts.json": "./charts.json",
     "./data/*": "./data/*.geojson",
+    "./data/*.shp": "./data/*.shp",
+    "./data/*.txt": "./data/*.txt",
     "./styles/*": "./styles/*.json",
     "./package.json": "./package.json"
   },
@@ -40,7 +42,7 @@
     "marine",
     "signalk"
   ],
-  "license": "MIT",
+  "license": "MIT AND LGPL-3.0-or-later",
   "author": "Mark Brannan",
   "repository": {
     "type": "git",

@@ -6,7 +6,7 @@
 //   node scripts/catalogue-table.mjs          rewrite README.md
 //   node scripts/catalogue-table.mjs --print  print the table only
 import { readFile, writeFile } from 'node:fs/promises';
-import { manifest } from '../lib/catalogue.js';
+import { manifest, format } from '../lib/catalogue.js';
 
 export const START = '<!-- catalogue:start -->';
 export const END = '<!-- catalogue:end -->';
@@ -16,16 +16,26 @@ const kb = (bytes) =>
     ? `${(bytes / 1024 / 1024).toFixed(1)} MB`
     : `${Math.round(bytes / 1024)} KB`;
 
-/** The Markdown table, one row per id, grouped by scale in manifest order. */
+/** The import subpath's tail: the bare id resolves to GeoJSON; any other format carries its extension. */
+const subpath = (entry) =>
+  format(entry) === 'geojson' ? entry.id : `${entry.id}.${format(entry)}`;
+
+/** The Markdown table, one row per id, in manifest order; a notice file has no layer, scale or geometry. */
 export function catalogueTable(files = manifest.files) {
   const lines = [
     '| Import `coastlines/data/…` | Layer | Scale | Geometry | Raw | Why a boat wants it |',
     '| --- | --- | --- | --- | ---: | --- |',
   ];
   for (const entry of files) {
-    lines.push(
-      `| \`${entry.id}\` | ${entry.layer} | ${entry.scale} | ${entry.geometry} | ${kb(entry.bytes)} | ${entry.about} |`,
-    );
+    const cells = [
+      `\`${subpath(entry)}\``,
+      entry.layer ?? '—',
+      entry.scale ?? '—',
+      entry.geometry ?? '—',
+      kb(entry.bytes),
+      entry.about,
+    ];
+    lines.push(`| ${cells.join(' | ')} |`);
   }
   return lines.join('\n');
 }

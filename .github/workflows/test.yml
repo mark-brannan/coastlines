@@ -24,9 +24,12 @@ jobs:
       # the sync job below is where the bytes are proven.
       - run: npm test
 
-  # Fetches the pinned Natural Earth release (45 MB, ~15 s) and fails if any
-  # file disagrees with manifest.json, then runs the per-file tests over it.
-  # Once per PR, one Node: the manifest is the product, and this is its proof.
+  # Fetches the pinned Natural Earth release (45 MB) and the GSHHG zip (149 MB,
+  # ~90 s together) and fails if any file disagrees with manifest.json, then
+  # runs the per-file tests over it. Once per PR, one Node: the manifest is the
+  # product, and this is its proof. data/ is cached by the manifest's hash:
+  # sync verifies every byte on a hit, so the cache cannot slip in a wrong one,
+  # and a moved pin misses it.
   sync:
     runs-on: ubuntu-latest
     steps:
@@ -34,8 +37,14 @@ jobs:
         with: { persist-credentials: false }
       - uses: actions/setup-node@v7
         with: { node-version: '22' }
+      - uses: actions/cache@v4
+        with:
+          path: data
+          key: data-${{ hashFiles('manifest.json') }}
       - run: npm run sync
       - run: npm test
+      # Design §2e (R4): the package stays under 30 MB packed.
+      - run: npm pack --dry-run --json | node -e "const [p] = JSON.parse(require('fs').readFileSync(0, 'utf8')); console.log((p.size / 1048576).toFixed(1) + ' MB packed, ' + (p.unpackedSize / 1048576).toFixed(1) + ' MB unpacked'); if (p.size > 30 * 1048576) process.exit(1)"
 
   # Refuses to call an empty PR green: a branch whose tree equals its base at
   # the merge base (a stray commit reverted it) merges cleanly and lands

@@ -20,7 +20,16 @@ const world = JSON.parse(await readFile(localUrl(entry), 'utf8'))
 ```
 
 The subpath `coastlines/data/<id>` resolves to the `.geojson` file for any
-tool that can load one; `manifest.json` and `charts.json` are plain JSON.
+tool that can load one; `manifest.json` and `charts.json` are plain JSON. A
+file in another format carries its extension, `coastlines/data/gshhg-land-h.shp`,
+and `shapefilePolygons` from the package reads it:
+
+```js
+import { find, localUrl, shapefilePolygons } from 'coastlines'
+
+const land = find('gshhg-land-h')               // { source: 'gshhg', format: 'shp', … }
+const polygons = shapefilePolygons(await readFile(localUrl(land)))  // 144,749 of [outerRing]
+```
 
 **See it:** [the basemap on GitHub Pages](https://mark-brannan.github.io/coastlines/),
 the three default charts, drawn with the styles the plugin will serve.
@@ -45,9 +54,12 @@ draws.
 
 ## The catalogue
 
-33 files. Every 50m and 110m file in the marine catalogue, and at 10m the
-coastline, the land and every other file that fits a 5 MB response body.
-The rest of 10m and the bathymetry set belong to companion packages.
+36 files from two sources. From Natural Earth, every 50m and 110m file in
+the marine catalogue, and at 10m the coastline, the land and every other file
+that fits a 5 MB response body; the rest of 10m and the bathymetry set belong
+to companion packages. From GSHHG 2.3.7, the "h" land polygons, the next rung
+of coastline above Natural Earth's 10m (vertex spacing median 707 m), as the
+published shapefile, with the two licence notices that travel with it.
 
 <!-- catalogue:start -->
 | Import `coastlines/data/…` | Layer | Scale | Geometry | Raw | Why a boat wants it |
@@ -85,17 +97,33 @@ The rest of 10m and the bathymetry set belong to companion packages.
 | `ne-admin-0-disputed-areas-10m` | admin_0_disputed_areas | 10m | polygons | 685 KB | Honesty on the borders layer |
 | `ne-ports-10m` | ports | 10m | points | 273 KB | Harbours |
 | `ne-antarctic-ice-shelves-polys-10m` | antarctic_ice_shelves_polys | 10m | polygons | 548 KB | Polar context |
+| `gshhg-land-h.shp` | land | h | polygons | 32.5 MB | Land, the GSHHS shoreline at high resolution; 144,749 polygons |
+| `gshhg-licence.txt` | — | — | — | 1 KB | The GSHHG copyright and permission notice; travels with every copy |
+| `gshhg-copying-lesser.txt` | — | — | — | 8 KB | The GNU Lesser General Public License, version 3 |
 <!-- catalogue:end -->
 
 ![Every file, rendered equirectangular](docs/layers.png)
 
 Ids follow the file: `ne-<layer>-<scale>` is `ne_<scale>_<layer>.geojson` in
-the Natural Earth tree. `coastlines/manifest.json` is the machine-readable
-form of this table, with the bytes and sha256 of each file.
+the Natural Earth tree; `gshhg-land-h` is `GSHHS_shp/h/GSHHS_h_L1.shp` inside
+the GSHHG zip. `coastlines/manifest.json` is the machine-readable form of this
+table, with the bytes and sha256 of each file and, under `sources`, of the
+zip itself.
+
+### Sources and licences
+
+Natural Earth is public domain. GSHHG (Wessel & Smith, the Global
+Self-consistent, Hierarchical, High-resolution Geography database) is
+LGPL-3.0-or-later with a permission notice that asks for the copyright and
+permission notice to appear in all copies; both ship unchanged as
+`data/gshhg-licence.txt` and `data/gshhg-copying-lesser.txt`, pinned like the
+data. Cite: Wessel, P., and W. H. F. Smith, A global, self-consistent,
+hierarchical, high-resolution shoreline database, _J. Geophys. Res._, 101(B4),
+8741–8743, 1996.
 
 ## The charts
 
-A plotter does not want 33 files; it wants a basemap to tick. `charts.json`
+A plotter does not want 36 files; it wants a basemap to tick. `charts.json`
 groups the files into three charts, each at one scale, and gives every layer
 its zoom range. `styles/<chart>.json` is a Mapbox style, hand-written, one
 per chart; the demo draws it over GeoJSON sources, and the plugin will serve
@@ -112,14 +140,14 @@ consumer written against one chart reads any.
 
 ## Provenance, and checking rather than trusting
 
-`data/` is not in git. `npm run sync` fetches each file from the pinned
+`data/` is not in git. `npm run sync` fetches each file from its pinned
 release and refuses any byte that disagrees with `manifest.json`; `npm pack`
 runs it first, so a tarball never ships a file the manifest did not promise.
 
 ```shell
-npm run sync          # fetch what is missing, verify everything (45 MB, ~15 s)
+npm run sync          # fetch what is missing, verify everything (45 MB + 149 MB zip)
 npm run sync:check    # verify only, no network
-npm run sync:refresh  # move the pin: refetch all and rewrite bytes and sha256
+npm run sync:refresh  # move the pins: refetch all and rewrite bytes and sha256
 ```
 
 To check a published tarball against Natural Earth yourself:
@@ -136,4 +164,8 @@ permission needed, no attribution required. Credited anyway:
 
 > Made with Natural Earth. Free vector and raster map data @ naturalearthdata.com
 
+The GSHHG shoreline is [LGPL-3.0-or-later][gshhg]; its notices ship beside it
+([Sources and licences](#sources-and-licences)).
+
 [ne]: https://www.naturalearthdata.com/
+[gshhg]: https://www.soest.hawaii.edu/pwessel/gshhg/

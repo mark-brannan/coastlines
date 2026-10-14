@@ -16,6 +16,12 @@ test('one row per id, sizes humanised', () => {
   assert.match(table, /`ne-coastline-110m` \| coastline \| 110m \| lines \| 137 KB/);
 });
 
+test('a non-GeoJSON entry shows its import suffix; a notice shows no layer', () => {
+  const table = catalogueTable();
+  assert.match(table, /`gshhg-land-h\.shp` \| land \| h \| polygons \| 32\.5 MB/);
+  assert.match(table, /`gshhg-licence\.txt` \| — \| — \| — \| 1 KB/);
+});
+
 test('splice refuses a README without markers and replaces only between them', () => {
   assert.throws(() => splice('no markers', 'x'), /markers/);
   assert.equal(splice(`a\n${START}\nold\n${END}\nb`, 'new'), `a\n${START}\nnew\n${END}\nb`);
