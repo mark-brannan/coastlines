@@ -21,3 +21,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261014t074611z
 - The package root exports shapefilePolygons only; the zip reader and signedArea are internal, imported by path. Undo: re-export zipMembers, zipMember, crc32 and signedArea from lib/index.js ([#25](https://github.com/mark-brannan/coastlines/pull/25))
+
+### 20261014t074613z
+- The design's 30 MB packed line (§2e, R4) is a CI guard: the sync job fails past it. Measured 28.1 MB packed on this branch. Undo: delete the npm pack step from the sync job in test.yml ([#25](https://github.com/mark-brannan/coastlines/pull/25))
