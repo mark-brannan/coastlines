@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.5-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.4-alpha.0...v0.0.5-alpha.0) (2026-10-14)
+
+
+### Added
+
+* urban-area polygons at 50m ([#28](https://github.com/mark-brannan/coastlines/issues/28)) ([949b276](https://github.com/mark-brannan/coastlines/commit/949b276229c409c884237124954365643cf20cd7))
+
 ## [0.0.4-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.3-alpha.0...v0.0.4-alpha.0) (2026-10-14)
 
 
