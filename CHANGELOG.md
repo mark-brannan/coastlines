@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.0.4-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.3-alpha.0...v0.0.4-alpha.0) (2026-10-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* vend GSHHG 2.3.7 "h" land, byte for byte, with zip and shapefile readers ([#25](https://github.com/mark-brannan/coastlines/issues/25))
+
+### Added
+
+* vend GSHHG 2.3.7 "h" land, byte for byte, with zip and shapefile readers ([#25](https://github.com/mark-brannan/coastlines/issues/25)) ([efb0801](https://github.com/mark-brannan/coastlines/commit/efb080127faef5a4fa9bcdc796709fc8dae378fc))
+
 ## [0.0.3-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.2-alpha.0...v0.0.3-alpha.0) (2026-10-11)
 
 
