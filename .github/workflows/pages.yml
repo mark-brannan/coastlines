@@ -20,7 +20,7 @@ jobs:
       # Natural Earth release (45 MB) and the GSHHG zip (149 MB, ~90 s together),
       # cached by the manifest's hash and verified byte for byte on every run;
       # build:pages copies the three charts' files into _site.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: data
           key: data-${{ hashFiles('manifest.json') }}
