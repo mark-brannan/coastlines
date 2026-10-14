@@ -18,3 +18,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261011t034742z
 - README images committed under docs/ Undo: host on Pages ([#21](https://github.com/mark-brannan/coastlines/pull/21))
+
+### 20261014t074611z
+- The package root exports shapefilePolygons only; the zip reader and signedArea are internal, imported by path. Undo: re-export zipMembers, zipMember, crc32 and signedArea from lib/index.js ([#25](https://github.com/mark-brannan/coastlines/pull/25))
