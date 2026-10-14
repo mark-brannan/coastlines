@@ -23,13 +23,12 @@ const subpath = (entry) =>
 /** The Markdown table, one row per id, in manifest order; a notice file has no layer, scale or geometry. */
 export function catalogueTable(files = manifest.files) {
   const lines = [
-    '| Import `coastlines/data/…` | Source | Layer | Scale | Geometry | Raw | Why a boat wants it |',
-    '| --- | --- | --- | --- | --- | ---: | --- |',
+    '| Import `coastlines/data/…` | Layer | Scale | Geometry | Raw | Why a boat wants it |',
+    '| --- | --- | --- | --- | ---: | --- |',
   ];
   for (const entry of files) {
     const cells = [
       `\`${subpath(entry)}\``,
-      entry.source,
       entry.layer ?? '—',
       entry.scale ?? '—',
       entry.geometry ?? '—',

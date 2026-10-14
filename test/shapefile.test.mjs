@@ -92,6 +92,11 @@ test('two outers in one record become two polygons; the hole goes to the outer t
   assert.deepEqual(polygons, [[island], [outer, hole]]);
 });
 
+test('a record of only anticlockwise rings, a reversed writer, is one polygon per ring', () => {
+  const polygons = shapefilePolygons(buildShp([[hole, [...island].reverse()]]));
+  assert.deepEqual(polygons, [[hole], [[...island].reverse()]]);
+});
+
 test('null shapes are skipped and an unclosed ring is closed', () => {
   const open = outer.slice(0, -1);
   const polygons = shapefilePolygons(buildShp([null, [open], null]));

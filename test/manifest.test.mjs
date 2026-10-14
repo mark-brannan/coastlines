@@ -135,15 +135,13 @@ test('the Natural Earth share: every 50m and 110m file; at 10m, coastline, land 
   }
 });
 
-test('the raw set stays under the package line', () => {
-  // Design §2e: `npm pack` of the Natural Earth set was 14.5 MB gzipped
-  // against a 30 MB line (R4). Raw bytes are what the manifest knows, so this
+test('the Natural Earth raw set stays under its coarse line', () => {
+  // Design §2e: the gate is 30 MB packed (R4), which the sync job in CI
+  // measures with `npm pack`. Raw bytes are what the manifest knows, so this
   // is a coarse ceiling that trips only if a companion package's share leaks
-  // in. GSHHG h land (ruling 2026-10-14) adds 34 MB raw on top, under its own
-  // line: the one shoreline file and its notices, no lakes, no other levels.
-  const raw = (files) => files.reduce((sum, entry) => sum + entry.bytes, 0);
-  assert.ok(raw(ne) < 60 * MB, `${(raw(ne) / MB).toFixed(1)} MB raw from Natural Earth`);
-  assert.ok(raw(gshhg) < 40 * MB, `${(raw(gshhg) / MB).toFixed(1)} MB raw from GSHHG`);
+  // in. The GSHHG set is fixed by id above, so it needs no line here.
+  const raw = ne.reduce((sum, entry) => sum + entry.bytes, 0);
+  assert.ok(raw < 60 * MB, `${(raw / MB).toFixed(1)} MB raw from Natural Earth`);
 });
 
 test('package.json exports every shipped thing by subpath, and ships it', () => {

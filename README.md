@@ -62,44 +62,44 @@ of coastline above Natural Earth's 10m (vertex spacing median 707 m), as the
 published shapefile, with the two licence notices that travel with it.
 
 <!-- catalogue:start -->
-| Import `coastlines/data/…` | Source | Layer | Scale | Geometry | Raw | Why a boat wants it |
-| --- | --- | --- | --- | --- | ---: | --- |
-| `ne-coastline-110m` | ne | coastline | 110m | lines | 137 KB | The line |
-| `ne-land-110m` | ne | land | 110m | polygons | 135 KB | Fill, land masks |
-| `ne-ocean-110m` | ne | ocean | 110m | polygons | 115 KB | The complement; sea fill |
-| `ne-geographic-lines-110m` | ne | geographic_lines | 110m | lines | 59 KB | Equator, tropics, polar circles, International Date Line |
-| `ne-admin-0-boundary-lines-land-110m` | ne | admin_0_boundary_lines_land | 110m | lines | 332 KB | Borders |
-| `ne-admin-0-countries-110m` | ne | admin_0_countries | 110m | polygons | 819 KB | Courtesy flag, VHF scheme, customs |
-| `ne-populated-places-110m` | ne | populated_places | 110m | points | 639 KB | Labels |
-| `ne-lakes-110m` | ne | lakes | 110m | polygons | 36 KB | Inland context |
-| `ne-rivers-lake-centerlines-110m` | ne | rivers_lake_centerlines | 110m | lines | 37 KB | Inland context |
-| `ne-glaciated-areas-110m` | ne | glaciated_areas | 110m | polygons | 21 KB | Polar context |
-| `ne-coastline-50m` | ne | coastline | 50m | lines | 1.6 MB | The line |
-| `ne-land-50m` | ne | land | 50m | polygons | 1.6 MB | Fill, land masks |
-| `ne-ocean-50m` | ne | ocean | 50m | polygons | 1.3 MB | The complement; sea fill |
-| `ne-geographic-lines-50m` | ne | geographic_lines | 50m | lines | 59 KB | Equator, tropics, polar circles, International Date Line |
-| `ne-admin-0-boundary-lines-land-50m` | ne | admin_0_boundary_lines_land | 50m | lines | 742 KB | Borders |
-| `ne-admin-0-boundary-lines-maritime-indicator-50m` | ne | admin_0_boundary_lines_maritime_indicator | 50m | lines | 193 KB | The maritime boundaries Natural Earth draws |
-| `ne-admin-0-countries-50m` | ne | admin_0_countries | 50m | polygons | 2.9 MB | Courtesy flag, VHF scheme, customs |
-| `ne-populated-places-50m` | ne | populated_places | 50m | points | 3.2 MB | Labels |
-| `ne-lakes-50m` | ne | lakes | 50m | polygons | 855 KB | Inland context |
-| `ne-rivers-lake-centerlines-50m` | ne | rivers_lake_centerlines | 50m | lines | 808 KB | Inland context |
-| `ne-glaciated-areas-50m` | ne | glaciated_areas | 50m | polygons | 500 KB | Polar context |
-| `ne-antarctic-ice-shelves-polys-50m` | ne | antarctic_ice_shelves_polys | 50m | polygons | 128 KB | Polar context |
-| `ne-coastline-10m` | ne | coastline | 10m | lines | 9.6 MB | The line, finest |
-| `ne-land-10m` | ne | land | 10m | polygons | 9.7 MB | Fill, land masks, finest |
-| `ne-minor-islands-10m` | ne | minor_islands | 10m | polygons | 1.3 MB | The islands 50m drops |
-| `ne-reefs-10m` | ne | reefs | 10m | lines | 449 KB | Hazards |
-| `ne-geographic-lines-10m` | ne | geographic_lines | 10m | lines | 59 KB | Equator, tropics, polar circles, International Date Line |
-| `ne-time-zones-10m` | ne | time_zones | 10m | polygons | 3.4 MB | Local time from position |
-| `ne-admin-0-boundary-lines-land-10m` | ne | admin_0_boundary_lines_land | 10m | lines | 2.2 MB | Borders |
-| `ne-admin-0-boundary-lines-maritime-indicator-10m` | ne | admin_0_boundary_lines_maritime_indicator | 10m | lines | 278 KB | The maritime boundaries Natural Earth draws |
-| `ne-admin-0-disputed-areas-10m` | ne | admin_0_disputed_areas | 10m | polygons | 685 KB | Honesty on the borders layer |
-| `ne-ports-10m` | ne | ports | 10m | points | 273 KB | Harbours |
-| `ne-antarctic-ice-shelves-polys-10m` | ne | antarctic_ice_shelves_polys | 10m | polygons | 548 KB | Polar context |
-| `gshhg-land-h.shp` | gshhg | land | h | polygons | 32.5 MB | Land, the GSHHS shoreline at high resolution; 144,749 polygons |
-| `gshhg-licence.txt` | gshhg | — | — | — | 1 KB | The GSHHG copyright and permission notice; travels with every copy |
-| `gshhg-copying-lesser.txt` | gshhg | — | — | — | 8 KB | The GNU Lesser General Public License, version 3 |
+| Import `coastlines/data/…` | Layer | Scale | Geometry | Raw | Why a boat wants it |
+| --- | --- | --- | --- | ---: | --- |
+| `ne-coastline-110m` | coastline | 110m | lines | 137 KB | The line |
+| `ne-land-110m` | land | 110m | polygons | 135 KB | Fill, land masks |
+| `ne-ocean-110m` | ocean | 110m | polygons | 115 KB | The complement; sea fill |
+| `ne-geographic-lines-110m` | geographic_lines | 110m | lines | 59 KB | Equator, tropics, polar circles, International Date Line |
+| `ne-admin-0-boundary-lines-land-110m` | admin_0_boundary_lines_land | 110m | lines | 332 KB | Borders |
+| `ne-admin-0-countries-110m` | admin_0_countries | 110m | polygons | 819 KB | Courtesy flag, VHF scheme, customs |
+| `ne-populated-places-110m` | populated_places | 110m | points | 639 KB | Labels |
+| `ne-lakes-110m` | lakes | 110m | polygons | 36 KB | Inland context |
+| `ne-rivers-lake-centerlines-110m` | rivers_lake_centerlines | 110m | lines | 37 KB | Inland context |
+| `ne-glaciated-areas-110m` | glaciated_areas | 110m | polygons | 21 KB | Polar context |
+| `ne-coastline-50m` | coastline | 50m | lines | 1.6 MB | The line |
+| `ne-land-50m` | land | 50m | polygons | 1.6 MB | Fill, land masks |
+| `ne-ocean-50m` | ocean | 50m | polygons | 1.3 MB | The complement; sea fill |
+| `ne-geographic-lines-50m` | geographic_lines | 50m | lines | 59 KB | Equator, tropics, polar circles, International Date Line |
+| `ne-admin-0-boundary-lines-land-50m` | admin_0_boundary_lines_land | 50m | lines | 742 KB | Borders |
+| `ne-admin-0-boundary-lines-maritime-indicator-50m` | admin_0_boundary_lines_maritime_indicator | 50m | lines | 193 KB | The maritime boundaries Natural Earth draws |
+| `ne-admin-0-countries-50m` | admin_0_countries | 50m | polygons | 2.9 MB | Courtesy flag, VHF scheme, customs |
+| `ne-populated-places-50m` | populated_places | 50m | points | 3.2 MB | Labels |
+| `ne-lakes-50m` | lakes | 50m | polygons | 855 KB | Inland context |
+| `ne-rivers-lake-centerlines-50m` | rivers_lake_centerlines | 50m | lines | 808 KB | Inland context |
+| `ne-glaciated-areas-50m` | glaciated_areas | 50m | polygons | 500 KB | Polar context |
+| `ne-antarctic-ice-shelves-polys-50m` | antarctic_ice_shelves_polys | 50m | polygons | 128 KB | Polar context |
+| `ne-coastline-10m` | coastline | 10m | lines | 9.6 MB | The line, finest |
+| `ne-land-10m` | land | 10m | polygons | 9.7 MB | Fill, land masks, finest |
+| `ne-minor-islands-10m` | minor_islands | 10m | polygons | 1.3 MB | The islands 50m drops |
+| `ne-reefs-10m` | reefs | 10m | lines | 449 KB | Hazards |
+| `ne-geographic-lines-10m` | geographic_lines | 10m | lines | 59 KB | Equator, tropics, polar circles, International Date Line |
+| `ne-time-zones-10m` | time_zones | 10m | polygons | 3.4 MB | Local time from position |
+| `ne-admin-0-boundary-lines-land-10m` | admin_0_boundary_lines_land | 10m | lines | 2.2 MB | Borders |
+| `ne-admin-0-boundary-lines-maritime-indicator-10m` | admin_0_boundary_lines_maritime_indicator | 10m | lines | 278 KB | The maritime boundaries Natural Earth draws |
+| `ne-admin-0-disputed-areas-10m` | admin_0_disputed_areas | 10m | polygons | 685 KB | Honesty on the borders layer |
+| `ne-ports-10m` | ports | 10m | points | 273 KB | Harbours |
+| `ne-antarctic-ice-shelves-polys-10m` | antarctic_ice_shelves_polys | 10m | polygons | 548 KB | Polar context |
+| `gshhg-land-h.shp` | land | h | polygons | 32.5 MB | Land, the GSHHS shoreline at high resolution; 144,749 polygons |
+| `gshhg-licence.txt` | — | — | — | 1 KB | The GSHHG copyright and permission notice; travels with every copy |
+| `gshhg-copying-lesser.txt` | — | — | — | 8 KB | The GNU Lesser General Public License, version 3 |
 <!-- catalogue:end -->
 
 ![Every file, rendered equirectangular](docs/layers.png)
@@ -143,9 +143,6 @@ consumer written against one chart reads any.
 `data/` is not in git. `npm run sync` fetches each file from its pinned
 release and refuses any byte that disagrees with `manifest.json`; `npm pack`
 runs it first, so a tarball never ships a file the manifest did not promise.
-The GSHHG files are members of one 149 MB zip, fetched once per sync when any
-of them is missing, checked against the zip's own pinned sha256, and never
-written under the repository.
 
 ```shell
 npm run sync          # fetch what is missing, verify everything (45 MB + 149 MB zip)

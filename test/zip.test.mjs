@@ -121,3 +121,7 @@ test('not a zip, and zip64, are named as such', () => {
   big.set([0xff, 0xff, 0xff, 0xff], eocd + 16); // directory offset deferred to the zip64 record
   assert.throws(() => zipMembers(big), /zip64/);
 });
+
+test('a buffer too short to hold a directory record is not a zip', () => {
+  assert.throws(() => zipMembers(new Uint8Array(10)), /not a zip archive/);
+});
