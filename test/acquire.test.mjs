@@ -88,6 +88,16 @@ test('a name that is a path, or empty, is refused before anything is fetched', a
   assert.deepEqual(await readdir(cacheDir), []);
 });
 
+test('a url ending in / has an empty default name and is refused before any fetch', async () => {
+  const cacheDir = await dir();
+  const calls = { n: 0 };
+  await assert.rejects(
+    acquire({ ...pin, url: 'https://example.test/a/' }, { cacheDir, fetchImpl: ok(calls) }),
+    /file name/,
+  );
+  assert.equal(calls.n, 0);
+});
+
 test('a 4xx is not retried and keeps nothing', async () => {
   const cacheDir = await dir();
   let n = 0;
