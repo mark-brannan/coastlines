@@ -161,7 +161,8 @@ test('loaded and pending say what a view would fetch, and drawing it fetches it'
   const p = provider({ read });
   const view = viewAt(11, GENOA);
   assert.equal(await p.loaded(view), false);
-  assert.deepEqual(await p.pending(view), { band: 'gshhg-h-land', cells: 2, bytes: null });
+  // two cells at gshhg-h-land's measured bytesPerCell (catalogue.json)
+  assert.deepEqual(await p.pending(view), { band: 'gshhg-h-land', cells: 2, bytes: 2 * 3717 });
   await tags(p.rings(view));
   assert.equal(await p.loaded(view), true);
   assert.deepEqual(await p.pending(view), { band: 'gshhg-h-land', cells: 0, bytes: 0 });

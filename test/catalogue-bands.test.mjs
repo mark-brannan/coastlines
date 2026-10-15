@@ -75,10 +75,11 @@ test('sources say where the geometry is fetched from, one kind and url each', ()
   assert.deepEqual(band('gshhg-f-land').sources, [{ kind: 'cells', url: 'geo/f/' }]);
 });
 
-test('a cut band draws on inputs, and is measured later', () => {
+test('a cut band draws on inputs, and carries the cells and bytes of its build', () => {
   for (const r of catalogue.filter((r) => r.grid)) {
     assert.ok(inputsOf(r).length > 0, r.id);
-    assert.equal(r.bytesPerCell, null, 'null until measured');
+    assert.ok(r.cells > 0 && r.bytes > 0, `${r.id}: measured`);
+    assert.equal(r.bytesPerCell, Math.round(r.bytes / r.cells), `${r.id}: bytesPerCell`);
   }
 });
 
