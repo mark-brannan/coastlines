@@ -36,3 +36,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261015t054114z
 - view frame is the caller's lon/lat box (lonMin, lonMax, latMin, latMax); the projection stays with the caller Undo: change the view's frame fields in lib/provider.js ([#38](https://github.com/mark-brannan/coastlines/pull/38))
+
+### 20261015t054117z
+- factory provider({ read, kind }) at coastlines/provider, kind coast or land Undo: rename the export and the package.json subpath ([#38](https://github.com/mark-brannan/coastlines/pull/38))
