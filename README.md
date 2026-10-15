@@ -111,6 +111,18 @@ the GSHHG zip. `coastlines/manifest.json` is the machine-readable form of this
 table, with the bytes and sha256 of each file and, under `sources`, of the
 zip itself.
 
+### Installed, built, or cached
+
+| Where | What | Size | How it reaches you |
+| --- | --- | ---: | --- |
+| `data/` | the 36 files above | 78 MB, 29 MB packed | installed with the package |
+| `geo/` | six cut bands, land and water in square cells | 896 MB | built by `npm run sync`; not shipped |
+| `cache/` | the GSHHG zip, six Natural Earth 10m water files | 167 MB | fetched once by sync, kept |
+
+The cut bands are Natural Earth 10m and GSHHG h and f, land and lakes, each
+a record in `catalogue.json`: grid, inputs and pins, cutter and build date.
+How cells reach a boat that installs the package is open ([#17](https://github.com/mark-brannan/coastlines/issues/17)).
+
 ### Sources and licences
 
 Natural Earth is public domain. GSHHG (Wessel & Smith, the Global
@@ -146,7 +158,7 @@ release and refuses any byte that disagrees with `manifest.json`; `npm pack`
 runs it first, so a tarball never ships a file the manifest did not promise.
 
 ```shell
-npm run sync          # fetch what is missing, verify everything (45 MB + 149 MB zip)
+npm run sync          # fetch what is missing, verify everything, cut the cells (~2 min, 6 GB heap)
 npm run sync:check    # verify only, no network
 npm run sync:refresh  # move the pins: refetch all and rewrite bytes and sha256
 ```
