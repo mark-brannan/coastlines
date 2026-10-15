@@ -116,11 +116,25 @@ zip itself.
 | Where | What | Size | How it reaches you |
 | --- | --- | ---: | --- |
 | `data/` | the 36 files above | 78 MB, 29 MB packed | installed with the package |
-| `geo/` | six cut bands, land and water in square cells | 896 MB | built by `npm run sync`; not shipped |
+| `geo/` | six cut bands, land and water in square cells | 549 MB | built by `npm run sync`; not shipped |
 | `cache/` | the GSHHG zip, six Natural Earth 10m water files | 167 MB | fetched once by sync, kept |
 
-The cut bands are Natural Earth 10m and GSHHG h and f, land and lakes, each
-a record in `catalogue.json`: grid, inputs and pins, cutter and build date.
+Each cut band is a record in `catalogue.json`: grid, inputs and pins, cutter
+and build date. Cells and size are measured from the build (file content;
+4 KB disk blocks bring `geo/` to about 900 MB on disk). `cache/` holds the
+inputs those builds draw on, pinned but never shipped.
+
+<!-- cut-bands:start -->
+| Band | Layer | Zoom | Cell | Cells | Size | Source |
+| --- | --- | --- | --- | ---: | ---: | --- |
+| `ne-10m-land` | land | 9–10 | 5° (+2°) | 1,456 | 18.0 MB | Natural Earth v5.1.2, public domain |
+| `gshhg-h-land` | land | 10–12 | 1° (+0.5°) | 19,273 | 68.3 MB | GSHHG 2.3.7, LGPL-3.0-or-later |
+| `gshhg-f-land` | land | 12–∞ | 0.5° (+0.25°) | 70,692 | 383.8 MB | GSHHG 2.3.7, LGPL-3.0-or-later |
+| `ne-10m-water` | water | 7–∞ | 5° (+2°) | 712 | 31.0 MB | Natural Earth v5.1.2, public domain |
+| `gshhg-h-lakes` | lakes | 10–12 | 1° (+0.5°) | 4,068 | 11.4 MB | GSHHG 2.3.7, LGPL-3.0-or-later |
+| `gshhg-f-lakes` | lakes | 12–∞ | 0.5° (+0.25°) | 8,699 | 36.6 MB | GSHHG 2.3.7, LGPL-3.0-or-later |
+<!-- cut-bands:end -->
+
 How cells reach a boat that installs the package is open ([#17](https://github.com/mark-brannan/coastlines/issues/17)).
 
 ### Sources and licences
