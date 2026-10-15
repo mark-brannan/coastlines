@@ -5,7 +5,7 @@ import { provider, zoomOf } from '../lib/provider.js';
 // A view at web-mercator zoom `z` on the equator, over the given frame.
 const viewAt = (z, frame) => ({
   lat: 0,
-  metresPerPixel: (2 * Math.PI * 6378137) / (512 * 2 ** z),
+  resolution: (2 * Math.PI * 6378137) / (512 * 2 ** z),
   ...frame,
 });
 const GENOA = { lonMin: 8.5, lonMax: 9.5, latMin: 44.2, latMax: 44.6 };
@@ -185,6 +185,27 @@ test('held and cost still answer as loaded and pending, warning once each', asyn
     console.warn = warn;
   }
   assert.equal(warnings.length, 2);
+});
+
+test('a view with metresPerPixel still draws, warning once', async () => {
+  const { read } = source(sites());
+  const p = provider({ read });
+  const { resolution, ...rest } = viewAt(11, GENOA);
+  const old = { ...rest, metresPerPixel: resolution };
+  const warnings = [];
+  const warn = console.warn;
+  console.warn = (m) => warnings.push(m);
+  try {
+    assert.equal(zoomOf(old), zoomOf(viewAt(11, GENOA)));
+    assert.deepEqual(await tags(p.rings(old)), await tags(p.rings(viewAt(11, GENOA))));
+    assert.equal(await p.loaded(old), true);
+    // `resolution` wins when both are given, without a warning
+    zoomOf({ ...old, resolution: 1e9 });
+  } finally {
+    console.warn = warn;
+  }
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /`metresPerPixel` is deprecated, use `resolution`/);
 });
 
 test('land yields every ring of every polygon', async () => {
