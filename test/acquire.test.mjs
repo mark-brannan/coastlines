@@ -25,11 +25,21 @@ test('a miss fetches, verifies and stores; the next call is a cache hit with no 
 test('a wrong sha256 throws with no retry and stores nothing', async () => {
   const cacheDir = await dir();
   const calls = { n: 0 };
+  const retried = [];
   await assert.rejects(
-    acquire({ ...pin, sha256: digest(new Uint8Array(1)) }, { cacheDir, fetchImpl: ok(calls) }),
+    acquire(
+      { ...pin, sha256: digest(new Uint8Array(1)) },
+      {
+        cacheDir,
+        fetchImpl: ok(calls),
+        sleep: async () => {},
+        onRetry: (_e, a) => retried.push(a),
+      },
+    ),
     /pinned sha256:/,
   );
   assert.equal(calls.n, 1);
+  assert.deepEqual(retried, [], 'a wrong hash is never retried');
   assert.deepEqual(await readdir(cacheDir).catch(() => []), []);
 });
 
