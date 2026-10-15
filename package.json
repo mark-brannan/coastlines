@@ -1,6 +1,6 @@
 {
   "name": "coastlines",
-  "version": "0.0.7-alpha.0",
+  "version": "0.0.8-alpha.0",
   "description": "Natural Earth geography on a boat, installed rather than fetched: the marine catalogue at three scales, byte-for-byte as published, sha256-pinned, as plain GeoJSON today and a Signal K resource provider next",
   "type": "module",
   "main": "lib/index.js",
