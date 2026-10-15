@@ -43,17 +43,27 @@ test('a wrong sha256 throws with no retry and stores nothing', async () => {
   assert.deepEqual(await readdir(cacheDir).catch(() => []), []);
 });
 
-test('a cached file that no longer matches is fetched again; a wrong length throws', async () => {
+test('a cached file that no longer matches is fetched again and replaced', async () => {
   const cacheDir = await dir();
   const calls = { n: 0 };
   await acquire(pin, { cacheDir, fetchImpl: ok(calls) });
   await writeFile(join(cacheDir, 'pinned.bin'), 'bad');
   assert.deepEqual(await acquire(pin, { cacheDir, fetchImpl: ok(calls) }), body);
   assert.equal(calls.n, 2);
+  assert.deepEqual(
+    await readFile(join(cacheDir, 'pinned.bin')),
+    Buffer.from(body),
+    'cache repaired',
+  );
+});
+
+test('a wrong length throws and stores nothing', async () => {
+  const cacheDir = await dir();
   await assert.rejects(
-    acquire({ ...pin, bytes: 1 }, { cacheDir: await dir(), fetchImpl: ok(calls) }),
+    acquire({ ...pin, bytes: 1 }, { cacheDir, fetchImpl: ok({ n: 0 }) }),
     /12 bytes, pinned 1/,
   );
+  assert.deepEqual(await readdir(cacheDir).catch(() => []), []);
 });
 
 test('a transient failure is retried; the retry report names the attempt', async () => {
