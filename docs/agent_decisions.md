@@ -39,3 +39,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261015t054117z
 - factory provider({ read, kind }) at coastlines/provider, kind coast or land Undo: rename the export and the package.json subpath ([#38](https://github.com/mark-brannan/coastlines/pull/38))
+
+### 20261015t054120z
+- any cell read failure degrades the view, not only a 404 Undo: rethrow non-missing errors in draw() in lib/provider.js ([#38](https://github.com/mark-brannan/coastlines/pull/38))
