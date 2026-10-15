@@ -7,9 +7,11 @@
 //   node scripts/sync.mjs --refresh  fetch everything and rewrite the manifest's
 //                                    bytes and sha256 from what arrived -- the
 //                                    one way to move a pin; review the diff
-//   node scripts/sync.mjs --no-cells the files only; build no cells (prepack:
-//                                    the tarball ships none, and a build would
-//                                    stamp catalogue.json mid-pack)
+//   node scripts/sync.mjs --no-cells the files only; build no cells (the tarball
+//                                    ships none, and a build would stamp
+//                                    catalogue.json away from the tagged one).
+//                                    With --check it is prepack: verifies data/,
+//                                    never downloads
 //
 // Two kinds of source. A Natural Earth entry is one file at one URL. A GSHHG
 // entry is a member of the published zip: the zip (149 MB) is fetched once,
