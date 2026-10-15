@@ -25,6 +25,7 @@ import { manifest, localUrl, source, upstreamUrl } from '../lib/catalogue.js';
 import { drift } from '../lib/bands.js';
 import { digest, verify } from '../lib/verify.js';
 import { zipMember } from '../lib/zip.js';
+import { fetchBytesWithRetry } from '../lib/fetch-retry.js';
 
 const flags = new Set(process.argv.slice(2));
 const refresh = flags.has('--refresh');
@@ -32,10 +33,14 @@ const checkOnly = flags.has('--check');
 
 const say = (line) => process.stderr.write(line + '\n');
 
-async function fetchBytes(url) {
-  const response = await fetch(url);
-  if (!response.ok) throw new Error(`${url}: HTTP ${response.status}`);
-  return new Uint8Array(await response.arrayBuffer());
+function fetchBytes(url) {
+  return fetchBytesWithRetry(url, {
+    onRetry: (error, attempt, attempts, wait) => {
+      // An HTTP failure's message already names the url; say it once.
+      const why = error.cause?.code ?? error.message.replace(`${url}: `, '');
+      say(`${url}: ${why}; attempt ${attempt} of ${attempts} failed, retrying in ${wait / 1000} s`);
+    },
+  });
 }
 
 async function onDisk(entry) {
