@@ -130,7 +130,8 @@ test('stampBuilt rewrites one record and refuses the wrong one', () => {
 
 test('no geometry file is built from more than one source', async () => {
   for (const r of catalogue) assert.equal(sourcesOf(r).size, 1, `${r.id} names one source`);
-  for (const f of manifest.files) assert.equal(typeof f.source, 'string', `${f.id} has one source`);
+  for (const f of manifest.files)
+    assert.ok(manifest.sources[f.source], `${f.id} names a known source`);
   const mixed = {
     ...band('gshhg-h-land'),
     inputs: [...band('gshhg-h-land').inputs, 'ne-land-10m'],
@@ -139,5 +140,9 @@ test('no geometry file is built from more than one source', async () => {
   await assert.rejects(
     cutBand(mixed, async () => new Uint8Array()),
     /more than one source/,
+  );
+  assert.match(
+    driftWith('gshhg-h-land', 'inputs', (r) => r.inputs.push('ne-land-10m')),
+    /gshhg-h-land: built from 2 sources/,
   );
 });
