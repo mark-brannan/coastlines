@@ -35,10 +35,11 @@ const say = (line) => process.stderr.write(line + '\n');
 
 function fetchBytes(url) {
   return fetchBytesWithRetry(url, {
-    onRetry: (error, attempt, attempts, wait) =>
-      say(
-        `${url}: ${error.cause?.code ?? error.message}; attempt ${attempt} of ${attempts} failed, retrying in ${wait / 1000} s`,
-      ),
+    onRetry: (error, attempt, attempts, wait) => {
+      // An HTTP failure's message already names the url; say it once.
+      const why = error.cause?.code ?? error.message.replace(`${url}: `, '');
+      say(`${url}: ${why}; attempt ${attempt} of ${attempts} failed, retrying in ${wait / 1000} s`);
+    },
   });
 }
 
