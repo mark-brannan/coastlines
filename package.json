@@ -10,6 +10,7 @@
     "./charts.json": "./charts.json",
     "./catalogue": "./lib/bands.js",
     "./catalogue.json": "./catalogue.json",
+    "./provider": "./lib/provider.js",
     "./data/*": "./data/*.geojson",
     "./data/*.shp": "./data/*.shp",
     "./data/*.txt": "./data/*.txt",
