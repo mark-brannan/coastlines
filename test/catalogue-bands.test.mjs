@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import catalogue, { band, catalogue as same, drift, inputsOf } from '../lib/bands.js';
+import catalogue, { band, catalogue as same, CUTTER, drift, inputsOf } from '../lib/bands.js';
+import { modifiedGshhg } from '../lib/cut.js';
 import { manifest } from '../lib/catalogue.js';
 
 const require = createRequire(import.meta.url);
@@ -78,4 +79,20 @@ test('catalogue.json ships and is exported', () => {
   const pkg = require('../package.json');
   assert.equal(pkg.exports['./catalogue'], './lib/bands.js');
   assert.ok(pkg.files.includes('catalogue.json'));
+});
+
+test('a cut band names its cutter and build date, and draws on one upstream', () => {
+  for (const r of catalogue.filter((r) => r.grid)) {
+    assert.equal(r.provenance.cutter, CUTTER, r.id);
+    assert.match(r.provenance.built, /^\d{4}-\d{2}-\d{2}$/, r.id);
+  }
+  for (const r of catalogue.filter((r) => !r.grid)) assert.equal(r.provenance.cutter, undefined);
+  assert.match(
+    driftWith('ne-10m-land', 'provenance', (r) => (r.provenance.cutter = 'portolani')),
+    /ne-10m-land: cutter portolani/,
+  );
+  assert.deepEqual(
+    modifiedGshhg(catalogue).map((r) => r.id),
+    ['gshhg-h-land', 'gshhg-f-land', 'gshhg-h-lakes', 'gshhg-f-lakes'],
+  );
 });
