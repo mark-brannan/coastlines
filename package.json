@@ -8,6 +8,8 @@
     ".": "./lib/index.js",
     "./manifest.json": "./manifest.json",
     "./charts.json": "./charts.json",
+    "./catalogue": "./lib/bands.js",
+    "./catalogue.json": "./catalogue.json",
     "./data/*": "./data/*.geojson",
     "./data/*.shp": "./data/*.shp",
     "./data/*.txt": "./data/*.txt",
@@ -54,6 +56,7 @@
     "styles",
     "manifest.json",
     "charts.json",
+    "catalogue.json",
     "LICENSE"
   ]
 }
