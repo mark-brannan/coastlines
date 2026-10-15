@@ -45,3 +45,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261015t054123z
 - the whole view falls to the band below, never cell by cell Undo: per-cell fallback in draw() in lib/provider.js ([#38](https://github.com/mark-brannan/coastlines/pull/38))
+
+### 20261015t060922z
+- prepack fetches and verifies the data only (--no-cells); cells are built by npm run sync and the CI sync job Undo: put the cells build back in prepack ([#39](https://github.com/mark-brannan/coastlines/pull/39))
