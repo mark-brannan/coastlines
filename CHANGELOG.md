@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.8-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.7-alpha.0...v0.0.8-alpha.0) (2026-10-15)
+
+
+### Added
+
+* build the catalogue's cells here, with the cutter and build date in each record ([#39](https://github.com/mark-brannan/coastlines/issues/39)) ([cb372d1](https://github.com/mark-brannan/coastlines/commit/cb372d1344520251842d20696f893bc4c2fb8600))
+
 ## [0.0.7-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.6-alpha.0...v0.0.7-alpha.0) (2026-10-15)
 
 
