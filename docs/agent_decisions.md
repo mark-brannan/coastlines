@@ -48,3 +48,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261015t060922z
 - prepack fetches and verifies the data only (--no-cells); cells are built by npm run sync and the CI sync job Undo: put the cells build back in prepack ([#39](https://github.com/mark-brannan/coastlines/pull/39))
+
+### 20261015t060929z
+- the CI data/ cache key hashes catalogue.json as well as manifest.json; geo/ is not cached Undo: key on manifest.json alone, or add a geo/ cache ([#39](https://github.com/mark-brannan/coastlines/pull/39))
