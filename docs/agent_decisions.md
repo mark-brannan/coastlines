@@ -30,3 +30,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261015t054107z
 - provider verbs named rings, held, cost (agent-notes proposal) Undo: rename the three methods in lib/provider.js ([#38](https://github.com/mark-brannan/coastlines/pull/38))
+
+### 20261015t054110z
+- view scale field is metresPerPixel at the centre, converted to web-mercator zoom at view.lat Undo: swap zoomOf for a zoom field in lib/provider.js ([#38](https://github.com/mark-brannan/coastlines/pull/38))
