@@ -11,6 +11,7 @@
     "./catalogue": "./lib/bands.js",
     "./catalogue.json": "./catalogue.json",
     "./provider": "./lib/provider.js",
+    "./pinned": "./lib/pinned.js",
     "./data/*": "./data/*.geojson",
     "./data/*.shp": "./data/*.shp",
     "./data/*.txt": "./data/*.txt",
