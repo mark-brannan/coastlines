@@ -15,10 +15,14 @@
 // member is lifted out and checked against its own entry. Nothing of the zip
 // touches the repository.
 //
+// catalogue.json is checked against the manifest first (lib/bands.js drift): every record's
+// upstream, member and sha256 must be what its inputs pin, so the two cannot drift.
+//
 // data/ is gitignored, so the manifest is the record: an entry's sha256 is the
 // promise that `coastlines/data/<id>` is the published file, byte for byte.
 import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { manifest, localUrl, source, upstreamUrl } from '../lib/catalogue.js';
+import { drift } from '../lib/bands.js';
 import { digest, verify } from '../lib/verify.js';
 import { zipMember } from '../lib/zip.js';
 
@@ -91,6 +95,9 @@ async function syncOne(entry) {
   return 'fetched';
 }
 
+const drifted = drift();
+if (drifted.length)
+  throw new Error(`catalogue.json disagrees with manifest.json:\n  ${drifted.join('\n  ')}`);
 for (const entry of manifest.files) {
   if (!source(entry)) throw new Error(`${entry.id}: unknown source ${entry.source}`);
 }

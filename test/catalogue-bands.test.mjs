@@ -1,0 +1,81 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
+import catalogue, { band, catalogue as same, drift, inputsOf } from '../lib/bands.js';
+import { manifest } from '../lib/catalogue.js';
+
+const require = createRequire(import.meta.url);
+
+test('coastlines/catalogue exports the records, one per id', () => {
+  assert.equal(catalogue, same);
+  assert.equal(new Set(catalogue.map((r) => r.id)).size, catalogue.length);
+  for (const id of [
+    'ne-10m-land',
+    'gshhg-h-land',
+    'gshhg-f-land',
+    'ne-10m-water',
+    'gshhg-h-lakes',
+    'gshhg-f-lakes',
+  ])
+    assert.ok(band(id)?.grid?.cellDeg > 0, `${id} is a cut band with a grid`);
+  assert.equal(band('ne-land-50m').grid, null, 'a whole file has no grid');
+});
+
+test('every manifest file appears in exactly one record', () => {
+  const count = new Map(manifest.files.map((f) => [f.id, 0]));
+  for (const r of catalogue)
+    for (const s of r.inputs) if (typeof s === 'string') count.set(s, count.get(s) + 1);
+  for (const [id, n] of count) assert.equal(n, 1, `${id} is in ${n} records`);
+});
+
+test('the catalogue agrees with the manifest and charts.json', () => {
+  assert.deepEqual(drift(), []);
+});
+
+/** Drift after `change` is made to a record, the change undone afterwards. */
+function driftWith(id, field, change) {
+  const record = band(id);
+  const was = structuredClone(record[field]);
+  change(record);
+  try {
+    return drift().join('\n');
+  } finally {
+    record[field] = was;
+  }
+}
+
+test('drift notices a changed pin, member, date, bytes or zoom', () => {
+  const zero = (r) => (r.provenance.sha256[0] = 'sha256:0');
+  assert.match(driftWith('ne-land-50m', 'provenance', zero), /ne-land-50m: sha256 differs/);
+  const unnamed = (r) => (r.provenance.member[0] = null);
+  assert.match(driftWith('gshhg-f-land', 'provenance', unnamed), /gshhg-f-land: member differs/);
+  const undated = (r) => (r.provenance.date = null);
+  assert.match(driftWith('gshhg-f-land', 'provenance', undated), /gshhg-f-land: date null/);
+  assert.match(
+    driftWith('ne-land-50m', 'bytes', (r) => (r.bytes += 1)),
+    /ne-land-50m: bytes/,
+  );
+  const later = (r) => (r.zoom.min += 1);
+  assert.match(driftWith('ne-glaciated-areas-110m', 'zoom', later), /110m: zoom 3-4/);
+});
+
+test('sources say where the geometry is fetched from, one kind and url each', () => {
+  for (const r of catalogue) {
+    assert.ok(r.sources.length > 0, r.id);
+    for (const s of r.sources) assert.deepEqual(Object.keys(s), ['kind', 'url'], r.id);
+  }
+  assert.deepEqual(band('gshhg-f-land').sources, [{ kind: 'cells', url: 'geo/f/' }]);
+});
+
+test('a cut band draws on inputs, and is measured later', () => {
+  for (const r of catalogue.filter((r) => r.grid)) {
+    assert.ok(inputsOf(r).length > 0, r.id);
+    assert.equal(r.bytesPerCell, null, 'null until measured');
+  }
+});
+
+test('catalogue.json ships and is exported', () => {
+  const pkg = require('../package.json');
+  assert.equal(pkg.exports['./catalogue'], './lib/bands.js');
+  assert.ok(pkg.files.includes('catalogue.json'));
+});
