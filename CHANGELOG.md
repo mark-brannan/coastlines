@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.7-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.6-alpha.0...v0.0.7-alpha.0) (2026-10-15)
+
+
+### Added
+
+* **provider:** rings for a view, the band and its cells chosen here ([#38](https://github.com/mark-brannan/coastlines/issues/38)) ([77c983e](https://github.com/mark-brannan/coastlines/commit/77c983e7a7db9f8b823a318354a7033cae956226))
+
+
+### Fixed
+
+* **sync:** retry the GSHHG download on network errors and 5xx ([#35](https://github.com/mark-brannan/coastlines/issues/35)) ([94f5026](https://github.com/mark-brannan/coastlines/commit/94f502694cda57eaabd2b5bb15769a91bd60dd09))
+
 ## [0.0.6-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.5-alpha.0...v0.0.6-alpha.0) (2026-10-15)
 
 
