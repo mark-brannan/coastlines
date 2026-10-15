@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.9-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.8-alpha.0...v0.0.9-alpha.0) (2026-10-15)
+
+
+### Added
+
+* acquire(), pinned-source bytes from a cache, with retry and verify ([#47](https://github.com/mark-brannan/coastlines/issues/47)) ([f44271a](https://github.com/mark-brannan/coastlines/commit/f44271a0a4febb83770c01a9eb736f0941903c61))
+* measured sizes for the cut bands and a generated README table ([#44](https://github.com/mark-brannan/coastlines/issues/44)) ([5425450](https://github.com/mark-brannan/coastlines/commit/54254508e030db4070819f57385fd33238785117))
+
+
+### Fixed
+
+* **publish:** sync in its own cached step; prepack only verifies ([#43](https://github.com/mark-brannan/coastlines/issues/43)) ([23f2eb0](https://github.com/mark-brannan/coastlines/commit/23f2eb05fcdded6419446821b6fc35be5a5d40c7))
+
 ## [0.0.8-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.7-alpha.0...v0.0.8-alpha.0) (2026-10-15)
 
 
