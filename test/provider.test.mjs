@@ -139,6 +139,17 @@ test('a cell that failed is asked for again by the next view', async () => {
   assert.deepEqual(await tags(p.rings(viewAt(11, GENOA))), ['h 8_44', 'h 9_44']);
 });
 
+test('an index that failed is asked for again by the next view', async () => {
+  const files = sites();
+  const saved = files['geo/h/index.json'];
+  delete files['geo/h/index.json'];
+  const { read } = source(files);
+  const p = provider({ read });
+  assert.deepEqual(await tags(p.rings(viewAt(11, GENOA))), ['10m']);
+  files['geo/h/index.json'] = saved;
+  assert.deepEqual(await tags(p.rings(viewAt(11, GENOA))), ['h 8_44', 'h 9_44']);
+});
+
 test('a frame across the antimeridian reads the cells on the far side', async () => {
   const { read } = source(sites());
   const pacific = { lonMin: 178, lonMax: 182, latMin: 1, latMax: 2 };
