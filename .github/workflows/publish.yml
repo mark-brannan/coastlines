@@ -59,12 +59,10 @@ jobs:
       # test.yml.
       - run: npm test
 
-      # data/ is gitignored, so the tarball needs it fetched first. That is a
-      # step of its own, not prepack: a download timing out inside `npm publish`
-      # (#41) left 0.0.8-alpha.0 off npm with nothing to re-run but the whole
-      # release. prepack now only verifies (sync --check) and fails if data/ is
-      # missing or wrong. The cache is keyed by the pins; sync verifies every
-      # byte on a hit, so it cannot slip in a wrong one.
+      # data/ is gitignored, so the tarball needs it fetched before packing;
+      # prepack only verifies it (sync --check). Same key as test.yml's sync
+      # job, so a tag run usually restores main's cache and downloads nothing;
+      # sync verifies every byte on a hit.
       - uses: actions/cache@v6
         with:
           path: |
