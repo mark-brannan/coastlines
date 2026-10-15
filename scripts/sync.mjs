@@ -16,7 +16,7 @@
 // touches the repository.
 //
 // catalogue.json is checked against the manifest first (lib/bands.js drift): every record's
-// upstream and sha256 must be what its sources pin, so the two cannot drift.
+// upstream, member and sha256 must be what its inputs pin, so the two cannot drift.
 //
 // data/ is gitignored, so the manifest is the record: an entry's sha256 is the
 // promise that `coastlines/data/<id>` is the published file, byte for byte.

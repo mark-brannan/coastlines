@@ -5,7 +5,8 @@
       "repository": "https://github.com/nvkelso/natural-earth-vector",
       "ref": "v5.1.2",
       "base": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/",
-      "licence": "public domain"
+      "licence": "public domain",
+      "date": "2022-05-13"
     },
     "gshhg": {
       "name": "GSHHG",
@@ -14,7 +15,8 @@
       "bytes": 149157845,
       "sha256": "sha256:8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41",
       "licence": "LGPL-3.0-or-later",
-      "site": "https://www.soest.hawaii.edu/pwessel/gshhg/"
+      "site": "https://www.soest.hawaii.edu/pwessel/gshhg/",
+      "date": "2017-06-15"
     }
   },
   "files": [
