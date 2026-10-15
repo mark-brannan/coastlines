@@ -61,9 +61,18 @@ test('bytes that disagree with the pin throw and are not kept', async () => {
   assert.deepEqual(await readdir(dir), []);
 });
 
-test('a name that is a path is refused before anything is fetched', async () => {
+test('a name that is a path, or empty, is refused before anything is fetched', async () => {
   const dir = await fresh();
   const { fetchImpl, calls } = stub(ok);
-  await assert.rejects(pinnedBytes({ ...base, name: '../a.bin', dir, fetchImpl }), /file name/);
+  for (const name of ['../a.bin', ''])
+    await assert.rejects(pinnedBytes({ ...base, name, dir, fetchImpl }), /file name/);
   assert.equal(calls.length, 0);
+});
+
+test('a 4xx is not retried and keeps nothing', async () => {
+  const dir = await fresh();
+  const { fetchImpl, calls } = stub(() => ({ ok: false, status: 404 }), ok);
+  await assert.rejects(pinnedBytes({ ...base, dir, fetchImpl }), /HTTP 404/);
+  assert.equal(calls.length, 1);
+  assert.deepEqual(await readdir(dir), []);
 });
