@@ -1,15 +1,19 @@
 #!/usr/bin/env node
 // Writes the catalogue table into README.md between the two marker comments,
-// from manifest.json, so the README can never disagree with the manifest. The
-// test suite regenerates it and diffs, which is the check.
+// from manifest.json, and the cut-bands table from catalogue.json, so the README
+// can never disagree with either. The test suite regenerates both and diffs,
+// which is the check.
 //
 //   node scripts/catalogue-table.mjs          rewrite README.md
 //   node scripts/catalogue-table.mjs --print  print the table only
 import { readFile, writeFile } from 'node:fs/promises';
 import { manifest, format } from '../lib/catalogue.js';
+import { catalogue } from '../lib/bands.js';
 
 export const START = '<!-- catalogue:start -->';
 export const END = '<!-- catalogue:end -->';
+export const BANDS_START = '<!-- cut-bands:start -->';
+export const BANDS_END = '<!-- cut-bands:end -->';
 
 const kb = (bytes) =>
   bytes >= 1024 * 1024
@@ -40,19 +44,42 @@ export function catalogueTable(files = manifest.files) {
   return lines.join('\n');
 }
 
+const mb = (bytes) => `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+
+/** Who a record's upstream is, for the table: the cut bands draw on Natural Earth or GSHHG. */
+const sourceOf = (p) =>
+  `${/gshhg/.test(p.upstream[0]) ? 'GSHHG' : 'Natural Earth'} ${p.version}, ${p.licence}`;
+
+/** The Markdown table of the cut bands, one row per record with a grid, as measured when built. */
+export function cutBandsTable(records = catalogue) {
+  const lines = [
+    '| Band | Layer | Zoom | Cell | Cells | Size | Source |',
+    '| --- | --- | --- | --- | ---: | ---: | --- |',
+  ];
+  for (const r of records.filter((r) => r.grid)) {
+    const zoom = `${r.zoom.min}–${r.zoom.max ?? '∞'}`;
+    const cell = `${r.grid.cellDeg}° (+${r.grid.marginDeg}°)`;
+    lines.push(
+      `| \`${r.id}\` | ${r.layer} | ${zoom} | ${cell} | ${r.cells.toLocaleString('en-US')} | ${mb(r.bytes)} | ${sourceOf(r.provenance)} |`,
+    );
+  }
+  return lines.join('\n');
+}
+
 /** `readme` with the table replaced between the markers; throws if a marker is missing. */
-export function splice(readme, table) {
-  const start = readme.indexOf(START);
-  const end = readme.indexOf(END);
+export function splice(readme, table, [from, to] = [START, END]) {
+  const start = readme.indexOf(from);
+  const end = readme.indexOf(to);
   if (start < 0 || end < 0 || end < start) throw new Error('README.md lacks the catalogue markers');
-  return readme.slice(0, start + START.length) + '\n' + table + '\n' + readme.slice(end);
+  return readme.slice(0, start + from.length) + '\n' + table + '\n' + readme.slice(end);
 }
 
 if (process.argv[1] && import.meta.url === new URL(process.argv[1], 'file://').href) {
   if (process.argv.includes('--print')) {
-    process.stdout.write(catalogueTable() + '\n');
+    process.stdout.write(catalogueTable() + '\n\n' + cutBandsTable() + '\n');
   } else {
     const path = new URL('../README.md', import.meta.url);
-    await writeFile(path, splice(await readFile(path, 'utf8'), catalogueTable()));
+    const readme = splice(await readFile(path, 'utf8'), catalogueTable());
+    await writeFile(path, splice(readme, cutBandsTable(), [BANDS_START, BANDS_END]));
   }
 }
