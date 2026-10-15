@@ -25,7 +25,7 @@ import { manifest, localUrl, source, upstreamUrl } from '../lib/catalogue.js';
 import { drift } from '../lib/bands.js';
 import { digest, verify } from '../lib/verify.js';
 import { zipMember } from '../lib/zip.js';
-import { fetchWithRetry } from '../lib/fetch-retry.js';
+import { fetchBytesWithRetry } from '../lib/fetch-retry.js';
 
 const flags = new Set(process.argv.slice(2));
 const refresh = flags.has('--refresh');
@@ -33,12 +33,13 @@ const checkOnly = flags.has('--check');
 
 const say = (line) => process.stderr.write(line + '\n');
 
-async function fetchBytes(url) {
-  const response = await fetchWithRetry(url, {
-    onRetry: (error, attempt, wait) =>
-      say(`${url}: ${error.cause?.code ?? error.message}; attempt ${attempt} of 3 failed, retrying in ${wait / 1000} s`),
+function fetchBytes(url) {
+  return fetchBytesWithRetry(url, {
+    onRetry: (error, attempt, attempts, wait) =>
+      say(
+        `${url}: ${error.cause?.code ?? error.message}; attempt ${attempt} of ${attempts} failed, retrying in ${wait / 1000} s`,
+      ),
   });
-  return new Uint8Array(await response.arrayBuffer());
 }
 
 async function onDisk(entry) {
