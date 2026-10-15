@@ -6,3 +6,7 @@ package-lock.json
 /data/
 # Built demo site, deployed by pages.yml.
 /_site/
+# Pinned inputs `npm run sync` fetches but never ships: the GSHHG zip, Natural Earth water files
+/cache/
+# Built by `npm run sync` (lib/cut.js), never committed
+/geo/

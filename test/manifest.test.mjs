@@ -157,7 +157,7 @@ test('package.json exports every shipped thing by subpath, and ships it', () => 
   assert.equal(pkg.dependencies, undefined, 'no runtime dependencies');
   assert.equal(
     pkg.scripts.prepack,
-    'node scripts/sync.mjs',
-    'the tarball is never built without the data',
+    'node scripts/sync.mjs --no-cells',
+    'the tarball is never built without the data, and ships no cells',
   );
 });

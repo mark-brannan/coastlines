@@ -1046,7 +1046,9 @@
       "licence": "public domain",
       "version": "v5.1.2",
       "date": "2022-05-13",
-      "caveat": "Holds to about z12 but has no narrow channels"
+      "caveat": "Holds to about z12 but has no narrow channels",
+      "cutter": "coastlines/lib/cut.js",
+      "built": "2026-10-15"
     },
     "bytesPerCell": null,
     "bytes": null,
@@ -1086,7 +1088,9 @@
       "licence": "LGPL-3.0-or-later",
       "version": "2.3.7",
       "date": "2017-06-15",
-      "caveat": "Holds to about z13; draws the Seattle ship canal. Its licence files are owned here and travel with every GSHHG band"
+      "caveat": "Holds to about z13; draws the Seattle ship canal. Its licence files are owned here and travel with every GSHHG band",
+      "cutter": "coastlines/lib/cut.js",
+      "built": "2026-10-15"
     },
     "bytesPerCell": null,
     "bytes": null,
@@ -1118,7 +1122,9 @@
       "licence": "LGPL-3.0-or-later",
       "version": "2.3.7",
       "date": "2017-06-15",
-      "caveat": "Full resolution; about 70,000 cells"
+      "caveat": "Full resolution; about 70,000 cells",
+      "cutter": "coastlines/lib/cut.js",
+      "built": "2026-10-15"
     },
     "bytesPerCell": null,
     "bytes": null,
@@ -1169,7 +1175,9 @@
       "licence": "public domain",
       "version": "v5.1.2",
       "date": "2022-05-13",
-      "caveat": "Rivers and lakes with their regional supplements; whole features go into every cell they reach. Not in the manifest, so each file is pinned here"
+      "caveat": "Rivers and lakes with their regional supplements; whole features go into every cell they reach. Not in the manifest, so each file is pinned here",
+      "cutter": "coastlines/lib/cut.js",
+      "built": "2026-10-15"
     },
     "bytesPerCell": null,
     "bytes": null,
@@ -1247,7 +1255,9 @@
       "licence": "LGPL-3.0-or-later",
       "version": "2.3.7",
       "date": "2017-06-15",
-      "caveat": "Lakes no Natural Earth file has (Dian Chi, Lago Mascardi); levels 2 and 3 with river-lakes"
+      "caveat": "Lakes no Natural Earth file has (Dian Chi, Lago Mascardi); levels 2 and 3 with river-lakes",
+      "cutter": "coastlines/lib/cut.js",
+      "built": "2026-10-15"
     },
     "bytesPerCell": null,
     "bytes": null,
@@ -1311,7 +1321,9 @@
       "licence": "LGPL-3.0-or-later",
       "version": "2.3.7",
       "date": "2017-06-15",
-      "caveat": "As gshhg-h-lakes at full resolution"
+      "caveat": "As gshhg-h-lakes at full resolution",
+      "cutter": "coastlines/lib/cut.js",
+      "built": "2026-10-15"
     },
     "bytesPerCell": null,
     "bytes": null,
