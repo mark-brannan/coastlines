@@ -14,14 +14,18 @@
 // Two kinds of source. A Natural Earth entry is one file at one URL. A GSHHG
 // entry is a member of the published zip: the zip (149 MB) is fetched once,
 // only when a member or a cut band needs it, checked against the bytes and
-// sha256 the manifest records for the zip itself, kept in data/ so the next run
-// and CI's cache need not fetch it again, and each member is lifted out and
-// checked against its own entry. Nothing of the zip touches the repository.
+// sha256 the manifest records for the zip itself, and each member is lifted out
+// and checked against its own entry. Nothing of the zip touches the repository.
 //
 // Then the catalogue's cut bands (`cells` sources) are built into geo/ by
 // lib/cut.js where a band's index.json is missing, and each band's
 // provenance.built is stamped with the day; geo/gshhg-modified.txt names the
 // GSHHG bands among them.
+//
+// cache/ (gitignored, not in the package) keeps the inputs that are pinned but
+// never shipped -- the zip, and the Natural Earth files only a cut band draws
+// on -- so the next run and CI's cache need not fetch them again. data/ holds
+// the manifest's files alone: the package ships all of it, under a 30 MB cap.
 //
 // catalogue.json is checked against the manifest first (lib/bands.js drift): every record's
 // upstream, member and sha256 must be what its inputs pin, so the two cannot drift.
@@ -79,9 +83,9 @@ async function writeAtomically(url, bytes) {
 /** The zips fetched this run, by source key: one download however many members want it. */
 const zips = new Map();
 
-/** Bytes pinned by `sha256`, from data/<cache> when it is there and right, else fetched and kept. */
-async function pinned(url, sha256, cache) {
-  const where = new URL(`../data/${cache}`, import.meta.url);
+/** Bytes pinned by `sha256`, from cache/<name> when it is there and right, else fetched and kept. */
+async function pinned(url, sha256, name) {
+  const where = new URL(`../cache/${name}`, import.meta.url);
   const held = await readFile(where).catch((error) => {
     if (error.code === 'ENOENT') return null;
     throw error;
@@ -91,9 +95,9 @@ async function pinned(url, sha256, cache) {
   say(`fetching ${url}`);
   const bytes = await fetchBytes(url);
   say(
-    `${cache}: ${bytes.byteLength} bytes in ${((performance.now() - started) / 1000).toFixed(1)} s`,
+    `${name}: ${bytes.byteLength} bytes in ${((performance.now() - started) / 1000).toFixed(1)} s`,
   );
-  if (digest(bytes) !== sha256) throw new Error(`${cache}: ${digest(bytes)}, pinned ${sha256}`);
+  if (digest(bytes) !== sha256) throw new Error(`${name}: ${digest(bytes)}, pinned ${sha256}`);
   await writeAtomically(where, bytes);
   return bytes;
 }
@@ -152,7 +156,8 @@ if (drifted.length)
 for (const entry of manifest.files) {
   if (!source(entry)) throw new Error(`${entry.id}: unknown source ${entry.source}`);
 }
-await mkdir(new URL('../data/', import.meta.url), { recursive: true });
+for (const dir of ['../data/', '../cache/'])
+  await mkdir(new URL(dir, import.meta.url), { recursive: true });
 const counts = { ok: 0, fetched: 0, missing: 0 };
 for (const entry of manifest.files) {
   const outcome = await syncOne(entry);
