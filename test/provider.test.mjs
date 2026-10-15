@@ -156,17 +156,35 @@ test('a frame across the antimeridian reads the cells on the far side', async ()
   assert.deepEqual(await tags(provider({ read }).rings(viewAt(9.5, pacific))), ['10m past 180']);
 });
 
-test('held and cost say what a view would fetch, and drawing it fetches it', async () => {
+test('loaded and pending say what a view would fetch, and drawing it fetches it', async () => {
   const { read } = source(sites());
   const p = provider({ read });
   const view = viewAt(11, GENOA);
-  assert.equal(await p.held(view), false);
-  assert.deepEqual(await p.cost(view), { band: 'gshhg-h-land', cells: 2, bytes: null });
+  assert.equal(await p.loaded(view), false);
+  assert.deepEqual(await p.pending(view), { band: 'gshhg-h-land', cells: 2, bytes: null });
   await tags(p.rings(view));
-  assert.equal(await p.held(view), true);
-  assert.deepEqual(await p.cost(view), { band: 'gshhg-h-land', cells: 0, bytes: 0 });
+  assert.equal(await p.loaded(view), true);
+  assert.deepEqual(await p.pending(view), { band: 'gshhg-h-land', cells: 0, bytes: 0 });
   const far = viewAt(5, GENOA);
-  assert.deepEqual(await p.cost(far), { band: 'ne-coastline-50m', cells: 1, bytes: 1640858 });
+  assert.deepEqual(await p.pending(far), { band: 'ne-coastline-50m', cells: 1, bytes: 1640858 });
+});
+
+test('held and cost still answer as loaded and pending, warning once each', async () => {
+  const { read } = source(sites());
+  const p = provider({ read });
+  const view = viewAt(11, GENOA);
+  const warnings = [];
+  const warn = console.warn;
+  console.warn = (m) => warnings.push(m);
+  try {
+    assert.equal(await p.held(view), await p.loaded(view));
+    assert.deepEqual(await p.cost(view), await p.pending(view));
+    await p.held(view);
+    await p.cost(view);
+  } finally {
+    console.warn = warn;
+  }
+  assert.equal(warnings.length, 2);
 });
 
 test('land yields every ring of every polygon', async () => {
