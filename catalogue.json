@@ -1050,8 +1050,9 @@
       "cutter": "coastlines/lib/cut.js",
       "built": "2026-10-15"
     },
-    "bytesPerCell": null,
-    "bytes": null,
+    "cells": 1456,
+    "bytesPerCell": 12954,
+    "bytes": 18861693,
     "from": ["ne-land-10m", "ne-coastline-10m", "ne-minor-islands-10m"],
     "inputs": [],
     "sources": [
@@ -1092,8 +1093,9 @@
       "cutter": "coastlines/lib/cut.js",
       "built": "2026-10-15"
     },
-    "bytesPerCell": null,
-    "bytes": null,
+    "cells": 19273,
+    "bytesPerCell": 3717,
+    "bytes": 71636830,
     "from": [],
     "inputs": ["gshhg-land-h", "gshhg-licence", "gshhg-copying-lesser"],
     "sources": [
@@ -1126,8 +1128,9 @@
       "cutter": "coastlines/lib/cut.js",
       "built": "2026-10-15"
     },
-    "bytesPerCell": null,
-    "bytes": null,
+    "cells": 70692,
+    "bytesPerCell": 5693,
+    "bytes": 402415178,
     "from": [],
     "inputs": [
       {
@@ -1179,8 +1182,9 @@
       "cutter": "coastlines/lib/cut.js",
       "built": "2026-10-15"
     },
-    "bytesPerCell": null,
-    "bytes": null,
+    "cells": 712,
+    "bytesPerCell": 45613,
+    "bytes": 32476615,
     "from": [],
     "inputs": [
       {
@@ -1259,8 +1263,9 @@
       "cutter": "coastlines/lib/cut.js",
       "built": "2026-10-15"
     },
-    "bytesPerCell": null,
-    "bytes": null,
+    "cells": 4068,
+    "bytesPerCell": 2935,
+    "bytes": 11939267,
     "from": [],
     "inputs": [
       {
@@ -1325,8 +1330,9 @@
       "cutter": "coastlines/lib/cut.js",
       "built": "2026-10-15"
     },
-    "bytesPerCell": null,
-    "bytes": null,
+    "cells": 8699,
+    "bytesPerCell": 4417,
+    "bytes": 38424112,
     "from": [],
     "inputs": [
       {
