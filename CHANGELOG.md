@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.5-alpha.0...v0.0.6-alpha.0) (2026-10-15)
+
+
+### Added
+
+* catalogue.json, the geometry bands as data ([#33](https://github.com/mark-brannan/coastlines/issues/33)) ([d48baf4](https://github.com/mark-brannan/coastlines/commit/d48baf4234a3300a7e6323de497fd0bb03cb2e3b))
+
 ## [0.0.5-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.4-alpha.0...v0.0.5-alpha.0) (2026-10-14)
 
 
