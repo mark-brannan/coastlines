@@ -59,6 +59,18 @@ jobs:
       # test.yml.
       - run: npm test
 
+      # data/ is gitignored, so the tarball needs it fetched before packing;
+      # prepack only verifies it (sync --check). Same key as test.yml's sync
+      # job, so a tag run usually restores main's cache and downloads nothing;
+      # sync verifies every byte on a hit.
+      - uses: actions/cache@v6
+        with:
+          path: |
+            data
+            cache
+          key: data-${{ hashFiles('manifest.json', 'catalogue.json') }}
+      - run: npm run sync -- --no-cells
+
       # No NODE_AUTH_TOKEN. Authentication is the OIDC identity above.
       # npm refuses a prerelease version without an explicit dist-tag, so that
       # an alpha never becomes `latest`. 0.0.2-alpha.0 -> `alpha`; a stable
