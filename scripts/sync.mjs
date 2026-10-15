@@ -7,6 +7,9 @@
 //   node scripts/sync.mjs --refresh  fetch everything and rewrite the manifest's
 //                                    bytes and sha256 from what arrived -- the
 //                                    one way to move a pin; review the diff
+//   node scripts/sync.mjs --no-cells the files only; build no cells (prepack:
+//                                    the tarball ships none, and a build would
+//                                    stamp catalogue.json mid-pack)
 //
 // Two kinds of source. A Natural Earth entry is one file at one URL. A GSHHG
 // entry is a member of the published zip: the zip (149 MB) is fetched once,
@@ -28,7 +31,14 @@
 import { access, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { manifest, localUrl, source, upstreamUrl } from '../lib/catalogue.js';
 import { catalogue, drift, pinOf } from '../lib/bands.js';
-import { cellsDir, cutBand, modifiedGshhg, modifiedNotice, writeBand } from '../lib/cut.js';
+import {
+  cellsDir,
+  cutBand,
+  modifiedGshhg,
+  modifiedNotice,
+  stampBuilt,
+  writeBand,
+} from '../lib/cut.js';
 import { digest, verify } from '../lib/verify.js';
 import { zipMember } from '../lib/zip.js';
 import { fetchBytesWithRetry } from '../lib/fetch-retry.js';
@@ -36,6 +46,7 @@ import { fetchBytesWithRetry } from '../lib/fetch-retry.js';
 const flags = new Set(process.argv.slice(2));
 const refresh = flags.has('--refresh');
 const checkOnly = flags.has('--check');
+const noCells = flags.has('--no-cells');
 
 const say = (line) => process.stderr.write(line + '\n');
 
@@ -149,31 +160,32 @@ for (const entry of manifest.files) {
   if (outcome !== 'ok') say(`${outcome}: ${entry.id}`);
 }
 
-/** Whether this band's cells are already built. */
-const built = (record) =>
-  access(new URL(`../geo/${cellsDir(record)}/index.json`, import.meta.url)).then(
+/** Stamps `provenance.built` on one record in catalogue.json, in place so the file's formatting stands. */
+async function stamp(id, day) {
+  const path = new URL('../catalogue.json', import.meta.url);
+  await writeFile(path, stampBuilt(await readFile(path, 'utf8'), id, day));
+  catalogue.find((r) => r.id === id).provenance.built = day;
+}
+
+const exists = (url) =>
+  access(url).then(
     () => true,
     () => false,
   );
 
-/** Stamps `provenance.built` on one record in catalogue.json, in place so the file's formatting stands. */
-async function stamp(id, day) {
-  const path = new URL('../catalogue.json', import.meta.url);
-  const text = await readFile(path, 'utf8');
-  const at = text.indexOf(`"id": "${id}"`);
-  const next = text.slice(at).replace(/("built": )"[^"]*"/, `$1"${day}"`);
-  await writeFile(path, text.slice(0, at) + next);
-  catalogue.find((r) => r.id === id).provenance.built = day;
-}
-
-if (!refresh) {
+if (!refresh && !noCells) {
   const root = new URL('../', import.meta.url);
+  const notice = new URL('../geo/gshhg-modified.txt', import.meta.url);
   const day = new Date().toISOString().slice(0, 10);
   const cut = catalogue.filter((r) => r.grid);
   const missing = [];
-  for (const record of cut) if (!(await built(record))) missing.push(record);
+  for (const record of cut)
+    if (!(await exists(new URL(`../geo/${cellsDir(record)}/index.json`, import.meta.url))))
+      missing.push(record);
   say(`cells: ${cut.length - missing.length} built, ${missing.length} missing`);
-  if (!checkOnly) {
+  if (checkOnly) {
+    if (!(await exists(notice))) say('missing: geo/gshhg-modified.txt');
+  } else {
     for (const record of missing) {
       const started = performance.now();
       const n = await writeBand(record, await cutBand(record, readInput), root);
@@ -182,17 +194,8 @@ if (!refresh) {
         `built: ${record.id}, ${n} cells in ${((performance.now() - started) / 1000).toFixed(1)} s`,
       );
     }
-    if (
-      missing.length ||
-      !(await access(new URL('../geo/gshhg-modified.txt', import.meta.url)).then(
-        () => true,
-        () => false,
-      ))
-    )
-      await writeFile(
-        new URL('../geo/gshhg-modified.txt', import.meta.url),
-        modifiedNotice(modifiedGshhg(catalogue)),
-      );
+    if (missing.length || !(await exists(notice)))
+      await writeFile(notice, modifiedNotice(modifiedGshhg(catalogue)));
   }
 }
 

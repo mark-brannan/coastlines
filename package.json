@@ -22,7 +22,7 @@
     "sync": "node --max-old-space-size=6144 scripts/sync.mjs",
     "sync:check": "node --max-old-space-size=6144 scripts/sync.mjs --check",
     "sync:refresh": "node --max-old-space-size=6144 scripts/sync.mjs --refresh",
-    "prepack": "node --max-old-space-size=6144 scripts/sync.mjs",
+    "prepack": "node scripts/sync.mjs --no-cells",
     "build:sheet": "node scripts/render-sheet.mjs",
     "build:readme": "node scripts/catalogue-table.mjs",
     "build:pages": "node scripts/build-pages.mjs",

@@ -26,10 +26,12 @@ jobs:
 
   # Fetches the pinned Natural Earth release (45 MB) and the GSHHG zip (149 MB,
   # ~90 s together) and fails if any file disagrees with manifest.json, then
-  # runs the per-file tests over it. Once per PR, one Node: the manifest is the
-  # product, and this is its proof. data/ is cached by the manifest's hash:
+  # cuts the catalogue's cells (~90 s, a 6 GB heap) and runs the per-file tests
+  # over it. Once per PR, one Node: the manifest is the product, and this is
+  # its proof. data/ is cached by the hash of its pins, the manifest's and the
+  # catalogue's (the zip and the Natural Earth water files live there too):
   # sync verifies every byte on a hit, so the cache cannot slip in a wrong one,
-  # and a moved pin misses it.
+  # and a moved pin misses it. geo/ is not cached: 900 MB, rebuilt each run.
   sync:
     runs-on: ubuntu-latest
     steps:
@@ -40,7 +42,7 @@ jobs:
       - uses: actions/cache@v6
         with:
           path: data
-          key: data-${{ hashFiles('manifest.json') }}
+          key: data-${{ hashFiles('manifest.json', 'catalogue.json') }}
       - run: npm run sync
       - run: npm test
       # Design §2e (R4): the package stays under 30 MB packed.

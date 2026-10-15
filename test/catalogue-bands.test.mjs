@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import catalogue, { band, catalogue as same, CUTTER, drift, inputsOf } from '../lib/bands.js';
-import { modifiedGshhg } from '../lib/cut.js';
+import { modifiedGshhg, stampBuilt } from '../lib/cut.js';
 import { manifest } from '../lib/catalogue.js';
 
 const require = createRequire(import.meta.url);
@@ -95,4 +95,28 @@ test('a cut band names its cutter and build date, and draws on one upstream', ()
     modifiedGshhg(catalogue).map((r) => r.id),
     ['gshhg-h-land', 'gshhg-f-land', 'gshhg-h-lakes', 'gshhg-f-lakes'],
   );
+});
+
+test('stampBuilt rewrites one record and refuses the wrong one', () => {
+  const text = `[
+  {
+    "id": "a",
+    "provenance": { "built": "2026-01-01" }
+  },
+  {
+    "id": "b",
+    "provenance": { "built": "2026-01-01" }
+  },
+  {
+    "id": "c",
+    "provenance": {}
+  }
+]`;
+  const out = stampBuilt(text, 'b', '2026-10-15');
+  assert.equal(out.replace('2026-10-15', '2026-01-01'), text, 'nothing but b changes');
+  assert.match(out, /"id": "a",\n\s+"provenance": \{ "built": "2026-01-01" \}/);
+  assert.match(out, /"id": "b",\n\s+"provenance": \{ "built": "2026-10-15" \}/);
+  assert.throws(() => stampBuilt(text, 'z', '2026-10-15'), /z: not in catalogue.json/);
+  assert.throws(() => stampBuilt(text, 'c', '2026-10-15'), /c: no provenance.built/);
+  assert.equal(stampBuilt(text, 'a', '2026-01-01'), text, 'a stamp already there is a no-op');
 });
