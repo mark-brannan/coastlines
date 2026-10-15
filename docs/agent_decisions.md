@@ -27,3 +27,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261014t074616z
 - package.json license stays MIT while the tarball ships unmodified LGPL-3.0-or-later GSHHG data with its notices; the declaration is left for the owner, thread open. Undo: set package.json license to MIT AND LGPL-3.0-or-later and point LICENSE at data/gshhg-*.txt ([#25](https://github.com/mark-brannan/coastlines/pull/25))
+
+### 20261015t054107z
+- provider verbs named rings, held, cost (agent-notes proposal) Undo: rename the three methods in lib/provider.js ([#38](https://github.com/mark-brannan/coastlines/pull/38))
