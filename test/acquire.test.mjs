@@ -78,3 +78,27 @@ test('a transient failure is retried; the retry report names the attempt', async
   assert.deepEqual(bytes, body);
   assert.deepEqual(seen, [1]);
 });
+
+test('a name that is a path, or empty, is refused before anything is fetched', async () => {
+  const cacheDir = await dir();
+  const calls = { n: 0 };
+  for (const name of ['../a.bin', 'a/b', ''])
+    await assert.rejects(acquire(pin, { cacheDir, name, fetchImpl: ok(calls) }), /file name/);
+  assert.equal(calls.n, 0);
+  assert.deepEqual(await readdir(cacheDir), []);
+});
+
+test('a 4xx is not retried and keeps nothing', async () => {
+  const cacheDir = await dir();
+  let n = 0;
+  await assert.rejects(
+    acquire(pin, {
+      cacheDir,
+      fetchImpl: async () => (n++, new Response('gone', { status: 404 })),
+      sleep: async () => {},
+    }),
+    /404/,
+  );
+  assert.equal(n, 1);
+  assert.deepEqual(await readdir(cacheDir).catch(() => []), []);
+});
