@@ -35,6 +35,7 @@
 // data/ is gitignored, so the manifest is the record: an entry's sha256 is the
 // promise that `coastlines/data/<id>` is the published file, byte for byte.
 import { access, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
 import { manifest, localUrl, source, upstreamUrl } from '../lib/catalogue.js';
 import { catalogue, drift, pinOf } from '../lib/bands.js';
 import {
@@ -48,6 +49,7 @@ import {
 import { digest, verify } from '../lib/verify.js';
 import { zipMember } from '../lib/zip.js';
 import { fetchBytesWithRetry } from '../lib/fetch-retry.js';
+import { acquire } from '../lib/acquire.js';
 
 const flags = new Set(process.argv.slice(2));
 const refresh = flags.has('--refresh');
@@ -56,15 +58,13 @@ const noCells = flags.has('--no-cells');
 
 const say = (line) => process.stderr.write(line + '\n');
 
-function fetchBytes(url) {
-  return fetchBytesWithRetry(url, {
-    onRetry: (error, attempt, attempts, wait) => {
-      // An HTTP failure's message already names the url; say it once.
-      const why = error.cause?.code ?? error.message.replace(`${url}: `, '');
-      say(`${url}: ${why}; attempt ${attempt} of ${attempts} failed, retrying in ${wait / 1000} s`);
-    },
-  });
-}
+const retryNote = (url) => (error, attempt, attempts, wait) => {
+  // An HTTP failure's message already names the url; say it once.
+  const why = error.cause?.code ?? error.message.replace(`${url}: `, '');
+  say(`${url}: ${why}; attempt ${attempt} of ${attempts} failed, retrying in ${wait / 1000} s`);
+};
+
+const fetchBytes = (url) => fetchBytesWithRetry(url, { onRetry: retryNote(url) });
 
 async function onDisk(entry) {
   try {
@@ -87,21 +87,16 @@ const zips = new Map();
 
 /** Bytes pinned by `sha256`, from cache/<name> when it is there and right, else fetched and kept. */
 async function pinned(url, sha256, name) {
-  const where = new URL(`../cache/${name}`, import.meta.url);
-  const held = await readFile(where).catch((error) => {
-    if (error.code === 'ENOENT') return null;
-    throw error;
-  });
-  if (held && digest(held) === sha256) return held;
-  const started = performance.now();
-  say(`fetching ${url}`);
-  const bytes = await fetchBytes(url);
-  say(
-    `${name}: ${bytes.byteLength} bytes in ${((performance.now() - started) / 1000).toFixed(1)} s`,
+  const cacheDir = fileURLToPath(new URL('../cache/', import.meta.url));
+  return acquire(
+    { url, sha256 },
+    {
+      cacheDir,
+      name,
+      onFetch: (u) => say(`fetching ${u}`),
+      onRetry: retryNote(url),
+    },
   );
-  if (digest(bytes) !== sha256) throw new Error(`${name}: ${digest(bytes)}, pinned ${sha256}`);
-  await writeAtomically(where, bytes);
-  return bytes;
 }
 
 /** The bytes of a source's zip, fetched on first use and checked against the manifest (or, on --refresh, re-pinned). */
