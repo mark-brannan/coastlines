@@ -59,6 +59,20 @@ jobs:
       # test.yml.
       - run: npm test
 
+      # data/ is gitignored, so the tarball needs it fetched first. That is a
+      # step of its own, not prepack: a download timing out inside `npm publish`
+      # (#41) left 0.0.8-alpha.0 off npm with nothing to re-run but the whole
+      # release. prepack now only verifies (sync --check) and fails if data/ is
+      # missing or wrong. The cache is keyed by the pins; sync verifies every
+      # byte on a hit, so it cannot slip in a wrong one.
+      - uses: actions/cache@v6
+        with:
+          path: |
+            data
+            cache
+          key: data-${{ hashFiles('manifest.json', 'catalogue.json') }}
+      - run: npm run sync -- --no-cells
+
       # No NODE_AUTH_TOKEN. Authentication is the OIDC identity above.
       # npm refuses a prerelease version without an explicit dist-tag, so that
       # an alpha never becomes `latest`. 0.0.2-alpha.0 -> `alpha`; a stable
