@@ -116,7 +116,7 @@ zip itself.
 | Where | What | Size | How it reaches you |
 | --- | --- | ---: | --- |
 | `data/` | the 36 files above | 78 MB, 29 MB packed | installed with the package |
-| `geo/` | six cut bands, land and water in square cells | 576 MB | built by `npm run sync`; not shipped |
+| `geo/` | six cut bands, land and water in square cells | 549 MB | built by `npm run sync`; not shipped |
 | `cache/` | the GSHHG zip, six Natural Earth 10m water files | 167 MB | fetched once by sync, kept |
 
 Each cut band is a record in `catalogue.json`: grid, inputs and pins, cutter
