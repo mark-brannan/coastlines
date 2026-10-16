@@ -130,7 +130,7 @@ test('stampBuilt rewrites one record and refuses the wrong one', () => {
   assert.match(out, /"id": "a",\n\s+"provenance": \{ "built": "2026-01-01" \}/);
   assert.match(out, /"id": "b",\n\s+"provenance": \{ "built": "2026-10-15" \}/);
   assert.throws(() => stampBuilt(text, 'z', '2026-10-15'), /z: not in catalogue.json/);
-  assert.throws(() => stampBuilt(text, 'c', '2026-10-15'), /c: no provenance.built/);
+  assert.throws(() => stampBuilt(text, 'c', '2026-10-15'), /c: no built/);
   assert.equal(stampBuilt(text, 'a', '2026-01-01'), text, 'a stamp already there is a no-op');
 });
 

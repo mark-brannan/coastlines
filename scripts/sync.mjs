@@ -21,7 +21,7 @@
 //
 // Then the catalogue's cut bands (`cells` sources) are built into geo/ by
 // lib/cut.js where a band's index.json is missing, and each band's
-// provenance.built is stamped with the day; geo/gshhg-modified.txt names the
+// `built` is stamped with the day; geo/gshhg-modified.txt names the
 // GSHHG bands among them.
 //
 // cache/ (gitignored, not in the package) keeps the inputs that are pinned but
