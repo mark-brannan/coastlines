@@ -332,3 +332,76 @@ test('kind still picks the default layer, and warns once', async () => {
   assert.equal(warnings.length, 1);
   assert.match(warnings[0], /`kind` is deprecated, use `layer`/);
 });
+
+test('lakes read c.land of a lake cell, keep islands as holes, and yield Polygons', async () => {
+  const files = {
+    ...sites(),
+    'geo/h-lakes/index.json': { cell: 1, cells: ['8_44'] },
+    'geo/h-lakes/8_44.json': {
+      land: [[ring(8, 44, 4, 'shore'), ring(9, 45, 1, 'island')]],
+      coast: [ring(8, 44, 4, 'shore')],
+    },
+  };
+  const { read, asked } = source(files);
+  const p = provider({ read });
+  const view = viewAt(11, GENOA);
+  const fs = await collect(p.features(view, 'lakes'));
+  assert.deepEqual(
+    fs.map((f) => f.geometry.type),
+    ['Polygon'],
+  );
+  assert.ok(asked.includes('geo/h-lakes/8_44.json'));
+  const polys = await collect(p.polygons(view, 'lakes'));
+  assert.equal(polys.length, 1);
+  assert.deepEqual(
+    polys[0].map((r) => r[0][2]),
+    ['shore', 'island'],
+  );
+  assert.equal((await collect(p.rings(view, 'lakes'))).length, 2);
+});
+
+test('water reads the { rivers, lakes } cell: LineStrings and Polygons, in that order', async () => {
+  const river = {
+    type: 'Feature',
+    properties: { name: 'Po' },
+    geometry: {
+      type: 'LineString',
+      coordinates: [
+        [7, 44, 'river'],
+        [8, 45, 'river'],
+      ],
+    },
+  };
+  const lake = {
+    type: 'Feature',
+    properties: { name: 'Lago' },
+    geometry: { type: 'Polygon', coordinates: [ring(8, 44, 4, 'shore'), ring(9, 45, 1, 'island')] },
+  };
+  const files = {
+    ...sites(),
+    'geo/water-10m/index.json': { cell: 5, cells: ['1_8'] },
+    'geo/water-10m/1_8.json': {
+      rivers: { type: 'FeatureCollection', features: [river] },
+      lakes: { type: 'FeatureCollection', features: [lake] },
+    },
+  };
+  const { read, asked } = source(files);
+  const p = provider({ read });
+  const view = viewAt(11, GENOA);
+  const fs = await collect(p.features(view, 'water'));
+  assert.deepEqual(
+    fs.map((f) => f.geometry.type),
+    ['LineString', 'Polygon'],
+  );
+  assert.deepEqual(
+    fs.map((f) => f.properties.name),
+    ['Po', 'Lago'],
+  );
+  assert.ok(asked.includes('geo/water-10m/1_8.json'));
+  const polys = await collect(p.polygons(view, 'water'));
+  assert.deepEqual(
+    polys[0].map((r) => r[0][2]),
+    ['shore', 'island'],
+  );
+  assert.equal((await collect(p.rings(view, 'water'))).length, 3);
+});
