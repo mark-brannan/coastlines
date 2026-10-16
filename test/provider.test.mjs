@@ -405,3 +405,109 @@ test('water reads the { rivers, lakes } cell: LineStrings and Polygons, in that 
   );
   assert.equal((await collect(p.rings(view, 'water'))).length, 3);
 });
+
+// A closed square ring from (x0, y0) to (x1, y1).
+const square = (x0, y0, x1, y1) => [
+  [x0, y0],
+  [x1, y0],
+  [x1, y1],
+  [x0, y1],
+  [x0, y0],
+];
+const neLake = (id, name, x0, y0, x1, y1) => ({
+  type: 'Feature',
+  id,
+  properties: { name },
+  geometry: { type: 'Polygon', coordinates: [square(x0, y0, x1, y1)] },
+});
+const neRiver = (id, name) => ({
+  type: 'Feature',
+  id,
+  properties: { name },
+  geometry: {
+    type: 'LineString',
+    coordinates: [
+      [8.6, 44.3],
+      [9.2, 44.4],
+    ],
+  },
+});
+
+// Two 5-degree water cells (a view over Genoa reaches both) and one GSHHG lake whose water is a
+// square with an island in it. Natural Earth cuts a feature whole into every cell it reaches.
+const lakeSite = () => {
+  const same = neLake(0, 'Same', 8.4, 44.4, 8.6, 44.6), // in the GSHHG water: one lake, twice drawn
+    island = neLake(1, 'Island', 9.0, 45.0, 9.05, 45.05), // in the GSHHG lake's box, in its island
+    far = neLake(2, 'Far', 20, 40, 21, 41); // nowhere near
+  const water = (rivers, lakes) => ({
+    rivers: { type: 'FeatureCollection', features: rivers },
+    lakes: { type: 'FeatureCollection', features: lakes },
+  });
+  return {
+    'geo/water-10m/index.json': { cell: 5, cells: ['1_8', '2_8'] },
+    'geo/water-10m/1_8.json': water([neRiver(0, 'Po')], [same, island]),
+    'geo/water-10m/2_8.json': water([neRiver(0, 'Po')], [same, island, far]),
+    'geo/h-lakes/index.json': { cell: 1, cells: ['8_44'] },
+    'geo/h-lakes/8_44.json': {
+      land: [[square(8, 44, 10, 46), square(8.9, 44.9, 9.1, 45.1)]],
+      coast: [],
+      m: [[7, 8, 44, 10, 46]],
+    },
+  };
+};
+const names = (fs) => fs.map((f) => f.properties.name ?? 'GSHHG');
+
+test('a feature that several cells hold is yielded once, a river and a lake of one id apart', async () => {
+  const files = lakeSite();
+  delete files['geo/h-lakes/index.json']; // Natural Earth water alone
+  const { read } = source(files);
+  const fs = await collect(provider({ read }).features(viewAt(11, GENOA), 'water'));
+  assert.deepEqual(names(fs), ['Po', 'Same', 'Island', 'Far']);
+  const ids = fs.map((f) => `${f.geometry.type}:${f.id}`);
+  assert.equal(new Set(ids).size, ids.length, ids.join(' '));
+});
+
+test('a Natural Earth lake gives way to a GSHHG lake only where a point of it lies in that water', async () => {
+  const { read } = source(lakeSite());
+  const p = provider({ read });
+  const view = viewAt(11, GENOA);
+  const water = await collect(p.features(view, 'water'));
+  // rivers first, then the Natural Earth lakes that stay, then GSHHG's
+  assert.deepEqual(names(water), ['Po', 'Island', 'Far', 'GSHHG']);
+  const lakes = await collect(p.features(view, 'lakes'));
+  assert.deepEqual(names(lakes), ['Island', 'Far', 'GSHHG']);
+  assert.deepEqual(
+    lakes.at(-1).geometry.coordinates.map((r) => r.length),
+    [5, 5],
+    'the GSHHG lake keeps its island as a hole',
+  );
+});
+
+test('with no GSHHG lake for the view, every Natural Earth lake stays; lakes falls to its own band', async () => {
+  const files = lakeSite();
+  delete files['geo/h-lakes/index.json'];
+  files['data/ne-lakes-50m.geojson'] = {
+    type: 'FeatureCollection',
+    features: [neLake(0, 'Coarse', 0, 0, 1, 1)],
+  };
+  const { read } = source(files);
+  const p = provider({ read });
+  const view = viewAt(11, GENOA);
+  assert.deepEqual(names(await collect(p.features(view, 'water'))), [
+    'Po',
+    'Same',
+    'Island',
+    'Far',
+  ]);
+  assert.deepEqual(names(await collect(p.features(view, 'lakes'))), ['Coarse']);
+});
+
+test('pending counts the cells of both sources a reconciled view reads', async () => {
+  const { read } = source(lakeSite());
+  const p = provider({ read });
+  const view = viewAt(11, GENOA);
+  assert.equal((await p.pending(view, 'water')).cells, 3);
+  assert.equal(await p.loaded(view, 'lakes'), false);
+  await collect(p.features(view, 'lakes'));
+  assert.equal(await p.loaded(view, 'water'), true);
+});
