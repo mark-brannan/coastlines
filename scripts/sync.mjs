@@ -2,7 +2,7 @@
 // Fetches every file in manifest.json from its pinned source into data/, and
 // refuses any byte that disagrees with the manifest.
 //
-//   node scripts/sync.mjs            fetch what is missing, verify everything
+//   node scripts/sync.mjs            fetch what is missing or disagrees with its pin, verify all
 //   node scripts/sync.mjs --check    verify only; exit 1 if anything is missing
 //   node scripts/sync.mjs --refresh  fetch everything and rewrite the manifest's
 //                                    bytes and sha256 from what arrived -- the
@@ -50,6 +50,7 @@ import { digest, verify } from '../lib/verify.js';
 import { zipMember } from '../lib/zip.js';
 import { fetchBytesWithRetry } from '../lib/fetch-retry.js';
 import { acquire } from '../lib/acquire.js';
+import { syncEntry } from '../lib/sync-entry.js';
 
 const flags = new Set(process.argv.slice(2));
 const refresh = flags.has('--refresh');
@@ -132,20 +133,16 @@ async function readInput(input) {
   return pinned(upstream, sha256, input.name);
 }
 
-/** One entry: returns 'ok', 'fetched', 'missing' or throws on a mismatch. */
-async function syncOne(entry) {
-  const existing = refresh ? null : await onDisk(entry);
-  if (existing) {
-    verify(entry, existing);
-    return 'ok';
-  }
-  if (checkOnly) return 'missing';
-  const bytes = await fetchEntry(entry);
-  if (refresh) Object.assign(entry, { bytes: bytes.byteLength, sha256: digest(bytes) });
-  else verify(entry, bytes);
-  await writeAtomically(localUrl(entry), bytes);
-  return 'fetched';
-}
+/** One entry: 'ok', 'fetched' or 'missing'. A file that disagrees with its pin is fetched again; it throws only if the fresh bytes disagree too. */
+const syncOne = (entry) =>
+  syncEntry(entry, {
+    read: () => onDisk(entry),
+    fetch: () => fetchEntry(entry),
+    write: (bytes) => writeAtomically(localUrl(entry), bytes),
+    refresh,
+    checkOnly,
+    onStale: (error) => say(`${error.message}; fetching again`),
+  });
 
 const drifted = drift();
 if (drifted.length)
