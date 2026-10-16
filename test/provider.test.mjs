@@ -219,3 +219,116 @@ test('land yields every ring of every polygon', async () => {
 test('an unknown kind is refused', () => {
   assert.throws(() => provider({ read: async () => ({}), kind: 'reefs' }), /unknown kind reefs/);
 });
+
+// A land cell with one island that has a lake in it: an outer ring and a hole.
+const ring = (x, y, s, tag) => [
+  [x, y, tag],
+  [x + s, y, tag],
+  [x + s, y + s, tag],
+  [x, y, tag],
+];
+const withLake = () => {
+  const files = sites();
+  files['geo/h/8_44.json'] = {
+    land: [[ring(8, 44, 4, 'outer'), ring(9, 45, 1, 'lake')]],
+    coast: [ring(8, 44, 4, 'outer')],
+  };
+  return files;
+};
+const collect = async (iterable) => {
+  const out = [];
+  for await (const x of iterable) out.push(x);
+  return out;
+};
+
+test('features yields GeoJSON Features, and a polygon keeps its hole', async () => {
+  const { read } = source(withLake());
+  const fs = await collect(provider({ read }).features(viewAt(11, GENOA), 'land'));
+  assert.equal(fs.length, 3);
+  for (const f of fs) {
+    assert.equal(f.type, 'Feature');
+    assert.equal(f.geometry.type, 'Polygon');
+    assert.ok(
+      f.geometry.coordinates.every((r) => r.length >= 4 && r[0].join() === r.at(-1).join()),
+    );
+  }
+  const island = fs[0].geometry.coordinates;
+  assert.deepEqual(
+    island.map((r) => r[0][2]),
+    ['outer', 'lake'],
+  );
+});
+
+test('features of the coastline are LineStrings', async () => {
+  const { read } = source(withLake());
+  const fs = await collect(provider({ read }).features(viewAt(11, GENOA), 'coastline'));
+  assert.deepEqual([...new Set(fs.map((f) => f.geometry.type))], ['LineString']);
+});
+
+test('polygons give each polygon as outer ring then holes; rings still flatten them', async () => {
+  const { read } = source(withLake());
+  const p = provider({ read });
+  const polys = await collect(p.polygons(viewAt(11, GENOA), 'land'));
+  assert.deepEqual(
+    polys[0].map((r) => r[0][2]),
+    ['outer', 'lake'],
+  );
+  assert.deepEqual(await tags(p.rings(viewAt(11, GENOA), 'land')), [
+    'outer',
+    'lake',
+    'h 9_44',
+    'h 9_44',
+  ]);
+});
+
+test('a whole file is read into Features, a MultiPolygon split into polygons', async () => {
+  const multi = {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'MultiPolygon',
+          coordinates: [[ring(0, 0, 1, 'a')], [ring(2, 2, 1, 'b'), ring(2.2, 2.2, 0.2, 'c')]],
+        },
+      },
+    ],
+  };
+  const { read } = source({ ...sites(), 'data/ne-land-50m.geojson': multi });
+  const p = provider({ read });
+  const view = viewAt(5, GENOA);
+  assert.equal((await collect(p.features(view, 'land')))[0].geometry.type, 'MultiPolygon');
+  assert.equal((await collect(p.polygons(view, 'land'))).length, 2);
+  assert.equal((await collect(p.rings(view, 'land'))).length, 3);
+});
+
+test('an unknown layer is refused', async () => {
+  const { read } = source(withLake());
+  const p = provider({ read });
+  await assert.rejects(collect(p.features(viewAt(11, GENOA), 'reefs')), /unknown layer reefs/);
+});
+
+test('kind still picks the default layer, and warns once', async () => {
+  // a fresh copy of the module, its warn-once memory empty
+  const { provider } = await import('../lib/provider.js?kind');
+  const { read } = source(withLake());
+  const view = viewAt(11, GENOA);
+  const plain = provider({ read });
+  const warnings = [];
+  const warn = console.warn;
+  console.warn = (m) => warnings.push(m);
+  try {
+    const land = provider({ read, kind: 'land' });
+    const coast = provider({ read, kind: 'coast' });
+    assert.deepEqual(await collect(land.rings(view)), await collect(plain.rings(view, 'land')));
+    assert.deepEqual(
+      await collect(coast.rings(view)),
+      await collect(plain.rings(view, 'coastline')),
+    );
+  } finally {
+    console.warn = warn;
+  }
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /`kind` is deprecated, use `layer`/);
+});

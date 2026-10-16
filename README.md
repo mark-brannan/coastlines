@@ -148,6 +148,32 @@ data. Cite: Wessel, P., and W. H. F. Smith, A global, self-consistent,
 hierarchical, high-resolution shoreline database, _J. Geophys. Res._, 101(B4),
 8741–8743, 1996.
 
+## The provider API
+
+`coastlines/provider` chooses what a view draws and hands it back as GeoJSON. The caller supplies
+`read(path)`, which fetches a catalogue path and rejects on a miss, and a view: the lon/lat frame
+it paints plus `resolution`, metres per pixel at the centre.
+
+```js
+import { provider } from 'coastlines/provider';
+
+const chart = provider({ read });
+for await (const f of chart.features(view, 'land')) {
+  // a GeoJSON Feature; a Polygon keeps its holes: coordinates = [outer, ...holes]
+}
+chart.rings(view, 'coastline'); // async iterable of rings, outer and holes flattened
+chart.polygons(view, 'land'); // async iterable of polygons, each [outer, ...holes]
+chart.loaded(view, 'land'); // true when drawing fetches nothing
+chart.pending(view, 'land'); // { band, cells, bytes } a draw would fetch
+```
+
+`layer` is one of the catalogue's layers: `coastline`, `land`, `lakes` or `water`. `rings` and
+`polygons` are built on `features`.
+
+**Deprecated:** the `kind` option of `provider({ read, kind })` (`'coast'`, `'land'`). It still
+works, maps to `layer` (`'coastline'`, `'land'`) as the default for calls that name none, and
+warns once. Name the layer on each call instead.
+
 ## The charts
 
 A plotter does not want 36 files; it wants a basemap to tick. `charts.json`
