@@ -4,6 +4,7 @@ import { createRequire } from 'node:module';
 import catalogue, {
   band,
   catalogue as same,
+  builtOf,
   CUTTER,
   drift,
   inputsOf,
@@ -26,7 +27,7 @@ test('coastlines/catalogue exports the records, one per id', () => {
     'gshhg-f-lakes',
   ])
     assert.ok(band(id)?.grid?.cellDeg > 0, `${id} is a cut band with a grid`);
-  assert.equal(band('ne-land-50m').grid, null, 'a whole file has no grid');
+  assert.equal(band('ne-50m-land').grid, null, 'a whole file has no grid');
 });
 
 test('every manifest file appears in exactly one record', () => {
@@ -54,23 +55,26 @@ function driftWith(id, field, change) {
 
 test('drift notices a changed pin, member, date, bytes or zoom', () => {
   const zero = (r) => (r.provenance.sha256[0] = 'sha256:0');
-  assert.match(driftWith('ne-land-50m', 'provenance', zero), /ne-land-50m: sha256 differs/);
+  assert.match(driftWith('ne-50m-land', 'provenance', zero), /ne-50m-land: sha256 differs/);
   const unnamed = (r) => (r.provenance.member[0] = null);
   assert.match(driftWith('gshhg-f-land', 'provenance', unnamed), /gshhg-f-land: member differs/);
   const undated = (r) => (r.provenance.date = null);
   assert.match(driftWith('gshhg-f-land', 'provenance', undated), /gshhg-f-land: date null/);
   assert.match(
-    driftWith('ne-land-50m', 'bytes', (r) => (r.bytes += 1)),
-    /ne-land-50m: bytes/,
+    driftWith('ne-50m-land', 'bytes', (r) => (r.bytes += 1)),
+    /ne-50m-land: bytes/,
   );
   const later = (r) => (r.zoom.min += 1);
-  assert.match(driftWith('ne-glaciated-areas-110m', 'zoom', later), /110m: zoom 3-4/);
+  assert.match(
+    driftWith('ne-110m-glaciated-areas', 'zoom', later),
+    /ne-110m-glaciated-areas: zoom 3-4/,
+  );
 });
 
 test('sources say where the geometry is fetched from, one kind and url each', () => {
   for (const r of catalogue) {
     assert.ok(r.sources.length > 0, r.id);
-    for (const s of r.sources) assert.deepEqual(Object.keys(s), ['kind', 'url'], r.id);
+    for (const s of r.sources) assert.deepEqual(Object.keys(s).slice(0, 2), ['kind', 'url'], r.id);
   }
   assert.deepEqual(band('gshhg-f-land').sources, [{ kind: 'cells', url: 'geo/f/' }]);
 });
@@ -78,8 +82,9 @@ test('sources say where the geometry is fetched from, one kind and url each', ()
 test('a cut band draws on inputs, and carries the cells and bytes of its build', () => {
   for (const r of catalogue.filter((r) => r.grid)) {
     assert.ok(inputsOf(r).length > 0, r.id);
-    assert.ok(r.cells > 0 && r.bytes > 0, `${r.id}: measured`);
-    assert.equal(r.bytesPerCell, Math.round(r.bytes / r.cells), `${r.id}: bytesPerCell`);
+    const { cells, bytes } = builtOf(r);
+    assert.ok(cells > 0 && bytes > 0, `${r.id}: measured`);
+    assert.equal(r.bytesPerCell, Math.round(bytes / cells), `${r.id}: bytesPerCell`);
   }
 });
 
@@ -91,12 +96,12 @@ test('catalogue.json ships and is exported', () => {
 
 test('a cut band names its cutter and build date, and draws on one upstream', () => {
   for (const r of catalogue.filter((r) => r.grid)) {
-    assert.equal(r.provenance.cutter, CUTTER, r.id);
-    assert.match(r.provenance.built, /^\d{4}-\d{2}-\d{2}$/, r.id);
+    assert.equal(builtOf(r).cutter, CUTTER, r.id);
+    assert.match(builtOf(r).built, /^\d{4}-\d{2}-\d{2}$/, r.id);
   }
   for (const r of catalogue.filter((r) => !r.grid)) assert.equal(r.provenance.cutter, undefined);
   assert.match(
-    driftWith('ne-10m-land', 'provenance', (r) => (r.provenance.cutter = 'portolani')),
+    driftWith('ne-10m-land', 'sources', (r) => (r.sources[1].cutter = 'portolani')),
     /ne-10m-land: cutter portolani/,
   );
   assert.deepEqual(
@@ -125,7 +130,7 @@ test('stampBuilt rewrites one record and refuses the wrong one', () => {
   assert.match(out, /"id": "a",\n\s+"provenance": \{ "built": "2026-01-01" \}/);
   assert.match(out, /"id": "b",\n\s+"provenance": \{ "built": "2026-10-15" \}/);
   assert.throws(() => stampBuilt(text, 'z', '2026-10-15'), /z: not in catalogue.json/);
-  assert.throws(() => stampBuilt(text, 'c', '2026-10-15'), /c: no provenance.built/);
+  assert.throws(() => stampBuilt(text, 'c', '2026-10-15'), /c: no built/);
   assert.equal(stampBuilt(text, 'a', '2026-01-01'), text, 'a stamp already there is a no-op');
 });
 
@@ -146,4 +151,83 @@ test('no geometry file is built from more than one source', async () => {
     driftWith('gshhg-h-land', 'inputs', (r) => r.inputs.push('ne-land-10m')),
     /gshhg-h-land: built from 2 sources/,
   );
+});
+
+// Every id a record went by before `<source>-<scale>-<layer>`, and the id it has now.
+const RENAMED = [
+  ['ne-coastline-110m', 'ne-110m-coastline'],
+  ['ne-land-110m', 'ne-110m-land'],
+  ['ne-ocean-110m', 'ne-110m-ocean'],
+  ['ne-geographic-lines-110m', 'ne-110m-geographic-lines'],
+  ['ne-admin-0-boundary-lines-land-110m', 'ne-110m-admin-0-boundary-lines-land'],
+  ['ne-admin-0-countries-110m', 'ne-110m-admin-0-countries'],
+  ['ne-populated-places-110m', 'ne-110m-populated-places'],
+  ['ne-lakes-110m', 'ne-110m-lakes'],
+  ['ne-rivers-lake-centerlines-110m', 'ne-110m-rivers-lake-centerlines'],
+  ['ne-glaciated-areas-110m', 'ne-110m-glaciated-areas'],
+  ['ne-coastline-50m', 'ne-50m-coastline'],
+  ['ne-land-50m', 'ne-50m-land'],
+  ['ne-ocean-50m', 'ne-50m-ocean'],
+  ['ne-geographic-lines-50m', 'ne-50m-geographic-lines'],
+  ['ne-admin-0-boundary-lines-land-50m', 'ne-50m-admin-0-boundary-lines-land'],
+  [
+    'ne-admin-0-boundary-lines-maritime-indicator-50m',
+    'ne-50m-admin-0-boundary-lines-maritime-indicator',
+  ],
+  ['ne-admin-0-countries-50m', 'ne-50m-admin-0-countries'],
+  ['ne-populated-places-50m', 'ne-50m-populated-places'],
+  ['ne-urban-areas-50m', 'ne-50m-urban-areas'],
+  ['ne-lakes-50m', 'ne-50m-lakes'],
+  ['ne-rivers-lake-centerlines-50m', 'ne-50m-rivers-lake-centerlines'],
+  ['ne-glaciated-areas-50m', 'ne-50m-glaciated-areas'],
+  ['ne-antarctic-ice-shelves-polys-50m', 'ne-50m-antarctic-ice-shelves-polys'],
+  ['ne-coastline-10m', 'ne-10m-coastline'],
+  ['ne-land-10m', 'ne-10m-land'],
+  ['ne-minor-islands-10m', 'ne-10m-minor-islands'],
+  ['ne-reefs-10m', 'ne-10m-reefs'],
+  ['ne-geographic-lines-10m', 'ne-10m-geographic-lines'],
+  ['ne-time-zones-10m', 'ne-10m-time-zones'],
+  ['ne-admin-0-boundary-lines-land-10m', 'ne-10m-admin-0-boundary-lines-land'],
+  [
+    'ne-admin-0-boundary-lines-maritime-indicator-10m',
+    'ne-10m-admin-0-boundary-lines-maritime-indicator',
+  ],
+  ['ne-admin-0-disputed-areas-10m', 'ne-10m-admin-0-disputed-areas'],
+  ['ne-ports-10m', 'ne-10m-ports'],
+  ['ne-antarctic-ice-shelves-polys-10m', 'ne-10m-antarctic-ice-shelves-polys'],
+  ['gshhg-land-h', 'gshhg-h-land'],
+];
+
+test('every id a band once had still finds it, as an alias of its new id', () => {
+  assert.equal(RENAMED.length, 35);
+  for (const [old, now] of RENAMED) {
+    assert.equal(band(old), band(now), `${old} finds ${now}`);
+    assert.equal(band(now)?.id, now, `${now} is a record`);
+    assert.ok(band(now).aliases.includes(old), `${now} lists ${old} as an alias`);
+    assert.equal(band(old).id === old, false, `${old} is no longer an id`);
+  }
+});
+
+test('ids follow <source>-<scale>-<layer>, and no id or alias is taken twice', () => {
+  const names = catalogue.flatMap((r) => [r.id, ...(r.aliases ?? [])]);
+  assert.equal(new Set(names).size, names.length);
+  for (const r of catalogue) {
+    const [source, scale, ...layer] = r.id.split('-');
+    assert.ok(['ne', 'gshhg'].includes(source), r.id);
+    assert.ok(['10m', '50m', '110m', 'h', 'f'].includes(scale), r.id);
+    assert.equal(layer.join('_'), r.layer, r.id);
+  }
+});
+
+test('one record per data set: the 10m land file and its cells share ne-10m-land', () => {
+  const r = band('ne-land-10m');
+  assert.equal(r.id, 'ne-10m-land');
+  assert.deepEqual(
+    r.sources.map((s) => s.kind),
+    ['file', 'cells'],
+  );
+  assert.deepEqual(r.inputs, ['ne-land-10m'], 'the file is owned by the manifest id');
+  assert.equal(r.bytes, manifest.files.find((f) => f.id === 'ne-land-10m').bytes);
+  assert.equal(r.provenance.cutter, undefined, "the cutter is the cells source's");
+  assert.ok(builtOf(r).cells > 0);
 });

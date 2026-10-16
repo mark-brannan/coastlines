@@ -1,6 +1,7 @@
 [
   {
-    "id": "ne-coastline-110m",
+    "id": "ne-110m-coastline",
+    "aliases": ["ne-coastline-110m"],
     "layer": "coastline",
     "zoom": {
       "min": 0,
@@ -30,7 +31,8 @@
     ]
   },
   {
-    "id": "ne-land-110m",
+    "id": "ne-110m-land",
+    "aliases": ["ne-land-110m"],
     "layer": "land",
     "zoom": {
       "min": 0,
@@ -60,7 +62,8 @@
     ]
   },
   {
-    "id": "ne-ocean-110m",
+    "id": "ne-110m-ocean",
+    "aliases": ["ne-ocean-110m"],
     "layer": "ocean",
     "zoom": {
       "min": 0,
@@ -90,7 +93,8 @@
     ]
   },
   {
-    "id": "ne-geographic-lines-110m",
+    "id": "ne-110m-geographic-lines",
+    "aliases": ["ne-geographic-lines-110m"],
     "layer": "geographic_lines",
     "zoom": {
       "min": 0,
@@ -120,7 +124,8 @@
     ]
   },
   {
-    "id": "ne-admin-0-boundary-lines-land-110m",
+    "id": "ne-110m-admin-0-boundary-lines-land",
+    "aliases": ["ne-admin-0-boundary-lines-land-110m"],
     "layer": "admin_0_boundary_lines_land",
     "zoom": {
       "min": 1,
@@ -150,7 +155,8 @@
     ]
   },
   {
-    "id": "ne-admin-0-countries-110m",
+    "id": "ne-110m-admin-0-countries",
+    "aliases": ["ne-admin-0-countries-110m"],
     "layer": "admin_0_countries",
     "zoom": {
       "min": 2,
@@ -180,7 +186,8 @@
     ]
   },
   {
-    "id": "ne-populated-places-110m",
+    "id": "ne-110m-populated-places",
+    "aliases": ["ne-populated-places-110m"],
     "layer": "populated_places",
     "zoom": {
       "min": 2,
@@ -210,7 +217,8 @@
     ]
   },
   {
-    "id": "ne-lakes-110m",
+    "id": "ne-110m-lakes",
+    "aliases": ["ne-lakes-110m"],
     "layer": "lakes",
     "zoom": {
       "min": 2,
@@ -240,7 +248,8 @@
     ]
   },
   {
-    "id": "ne-rivers-lake-centerlines-110m",
+    "id": "ne-110m-rivers-lake-centerlines",
+    "aliases": ["ne-rivers-lake-centerlines-110m"],
     "layer": "rivers_lake_centerlines",
     "zoom": {
       "min": 3,
@@ -270,7 +279,8 @@
     ]
   },
   {
-    "id": "ne-glaciated-areas-110m",
+    "id": "ne-110m-glaciated-areas",
+    "aliases": ["ne-glaciated-areas-110m"],
     "layer": "glaciated_areas",
     "zoom": {
       "min": 2,
@@ -300,7 +310,8 @@
     ]
   },
   {
-    "id": "ne-coastline-50m",
+    "id": "ne-50m-coastline",
+    "aliases": ["ne-coastline-50m"],
     "layer": "coastline",
     "zoom": {
       "min": 0,
@@ -330,7 +341,8 @@
     ]
   },
   {
-    "id": "ne-land-50m",
+    "id": "ne-50m-land",
+    "aliases": ["ne-land-50m"],
     "layer": "land",
     "zoom": {
       "min": 0,
@@ -360,7 +372,8 @@
     ]
   },
   {
-    "id": "ne-ocean-50m",
+    "id": "ne-50m-ocean",
+    "aliases": ["ne-ocean-50m"],
     "layer": "ocean",
     "zoom": {
       "min": 0,
@@ -390,7 +403,8 @@
     ]
   },
   {
-    "id": "ne-geographic-lines-50m",
+    "id": "ne-50m-geographic-lines",
+    "aliases": ["ne-geographic-lines-50m"],
     "layer": "geographic_lines",
     "zoom": {
       "min": 0,
@@ -420,7 +434,8 @@
     ]
   },
   {
-    "id": "ne-admin-0-boundary-lines-land-50m",
+    "id": "ne-50m-admin-0-boundary-lines-land",
+    "aliases": ["ne-admin-0-boundary-lines-land-50m"],
     "layer": "admin_0_boundary_lines_land",
     "zoom": {
       "min": 2,
@@ -450,7 +465,8 @@
     ]
   },
   {
-    "id": "ne-admin-0-boundary-lines-maritime-indicator-50m",
+    "id": "ne-50m-admin-0-boundary-lines-maritime-indicator",
+    "aliases": ["ne-admin-0-boundary-lines-maritime-indicator-50m"],
     "layer": "admin_0_boundary_lines_maritime_indicator",
     "zoom": {
       "min": 3,
@@ -480,7 +496,8 @@
     ]
   },
   {
-    "id": "ne-admin-0-countries-50m",
+    "id": "ne-50m-admin-0-countries",
+    "aliases": ["ne-admin-0-countries-50m"],
     "layer": "admin_0_countries",
     "zoom": {
       "min": 3,
@@ -510,7 +527,8 @@
     ]
   },
   {
-    "id": "ne-populated-places-50m",
+    "id": "ne-50m-populated-places",
+    "aliases": ["ne-populated-places-50m"],
     "layer": "populated_places",
     "zoom": {
       "min": 3,
@@ -540,7 +558,8 @@
     ]
   },
   {
-    "id": "ne-urban-areas-50m",
+    "id": "ne-50m-urban-areas",
+    "aliases": ["ne-urban-areas-50m"],
     "layer": "urban_areas",
     "zoom": {
       "min": null,
@@ -570,7 +589,8 @@
     ]
   },
   {
-    "id": "ne-lakes-50m",
+    "id": "ne-50m-lakes",
+    "aliases": ["ne-lakes-50m"],
     "layer": "lakes",
     "zoom": {
       "min": 3,
@@ -600,7 +620,8 @@
     ]
   },
   {
-    "id": "ne-rivers-lake-centerlines-50m",
+    "id": "ne-50m-rivers-lake-centerlines",
+    "aliases": ["ne-rivers-lake-centerlines-50m"],
     "layer": "rivers_lake_centerlines",
     "zoom": {
       "min": 4,
@@ -630,7 +651,8 @@
     ]
   },
   {
-    "id": "ne-glaciated-areas-50m",
+    "id": "ne-50m-glaciated-areas",
+    "aliases": ["ne-glaciated-areas-50m"],
     "layer": "glaciated_areas",
     "zoom": {
       "min": 3,
@@ -660,7 +682,8 @@
     ]
   },
   {
-    "id": "ne-antarctic-ice-shelves-polys-50m",
+    "id": "ne-50m-antarctic-ice-shelves-polys",
+    "aliases": ["ne-antarctic-ice-shelves-polys-50m"],
     "layer": "antarctic_ice_shelves_polys",
     "zoom": {
       "min": 2,
@@ -690,7 +713,8 @@
     ]
   },
   {
-    "id": "ne-coastline-10m",
+    "id": "ne-10m-coastline",
+    "aliases": ["ne-coastline-10m"],
     "layer": "coastline",
     "zoom": {
       "min": 0,
@@ -720,37 +744,57 @@
     ]
   },
   {
-    "id": "ne-land-10m",
+    "id": "ne-10m-land",
+    "aliases": ["ne-land-10m"],
     "layer": "land",
     "zoom": {
-      "min": null,
-      "max": null,
-      "minInclusive": true
+      "min": 9,
+      "max": 10,
+      "minInclusive": false
     },
-    "grid": null,
+    "grid": {
+      "cellDeg": 5,
+      "marginDeg": 2
+    },
     "provenance": {
       "upstream": [
-        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_land.geojson"
+        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_land.geojson",
+        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_coastline.geojson",
+        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_minor_islands.geojson"
       ],
-      "member": [null],
-      "sha256": ["sha256:1ac90796408bc6ad6911d69448485d3c4dbf2190370080368a09976e1c9f7416"],
+      "member": [null, null, null],
+      "sha256": [
+        "sha256:1ac90796408bc6ad6911d69448485d3c4dbf2190370080368a09976e1c9f7416",
+        "sha256:6f75ae0e0de157b14946e2255eb1f5486d9a13819032e26d4610852d296788f6",
+        "sha256:8c933ca7a4760256bdc46408355706e39764b0fa01c160c28888b90b4faec29f"
+      ],
       "licence": "public domain",
       "version": "v5.1.2",
       "date": "2022-05-13",
-      "caveat": null
+      "caveat": "Holds to about z12 but has no narrow channels"
     },
-    "bytesPerCell": null,
     "bytes": 10157965,
+    "bytesPerCell": 12954,
+    "from": ["ne-10m-coastline", "ne-10m-minor-islands"],
     "inputs": ["ne-land-10m"],
     "sources": [
       {
         "kind": "file",
         "url": "data/ne-land-10m.geojson"
+      },
+      {
+        "kind": "cells",
+        "url": "geo/10m/",
+        "cells": 1456,
+        "bytes": 18861693,
+        "cutter": "coastlines/lib/cut.js",
+        "built": "2026-10-15"
       }
     ]
   },
   {
-    "id": "ne-minor-islands-10m",
+    "id": "ne-10m-minor-islands",
+    "aliases": ["ne-minor-islands-10m"],
     "layer": "minor_islands",
     "zoom": {
       "min": null,
@@ -780,7 +824,8 @@
     ]
   },
   {
-    "id": "ne-reefs-10m",
+    "id": "ne-10m-reefs",
+    "aliases": ["ne-reefs-10m"],
     "layer": "reefs",
     "zoom": {
       "min": null,
@@ -810,7 +855,8 @@
     ]
   },
   {
-    "id": "ne-geographic-lines-10m",
+    "id": "ne-10m-geographic-lines",
+    "aliases": ["ne-geographic-lines-10m"],
     "layer": "geographic_lines",
     "zoom": {
       "min": null,
@@ -840,7 +886,8 @@
     ]
   },
   {
-    "id": "ne-time-zones-10m",
+    "id": "ne-10m-time-zones",
+    "aliases": ["ne-time-zones-10m"],
     "layer": "time_zones",
     "zoom": {
       "min": null,
@@ -870,7 +917,8 @@
     ]
   },
   {
-    "id": "ne-admin-0-boundary-lines-land-10m",
+    "id": "ne-10m-admin-0-boundary-lines-land",
+    "aliases": ["ne-admin-0-boundary-lines-land-10m"],
     "layer": "admin_0_boundary_lines_land",
     "zoom": {
       "min": null,
@@ -900,7 +948,8 @@
     ]
   },
   {
-    "id": "ne-admin-0-boundary-lines-maritime-indicator-10m",
+    "id": "ne-10m-admin-0-boundary-lines-maritime-indicator",
+    "aliases": ["ne-admin-0-boundary-lines-maritime-indicator-10m"],
     "layer": "admin_0_boundary_lines_maritime_indicator",
     "zoom": {
       "min": null,
@@ -930,7 +979,8 @@
     ]
   },
   {
-    "id": "ne-admin-0-disputed-areas-10m",
+    "id": "ne-10m-admin-0-disputed-areas",
+    "aliases": ["ne-admin-0-disputed-areas-10m"],
     "layer": "admin_0_disputed_areas",
     "zoom": {
       "min": null,
@@ -960,7 +1010,8 @@
     ]
   },
   {
-    "id": "ne-ports-10m",
+    "id": "ne-10m-ports",
+    "aliases": ["ne-ports-10m"],
     "layer": "ports",
     "zoom": {
       "min": null,
@@ -990,7 +1041,8 @@
     ]
   },
   {
-    "id": "ne-antarctic-ice-shelves-polys-10m",
+    "id": "ne-10m-antarctic-ice-shelves-polys",
+    "aliases": ["ne-antarctic-ice-shelves-polys-10m"],
     "layer": "antarctic_ice_shelves_polys",
     "zoom": {
       "min": null,
@@ -1020,50 +1072,8 @@
     ]
   },
   {
-    "id": "ne-10m-land",
-    "layer": "land",
-    "zoom": {
-      "min": 9,
-      "max": 10,
-      "minInclusive": false
-    },
-    "grid": {
-      "cellDeg": 5,
-      "marginDeg": 2
-    },
-    "provenance": {
-      "upstream": [
-        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_land.geojson",
-        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_coastline.geojson",
-        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_minor_islands.geojson"
-      ],
-      "member": [null, null, null],
-      "sha256": [
-        "sha256:1ac90796408bc6ad6911d69448485d3c4dbf2190370080368a09976e1c9f7416",
-        "sha256:6f75ae0e0de157b14946e2255eb1f5486d9a13819032e26d4610852d296788f6",
-        "sha256:8c933ca7a4760256bdc46408355706e39764b0fa01c160c28888b90b4faec29f"
-      ],
-      "licence": "public domain",
-      "version": "v5.1.2",
-      "date": "2022-05-13",
-      "caveat": "Holds to about z12 but has no narrow channels",
-      "cutter": "coastlines/lib/cut.js",
-      "built": "2026-10-15"
-    },
-    "cells": 1456,
-    "bytesPerCell": 12954,
-    "bytes": 18861693,
-    "from": ["ne-land-10m", "ne-coastline-10m", "ne-minor-islands-10m"],
-    "inputs": [],
-    "sources": [
-      {
-        "kind": "cells",
-        "url": "geo/10m/"
-      }
-    ]
-  },
-  {
     "id": "gshhg-h-land",
+    "aliases": ["gshhg-land-h"],
     "layer": "land",
     "zoom": {
       "min": 10,
