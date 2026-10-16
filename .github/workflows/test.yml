@@ -31,7 +31,9 @@ jobs:
   # its proof. data/ (the manifest's files) and cache/ (the zip and the Natural
   # Earth water files, pinned but not shipped) are cached by the hash of their
   # pins: sync verifies every byte on a hit, so the cache cannot slip in a
-  # wrong one, and a moved pin misses it. geo/ is not cached: 900 MB, rebuilt
+  # wrong one, and a moved pin misses it. A miss restores the nearest older
+  # cache and fetches only the files whose pins moved, so a catalogue edit
+  # that moves no pin needs no upstream. geo/ is not cached: 900 MB, rebuilt
   # each run.
   sync:
     runs-on: ubuntu-latest
@@ -46,6 +48,7 @@ jobs:
             data
             cache
           key: data-${{ hashFiles('manifest.json', 'catalogue.json') }}
+          restore-keys: data-
       - run: npm run sync
       - run: npm test
       # Design §2e (R4): the package stays under 30 MB packed.
