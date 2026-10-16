@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.10-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.9-alpha.0...v0.0.10-alpha.0) (2026-10-16)
+
+
+### Added
+
+* **provider:** features(view, layer) with holes kept; kind deprecated ([#54](https://github.com/mark-brannan/coastlines/issues/54)) ([416a73c](https://github.com/mark-brannan/coastlines/commit/416a73c76c834e13c02e35503549c10960437203))
+* **provider:** water and lakes apply the portolani lake rule, and yield a cut feature once ([#55](https://github.com/mark-brannan/coastlines/issues/55)) ([01136c6](https://github.com/mark-brannan/coastlines/commit/01136c6200a87dc0bf82c802d0c1fef677c1010f))
+
+
+### Fixed
+
+* **sync:** fetch a data/ file again when its bytes disagree with the pin ([#52](https://github.com/mark-brannan/coastlines/issues/52)) ([78a2a41](https://github.com/mark-brannan/coastlines/commit/78a2a415a8cc9919829d70ff5454b7de6b19624e))
+
 ## [0.0.9-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.8-alpha.0...v0.0.9-alpha.0) (2026-10-15)
 
 
