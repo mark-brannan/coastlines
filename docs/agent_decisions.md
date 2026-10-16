@@ -57,3 +57,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261016t024243z
 - water layer falls back to ne-50m-rivers-lake-centerlines below its cells; default layer with no kind is coastline Undo: revert in lib/provider.js LAYERS (mark-brannan/coastlines) (no PR, branch feat/provider-features)
+
+### 20261016t025330z
+- coastlines provider: the lakes layer serves the reconciled lakes too (kept Natural Earth lakes plus GSHHG), not GSHHG alone, past zoom 10 Undo: revert the lib/provider.js branch in features() for layer 'lakes' (https://github.com/mark-brannan/coastlines) (no PR, branch feat/provider-lake-reconcile)
