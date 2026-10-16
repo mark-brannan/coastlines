@@ -51,3 +51,19 @@ test('--check never fetches: a missing file is reported, a disagreeing one throw
   await assert.rejects(wrong.run(), /ne\.shp/);
   assert.equal(wrong.seen.fetched, 0);
 });
+
+test('--refresh never reads data/: the fetched bytes re-pin the entry and are stored', async () => {
+  const pin = { id: 'ne.shp', bytes: 0, sha256: 'sha256:old' };
+  let read = 0;
+  let written = null;
+  const outcome = await syncEntry(pin, {
+    read: async () => (read++, fresh),
+    fetch: async () => stale,
+    write: async (bytes) => (written = bytes),
+    refresh: true,
+  });
+  assert.equal(outcome, 'fetched');
+  assert.equal(read, 0);
+  assert.deepEqual(pin, { id: 'ne.shp', bytes: stale.length, sha256: digest(stale) });
+  assert.deepEqual(written, stale);
+});
