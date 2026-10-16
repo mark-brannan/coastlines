@@ -46,6 +46,9 @@ jobs:
             data
             cache
           key: data-${{ hashFiles('manifest.json', 'catalogue.json') }}
+          # A changed catalogue that moves no pin would otherwise refetch 190 MB from hosts that
+          # are sometimes down; sync verifies every restored byte and fetches only what is missing.
+          restore-keys: data-
       - run: npm run sync
       - run: npm test
       # Design §2e (R4): the package stays under 30 MB packed.
