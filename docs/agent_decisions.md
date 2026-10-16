@@ -54,3 +54,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261015t061550z
 - pinned inputs that are never shipped (the GSHHG zip, the Natural Earth water files) live in cache/, not data/; data/ stays the manifest's files, which the package ships Undo: move them back under data/ and exclude them from the tarball another way ([#39](https://github.com/mark-brannan/coastlines/pull/39))
+
+### 20261016t024243z
+- water layer falls back to ne-50m-rivers-lake-centerlines below its cells; default layer with no kind is coastline Undo: revert in lib/provider.js LAYERS (mark-brannan/coastlines) (no PR, branch feat/provider-features)
