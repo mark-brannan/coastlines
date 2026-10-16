@@ -60,3 +60,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261016t025330z
 - coastlines provider: the lakes layer serves the reconciled lakes too (kept Natural Earth lakes plus GSHHG), not GSHHG alone, past zoom 10 Undo: revert the lib/provider.js branch in features() for layer 'lakes' (https://github.com/mark-brannan/coastlines) (no PR, branch feat/provider-lake-reconcile)
+
+### 20261016t025335z
+- coastlines provider: loaded/pending for water and lakes count the cells of both sources once the lake rule applies Undo: revert wants() in lib/provider.js (https://github.com/mark-brannan/coastlines) (no PR, branch feat/provider-lake-reconcile)
