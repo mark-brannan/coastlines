@@ -8,7 +8,7 @@
 //   node scripts/catalogue-table.mjs --print  print the table only
 import { readFile, writeFile } from 'node:fs/promises';
 import { manifest, format } from '../lib/catalogue.js';
-import { catalogue } from '../lib/bands.js';
+import { builtOf, catalogue } from '../lib/bands.js';
 
 export const START = '<!-- catalogue:start -->';
 export const END = '<!-- catalogue:end -->';
@@ -59,8 +59,9 @@ export function cutBandsTable(records = catalogue) {
   for (const r of records.filter((r) => r.grid)) {
     const zoom = `${r.zoom.min}–${r.zoom.max ?? '∞'}`;
     const cell = `${r.grid.cellDeg}° (+${r.grid.marginDeg}°)`;
+    const built = builtOf(r);
     lines.push(
-      `| \`${r.id}\` | ${r.layer} | ${zoom} | ${cell} | ${r.cells.toLocaleString('en-US')} | ${mb(r.bytes)} | ${sourceOf(r.provenance)} |`,
+      `| \`${r.id}\` | ${r.layer} | ${zoom} | ${cell} | ${built.cells.toLocaleString('en-US')} | ${mb(built.bytes)} | ${sourceOf(r.provenance)} |`,
     );
   }
   return lines.join('\n');

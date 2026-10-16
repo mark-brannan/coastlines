@@ -167,7 +167,7 @@ test('loaded and pending say what a view would fetch, and drawing it fetches it'
   assert.equal(await p.loaded(view), true);
   assert.deepEqual(await p.pending(view), { band: 'gshhg-h-land', cells: 0, bytes: 0 });
   const far = viewAt(5, GENOA);
-  assert.deepEqual(await p.pending(far), { band: 'ne-coastline-50m', cells: 1, bytes: 1640858 });
+  assert.deepEqual(await p.pending(far), { band: 'ne-50m-coastline', cells: 1, bytes: 1640858 });
 });
 
 test('held and cost still answer as loaded and pending, warning once each', async () => {

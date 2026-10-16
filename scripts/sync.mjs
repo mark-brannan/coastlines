@@ -37,7 +37,7 @@
 import { access, mkdir, readFile, rename, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { manifest, localUrl, source, upstreamUrl } from '../lib/catalogue.js';
-import { catalogue, drift, pinOf } from '../lib/bands.js';
+import { catalogue, cellsOf, drift, pinOf } from '../lib/bands.js';
 import {
   cellsDir,
   cutBand,
@@ -166,7 +166,8 @@ for (const entry of manifest.files) {
 async function stamp(id, day) {
   const path = new URL('../catalogue.json', import.meta.url);
   await writeFile(path, stampBuilt(await readFile(path, 'utf8'), id, day));
-  catalogue.find((r) => r.id === id).provenance.built = day;
+  const record = catalogue.find((r) => r.id === id);
+  (cellsOf(record).built === undefined ? record.provenance : cellsOf(record)).built = day;
 }
 
 const exists = (url) =>
