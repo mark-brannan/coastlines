@@ -602,7 +602,10 @@ test('bandFor is sync: null until the indexes it turns on are read, then the ban
   assert.equal(p.bandFor(close, 'coastline'), null);
   await collect(p.features(close, 'land'));
   assert.equal(p.bandFor(close, 'land'), 'ne-10m-land');
-  assert.equal(p.bandFor(close, 'land'), (await p.pending(close, 'land')).band);
+  const retry = p.pending(close, 'land'); // the next call retries the failed index: in flight again
+  assert.equal(p.bandFor(close, 'land'), null, 'null while the retry is in flight');
+  assert.equal((await retry).band, 'ne-10m-land', 'failed again: skipped again');
+  assert.equal(p.bandFor(close, 'land'), 'ne-10m-land');
   assert.equal(p.bandFor(close, 'coastline'), 'ne-10m-land', 'the same cells, so the same answer');
   assert.equal(p.bandFor(far, 'lakeshore'), null, 'no whole file of shores');
   const whole = provider(source(sites()));
