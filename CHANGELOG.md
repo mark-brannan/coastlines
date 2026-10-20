@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.11-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.10-alpha.0...v0.0.11-alpha.0) (2026-10-20)
+
+
+### Added
+
+* **provider:** Features carry the cutter's per-piece facts; lakeshore layer; sync bandFor ([#56](https://github.com/mark-brannan/coastlines/issues/56)) ([62832d1](https://github.com/mark-brannan/coastlines/commit/62832d1d6af92463f8859cd032edf5b258bca1b8))
+
 ## [0.0.10-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.9-alpha.0...v0.0.10-alpha.0) (2026-10-16)
 
 
