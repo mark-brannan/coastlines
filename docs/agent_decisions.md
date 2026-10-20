@@ -63,3 +63,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261016t025335z
 - coastlines provider: loaded/pending for water and lakes count the cells of both sources once the lake rule applies Undo: revert wants() in lib/provider.js (https://github.com/mark-brannan/coastlines) (no PR, branch feat/provider-lake-reconcile)
+
+### 20261020t213100z
+- A GSHHG lake Feature's GeoJSON id is '<source>-<scale>:<id>' (gshhg-h:145417): the band's id space from the catalogue grammar, then GSHHG's own polygon number, because GSHHG numbers polygons afresh per resolution (Caspian: 145417 in h, 180506 in f) and the shapefiles carry no ancestor id, so the PR's bare 'gshhg:<id>' named a different lake in each lake band Undo: change lakeId in lib/provider.js; nothing stores the id yet (portolani#200 not started) ([#56](https://github.com/mark-brannan/coastlines/pull/56))
