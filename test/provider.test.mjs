@@ -511,3 +511,105 @@ test('pending counts the cells of both sources a reconciled view reads', async (
   await collect(p.features(view, 'lakes'));
   assert.equal(await p.loaded(view, 'water'), true);
 });
+
+test('land Features carry km2 and hue of the whole island from the cell m, {} without it', async () => {
+  const files = sites();
+  files['geo/h/8_44.json'] = {
+    ...cell('h 8_44'),
+    m: [
+      [25000, 3],
+      [12, 200],
+    ],
+  }; // 9_44 has no m
+  const { read } = source(files);
+  const fs = await collect(provider({ read }).features(viewAt(11, GENOA), 'land'));
+  assert.deepEqual(
+    fs.map((f) => f.properties),
+    [{ km2: 25000, hue: 3 }, { km2: 12, hue: 200 }, {}, {}],
+  );
+});
+
+test('a GSHHG lake Feature has the lake id as id and the whole lake box as bbox, on either path', async () => {
+  const lake = (f) => ({ id: f.id, bbox: f.bbox, props: f.properties });
+  // the plain path: lakes from its own band, no Natural Earth water for the view
+  const alone = lakeSite();
+  delete alone['geo/water-10m/index.json'];
+  const plain = await collect(provider(source(alone)).features(viewAt(11, GENOA), 'lakes'));
+  assert.deepEqual(plain.map(lake), [{ id: 'gshhg-h:7', bbox: [8, 44, 10, 46], props: {} }]);
+  // the reconciled path: Natural Earth lakes keep their own id and properties, with no bbox added
+  const both = await collect(provider(source(lakeSite())).features(viewAt(11, GENOA), 'lakes'));
+  assert.deepEqual(both.map(lake), [
+    { id: 1, bbox: undefined, props: { name: 'Island' } },
+    { id: 2, bbox: undefined, props: { name: 'Far' } },
+    { id: 'gshhg-h:7', bbox: [8, 44, 10, 46], props: {} },
+  ]);
+  // GSHHG numbers its polygons afresh at each resolution, so the id names the band's: the same
+  // number from the f band is another lake
+  const fine = lakeSite();
+  fine['geo/f-lakes/index.json'] = { cell: 0.5, cells: ['17_88'] };
+  fine['geo/f-lakes/17_88.json'] = { ...fine['geo/h-lakes/8_44.json'], coast: [], cm: undefined };
+  const f = await collect(provider(source(fine)).features(viewAt(13, GENOA), 'lakes'));
+  assert.deepEqual(
+    f.filter((x) => typeof x.id === 'string').map((x) => x.id),
+    ['gshhg-f:7'],
+  );
+  // a piece without m is a bare Feature
+  const bare = lakeSite();
+  delete bare['geo/h-lakes/8_44.json'].m;
+  const fs = await collect(provider(source(bare)).features(viewAt(11, GENOA), 'lakes'));
+  assert.ok(!('id' in fs.at(-1)) && !('bbox' in fs.at(-1)));
+});
+
+test('lakeshore yields the lake cells shore pieces as LineStrings with their lake id', async () => {
+  const files = lakeSite();
+  const shore = [
+    [8, 44],
+    [10, 44],
+  ];
+  files['geo/h-lakes/8_44.json'].coast = [shore, shore];
+  files['geo/h-lakes/8_44.json'].cm = [7, 7];
+  const p = provider(source(files));
+  const view = viewAt(11, GENOA);
+  const fs = await collect(p.features(view, 'lakeshore'));
+  assert.deepEqual(
+    fs.map((f) => [f.id, f.geometry.type, f.geometry.coordinates]),
+    [
+      ['gshhg-h:7', 'LineString', shore],
+      ['gshhg-h:7', 'LineString', shore],
+    ],
+  );
+  assert.equal((await p.pending(view, 'lakeshore')).band, 'gshhg-h-lakes');
+  // without cm the pieces have no id
+  delete files['geo/h-lakes/8_44.json'].cm;
+  const bare = await collect(provider(source(files)).features(view, 'lakeshore'));
+  assert.ok(bare.every((f) => !('id' in f)));
+  // below the lake bands there is no whole file of shores: nothing, and nothing to fetch
+  const far = viewAt(9, GENOA);
+  assert.deepEqual(await collect(p.features(far, 'lakeshore')), []);
+  assert.deepEqual(await p.pending(far, 'lakeshore'), { band: null, cells: 0, bytes: 0 });
+  assert.equal(await p.loaded(far, 'lakeshore'), true);
+  assert.equal(p.bandFor(far, 'lakes'), 'ne-50m-lakes');
+});
+
+test('bandFor is sync: null until the indexes it turns on are read, then the band pending names', async () => {
+  const files = sites();
+  delete files['geo/h/index.json']; // the finest band's index fails: skipped, as drawing skips it
+  const p = provider(source(files));
+  const close = viewAt(11, GENOA),
+    far = viewAt(5, GENOA);
+  assert.equal(p.bandFor(far, 'land'), 'ne-50m-land', 'no band passed: the whole file, at once');
+  assert.equal(p.bandFor(close, 'land'), null, 'before any async call for the view');
+  assert.equal(p.bandFor(close, 'coastline'), null);
+  await collect(p.features(close, 'land'));
+  assert.equal(p.bandFor(close, 'land'), 'ne-10m-land');
+  const retry = p.pending(close, 'land'); // the next call retries the failed index: in flight again
+  assert.equal(p.bandFor(close, 'land'), null, 'null while the retry is in flight');
+  assert.equal((await retry).band, 'ne-10m-land', 'failed again: skipped again');
+  assert.equal(p.bandFor(close, 'land'), 'ne-10m-land');
+  assert.equal(p.bandFor(close, 'coastline'), 'ne-10m-land', 'the same cells, so the same answer');
+  assert.equal(p.bandFor(far, 'lakeshore'), null, 'no whole file of shores');
+  const whole = provider(source(sites()));
+  await collect(whole.features(close, 'land'));
+  assert.equal(whole.bandFor(close, 'land'), 'gshhg-h-land');
+  assert.throws(() => whole.bandFor(close, 'rivers'), /unknown layer/);
+});
