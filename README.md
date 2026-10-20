@@ -165,10 +165,21 @@ chart.rings(view, 'coastline'); // async iterable of rings, outer and holes flat
 chart.polygons(view, 'land'); // async iterable of polygons, each [outer, ...holes]
 chart.loaded(view, 'land'); // true when drawing fetches nothing
 chart.pending(view, 'land'); // { band, cells, bytes } a draw would fetch
+chart.bandFor(view, 'land'); // sync: the band's id, the whole file's id, or null while unknown
 ```
 
-`layer` is one of the catalogue's layers: `coastline`, `land`, `lakes` or `water`. `rings` and
-`polygons` are built on `features`.
+`layer` is one of the catalogue's layers, `coastline`, `land`, `lakes` or `water`, or `lakeshore`,
+the lake shores from the `lakes` cells (nothing below the lake bands). `rings` and `polygons` are
+built on `features`.
+
+A Feature from a band's cells carries what the cutter knew about the whole it is a piece of:
+
+| layer | Feature | carries |
+| --- | --- | --- |
+| `land` | Polygon | `properties: { km2, hue }` of the whole island |
+| `lakes`, a GSHHG piece | Polygon | `id: 'gshhg-h:<id>'` (the band, then GSHHG's number), `bbox` of the whole lake |
+| `lakes`, Natural Earth | Polygon | its own `id` and `properties`, as published |
+| `lakeshore` | LineString | `id` of its lake |
 
 **Deprecated:** the `kind` option of `provider({ read, kind })` (`'coast'`, `'land'`). It still
 works, maps to `layer` (`'coastline'`, `'land'`) as the default for calls that name none, and
