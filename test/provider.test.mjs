@@ -535,14 +535,24 @@ test('a GSHHG lake Feature has the lake id as id and the whole lake box as bbox,
   const alone = lakeSite();
   delete alone['geo/water-10m/index.json'];
   const plain = await collect(provider(source(alone)).features(viewAt(11, GENOA), 'lakes'));
-  assert.deepEqual(plain.map(lake), [{ id: 'gshhg:7', bbox: [8, 44, 10, 46], props: {} }]);
+  assert.deepEqual(plain.map(lake), [{ id: 'gshhg-h:7', bbox: [8, 44, 10, 46], props: {} }]);
   // the reconciled path: Natural Earth lakes keep their own id and properties, with no bbox added
   const both = await collect(provider(source(lakeSite())).features(viewAt(11, GENOA), 'lakes'));
   assert.deepEqual(both.map(lake), [
     { id: 1, bbox: undefined, props: { name: 'Island' } },
     { id: 2, bbox: undefined, props: { name: 'Far' } },
-    { id: 'gshhg:7', bbox: [8, 44, 10, 46], props: {} },
+    { id: 'gshhg-h:7', bbox: [8, 44, 10, 46], props: {} },
   ]);
+  // GSHHG numbers its polygons afresh at each resolution, so the id names the band's: the same
+  // number from the f band is another lake
+  const fine = lakeSite();
+  fine['geo/f-lakes/index.json'] = { cell: 0.5, cells: ['17_88'] };
+  fine['geo/f-lakes/17_88.json'] = { ...fine['geo/h-lakes/8_44.json'], coast: [], cm: undefined };
+  const f = await collect(provider(source(fine)).features(viewAt(13, GENOA), 'lakes'));
+  assert.deepEqual(
+    f.filter((x) => typeof x.id === 'string').map((x) => x.id),
+    ['gshhg-f:7'],
+  );
   // a piece without m is a bare Feature
   const bare = lakeSite();
   delete bare['geo/h-lakes/8_44.json'].m;
@@ -564,8 +574,8 @@ test('lakeshore yields the lake cells shore pieces as LineStrings with their lak
   assert.deepEqual(
     fs.map((f) => [f.id, f.geometry.type, f.geometry.coordinates]),
     [
-      ['gshhg:7', 'LineString', shore],
-      ['gshhg:7', 'LineString', shore],
+      ['gshhg-h:7', 'LineString', shore],
+      ['gshhg-h:7', 'LineString', shore],
     ],
   );
   assert.equal((await p.pending(view, 'lakeshore')).band, 'gshhg-h-lakes');

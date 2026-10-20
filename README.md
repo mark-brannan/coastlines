@@ -169,32 +169,17 @@ chart.bandFor(view, 'land'); // sync: the band's id, the whole file's id, or nul
 ```
 
 `layer` is one of the catalogue's layers, `coastline`, `land`, `lakes` or `water`, or `lakeshore`,
-the lake shores from the `lakes` cells. `rings` and `polygons` are built on `features`.
+the lake shores from the `lakes` cells (nothing below the lake bands). `rings` and `polygons` are
+built on `features`.
 
-A Feature from a band's cells carries what the cutter knew about the whole it is a piece of, so a
-consumer needs no cell-format code:
+A Feature from a band's cells carries what the cutter knew about the whole it is a piece of:
 
 | layer | Feature | carries |
 | --- | --- | --- |
-| `land` | Polygon | `properties: { km2, hue }` of the whole island (`{}` for a cell without them) |
-| `lakes`, a GSHHG piece | Polygon | `id: 'gshhg:<id>'`, `bbox: [x0, y0, x1, y1]` of the whole lake |
+| `land` | Polygon | `properties: { km2, hue }` of the whole island |
+| `lakes`, a GSHHG piece | Polygon | `id: 'gshhg-h:<id>'` (the band, then GSHHG's number), `bbox` of the whole lake |
 | `lakes`, Natural Earth | Polygon | its own `id` and `properties`, as published |
-| `lakeshore` | LineString | `id: 'gshhg:<id>'` of its lake |
-
-`lakeshore` has no whole file: below the lake bands (zoom 10) it yields nothing, `pending` reports
-`band: null` and `bandFor(view, 'lakes')` is the whole file's id. A Natural Earth lake's shore is
-its polygon's rings.
-
-`bandFor(view, layer)` is synchronous and reads the indexes already loaded: the id of the band the
-view would draw from, the whole file's id when the view has passed no band, and `null` while an
-index the choice turns on is not yet known. So it is `null` before the first async call for that
-view (`features`, `loaded` or `pending`) settles, and the same as `pending(view, layer).band` after.
-
-The cells themselves: a `{ land, coast }` cell holds `land`, polygons `[outer, ...holes]` clipped to
-the cell, and `coast`, shore lines split at the cell's edges. Beside them, per piece, `m[i]` for
-`land[i]` and `cm[i]` for `coast[i]`: in a land band `m[i]` is `[km2, hue]` of the whole island
-(`lib/island.js`), no `cm`; in a lake band `m[i]` is `[id, x0, y0, x1, y1]`, the lake's id and whole
-box, and `cm[i]` the shore piece's lake id. The provider reads these; a consumer need not.
+| `lakeshore` | LineString | `id` of its lake |
 
 **Deprecated:** the `kind` option of `provider({ read, kind })` (`'coast'`, `'land'`). It still
 works, maps to `layer` (`'coastline'`, `'land'`) as the default for calls that name none, and
