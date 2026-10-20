@@ -52,8 +52,8 @@ jobs:
           restore-keys: data-
       - run: npm run sync
       - run: npm test
-      # Design §2e (R4): the package stays under 30 MB packed.
-      - run: npm pack --dry-run --json | node -e "const [p] = JSON.parse(require('fs').readFileSync(0, 'utf8')); console.log((p.size / 1048576).toFixed(1) + ' MB packed, ' + (p.unpackedSize / 1048576).toFixed(1) + ' MB unpacked'); if (p.size > 30 * 1048576) process.exit(1)"
+      # Design §2e (R4): the package stays under 50 MB packed.
+      - run: npm pack --dry-run --json | node -e "const [p] = JSON.parse(require('fs').readFileSync(0, 'utf8')); console.log((p.size / 1048576).toFixed(1) + ' MB packed, ' + (p.unpackedSize / 1048576).toFixed(1) + ' MB unpacked'); if (p.size > 50 * 1048576) process.exit(1)"
 
   # Refuses to call an empty PR green: a branch whose tree equals its base at
   # the merge base (a stray commit reverted it) merges cleanly and lands

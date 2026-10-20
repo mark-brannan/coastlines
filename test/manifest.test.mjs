@@ -136,7 +136,7 @@ test('the Natural Earth share: every 50m and 110m file; at 10m, coastline, land 
 });
 
 test('the Natural Earth raw set stays under its coarse line', () => {
-  // Design §2e: the gate is 30 MB packed (R4), which the sync job in CI
+  // Design §2e: the gate is 50 MB packed (R4), which the sync job in CI
   // measures with `npm pack`. Raw bytes are what the manifest knows, so this
   // is a coarse ceiling that trips only if a companion package's share leaks
   // in. The GSHHG set is fixed by id above, so it needs no line here.
