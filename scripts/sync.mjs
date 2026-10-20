@@ -27,7 +27,7 @@
 // cache/ (gitignored, not in the package) keeps the inputs that are pinned but
 // never shipped -- the zip, and the Natural Earth files only a cut band draws
 // on -- so the next run and CI's cache need not fetch them again. data/ holds
-// the manifest's files alone: the package ships all of it, under a 30 MB cap.
+// the manifest's files alone: the package ships all of it, under a 50 MB cap.
 //
 // catalogue.json is checked against the manifest first (lib/bands.js drift): every record's
 // upstream, member and sha256 must be what its inputs pin, so the two cannot drift.
