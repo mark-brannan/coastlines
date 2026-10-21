@@ -1072,6 +1072,37 @@
     ]
   },
   {
+    "id": "ne-10m-geography-regions-polys",
+    "aliases": ["ne-geography-regions-polys-10m"],
+    "layer": "geography_regions_polys",
+    "zoom": {
+      "min": null,
+      "max": null,
+      "minInclusive": true
+    },
+    "grid": null,
+    "provenance": {
+      "upstream": [
+        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_geography_regions_polys.geojson"
+      ],
+      "member": [null],
+      "sha256": ["sha256:b7b26e50ea917d3696aec87f932def2bf5f890f5770e441d59c162c6f4c92a77"],
+      "licence": "public domain",
+      "version": "v5.1.2",
+      "date": "2022-05-13",
+      "caveat": null
+    },
+    "bytesPerCell": null,
+    "bytes": 5583870,
+    "inputs": ["ne-geography-regions-polys-10m"],
+    "sources": [
+      {
+        "kind": "file",
+        "url": "data/ne-geography-regions-polys-10m.geojson"
+      }
+    ]
+  },
+  {
     "id": "gshhg-h-land",
     "aliases": ["gshhg-land-h"],
     "layer": "land",

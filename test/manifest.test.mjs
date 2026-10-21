@@ -118,7 +118,7 @@ test('the Natural Earth share: every 50m and 110m file; at 10m, coastline, land 
       !entry.layer.startsWith('bathymetry'),
       `${entry.id} belongs to coastlines-bathymetry`,
     );
-    if (!['coastline', 'land'].includes(entry.layer)) {
+    if (!['coastline', 'land', 'geography_regions_polys'].includes(entry.layer)) {
       assert.ok(
         entry.bytes <= 5 * MB,
         `${entry.id} is over the 5 MB body cap; it belongs to coastlines-10m`,

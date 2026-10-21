@@ -54,8 +54,8 @@ draws.
 
 ## The catalogue
 
-36 files from two sources. From Natural Earth, every 50m and 110m file in
-the marine catalogue, and at 10m the coastline, the land and every other file
+37 files from two sources. From Natural Earth, every 50m and 110m file in
+the marine catalogue, and at 10m the coastline, the land, the named regions and every other file
 that fits a 5 MB response body; the rest of 10m and the bathymetry set belong
 to companion packages. From GSHHG 2.3.7, the "h" land polygons, the next rung
 of coastline above Natural Earth's 10m (vertex spacing median 707 m), as the
@@ -98,6 +98,7 @@ published shapefile, with the two licence notices that travel with it.
 | `ne-admin-0-disputed-areas-10m` | admin_0_disputed_areas | 10m | polygons | 685 KB | Honesty on the borders layer |
 | `ne-ports-10m` | ports | 10m | points | 273 KB | Harbours |
 | `ne-antarctic-ice-shelves-polys-10m` | antarctic_ice_shelves_polys | 10m | polygons | 548 KB | Polar context |
+| `ne-geography-regions-polys-10m` | geography_regions_polys | 10m | polygons | 5.3 MB | Named mountain ranges, deserts, plateaus, island groups |
 | `gshhg-land-h.shp` | land | h | polygons | 32.5 MB | Land, the GSHHS shoreline at high resolution; 144,749 polygons |
 | `gshhg-licence.txt` | — | — | — | 1 KB | The GSHHG copyright and permission notice; travels with every copy |
 | `gshhg-copying-lesser.txt` | — | — | — | 8 KB | The GNU Lesser General Public License, version 3 |
@@ -115,7 +116,7 @@ zip itself.
 
 | Where | What | Size | How it reaches you |
 | --- | --- | ---: | --- |
-| `data/` | the 36 files above | 78 MB, 29 MB packed | installed with the package |
+| `data/` | the 37 files above | 84 MB, 31 MB packed | installed with the package |
 | `geo/` | six cut bands, land and water in square cells | 549 MB | built by `npm run sync`; not shipped |
 | `cache/` | the GSHHG zip, six Natural Earth 10m water files | 167 MB | fetched once by sync, kept |
 
@@ -187,7 +188,7 @@ warns once. Name the layer on each call instead.
 
 ## The charts
 
-A plotter does not want 36 files; it wants a basemap to tick. `charts.json`
+A plotter does not want 37 files; it wants a basemap to tick. `charts.json`
 groups the files into three charts, each at one scale, and gives every layer
 its zoom range. `styles/<chart>.json` is a Mapbox style, hand-written, one
 per chart; the demo draws it over GeoJSON sources, and the plugin will serve
