@@ -98,7 +98,7 @@ published shapefile, with the two licence notices that travel with it.
 | `ne-admin-0-disputed-areas-10m` | admin_0_disputed_areas | 10m | polygons | 685 KB | Honesty on the borders layer |
 | `ne-ports-10m` | ports | 10m | points | 273 KB | Harbours |
 | `ne-antarctic-ice-shelves-polys-10m` | antarctic_ice_shelves_polys | 10m | polygons | 548 KB | Polar context |
-| `ne-geography-regions-elevation-points-10m` | geography_regions_elevation_points | 10m | points | 842 KB | Named peaks with heights |
+| `ne-geography-regions-elevation-points-10m` | geography_regions_elevation_points | 10m | points | 842 KB | Named peaks with heights in metres |
 | `gshhg-land-h.shp` | land | h | polygons | 32.5 MB | Land, the GSHHS shoreline at high resolution; 144,749 polygons |
 | `gshhg-licence.txt` | — | — | — | 1 KB | The GSHHG copyright and permission notice; travels with every copy |
 | `gshhg-copying-lesser.txt` | — | — | — | 8 KB | The GNU Lesser General Public License, version 3 |

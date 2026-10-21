@@ -366,7 +366,7 @@
       "layer": "geography_regions_elevation_points",
       "scale": "10m",
       "geometry": "points",
-      "about": "Named peaks with heights",
+      "about": "Named peaks with heights in metres",
       "bytes": 862686,
       "sha256": "sha256:f98a16867867146ec4146d6d4b18c823eeedb2825947de666116cf9a4e3f43cb"
     },
