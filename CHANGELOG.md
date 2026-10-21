@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.12-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.11-alpha.0...v0.0.12-alpha.0) (2026-10-21)
+
+
+### Added
+
+* **catalogue:** ship Natural Earth's 10m peak points ([#60](https://github.com/mark-brannan/coastlines/issues/60)) ([510417a](https://github.com/mark-brannan/coastlines/commit/510417a66bbec9730b9e01072e56f33037f1c644))
+
 ## [0.0.11-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.10-alpha.0...v0.0.11-alpha.0) (2026-10-20)
 
 
