@@ -361,6 +361,16 @@
       "sha256": "sha256:8f9bf62368695f5664b5fcd9bc0e2baea66da295aea014ce0e9cf510f209898d"
     },
     {
+      "id": "ne-geography-regions-polys-10m",
+      "source": "ne",
+      "layer": "geography_regions_polys",
+      "scale": "10m",
+      "geometry": "polygons",
+      "about": "Named mountain ranges, deserts, plateaus, island groups",
+      "bytes": 5583870,
+      "sha256": "sha256:b7b26e50ea917d3696aec87f932def2bf5f890f5770e441d59c162c6f4c92a77"
+    },
+    {
       "id": "gshhg-land-h",
       "source": "gshhg",
       "member": "GSHHS_shp/h/GSHHS_h_L1.shp",
