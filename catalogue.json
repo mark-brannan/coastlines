@@ -1072,6 +1072,37 @@
     ]
   },
   {
+    "id": "ne-10m-geography-regions-elevation-points",
+    "aliases": ["ne-geography-regions-elevation-points-10m"],
+    "layer": "geography_regions_elevation_points",
+    "zoom": {
+      "min": null,
+      "max": null,
+      "minInclusive": true
+    },
+    "grid": null,
+    "provenance": {
+      "upstream": [
+        "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_10m_geography_regions_elevation_points.geojson"
+      ],
+      "member": [null],
+      "sha256": ["sha256:f98a16867867146ec4146d6d4b18c823eeedb2825947de666116cf9a4e3f43cb"],
+      "licence": "public domain",
+      "version": "v5.1.2",
+      "date": "2022-05-13",
+      "caveat": null
+    },
+    "bytesPerCell": null,
+    "bytes": 862686,
+    "inputs": ["ne-geography-regions-elevation-points-10m"],
+    "sources": [
+      {
+        "kind": "file",
+        "url": "data/ne-geography-regions-elevation-points-10m.geojson"
+      }
+    ]
+  },
+  {
     "id": "gshhg-h-land",
     "aliases": ["gshhg-land-h"],
     "layer": "land",
