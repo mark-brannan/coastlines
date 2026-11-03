@@ -54,14 +54,15 @@ draws.
 
 ## The catalogue
 
-38 files from two sources. From Natural Earth, every 50m and 110m file in
-the marine catalogue, and at 10m the coastline, the land and every other file
-that fits a 5 MB response body; the rest of 10m and the bathymetry set belong
-to companion packages. The 10m region polygons (5.3 MB) are the one exception
-beside coastline and land: Portolani scatters its mountain glyphs inside
-them, and the 10m companion package does not exist yet. From GSHHG 2.3.7, the "h" land polygons, the next rung
-of coastline above Natural Earth's 10m (vertex spacing median 707 m), as the
-published shapefile, with the two licence notices that travel with it.
+38 files from two sources. From Natural Earth, every 50m and 110m file in the
+marine catalogue, and at 10m the coastline, the land and every other file that
+fits a 5 MB response body; the rest of 10m and the bathymetry set belong to
+companion packages. The 10m region polygons (5.3 MB) are the one exception
+beside coastline and land: Portolani scatters its mountain glyphs inside them,
+and the 10m companion package does not exist yet. From GSHHG 2.3.7, the "h"
+land polygons, the next rung of coastline above Natural Earth's 10m (vertex
+spacing median 707 m), as the published shapefile, with the two licence
+notices that travel with it.
 
 <!-- catalogue:start -->
 | Import `coastlines/data/…` | Layer | Scale | Geometry | Raw | Why a boat wants it |
