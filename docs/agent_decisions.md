@@ -84,3 +84,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261104t024814z
 - Weekly Mondays 06:17 UTC; job timeout 4 min; fetches bounded at 20+30+150 s so a hung host reads as unreachable first Undo: edit timeout-minutes, the curl bounds and the cron line (no PR, branch mirror-gshhg-release)
+
+### 20261104t024817z
+- Unreachable passes with a warning annotation and files no issue Undo: make the unreachable path exit 1 (no PR, branch mirror-gshhg-release)
