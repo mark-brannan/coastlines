@@ -81,3 +81,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261104t024811z
 - The check also runs on a PR that edits it, without filing issues, so its runner cost is measured before merge Undo: drop the pull_request trigger (no PR, branch mirror-gshhg-release)
+
+### 20261104t024814z
+- Weekly Mondays 06:17 UTC; job timeout 4 min; fetches bounded at 20+30+150 s so a hung host reads as unreachable first Undo: edit timeout-minutes, the curl bounds and the cron line (no PR, branch mirror-gshhg-release)
