@@ -87,7 +87,7 @@ out verdict changed
 
 # The issue the workflow files on "changed": its title (the dedupe key) and body.
 out title "GSHHG upstream changed: $candidate, sha256 ${got_sha256:0:12}"
-[[ -n "${GITHUB_OUTPUT:-}" ]] || exit 0
+[[ -n "${GITHUB_ACTIONS:-}" ]] || exit 0
 run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 cat >"$RUNNER_TEMP/gshhg-issue.md" <<EOF
 Upstream GSHHG no longer matches the mirrored pin, found by $run.
