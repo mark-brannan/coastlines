@@ -90,3 +90,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261104t024820z
 - Ran prettier on catalogue.json after the URL change, which rewrapped the longer lines Undo: revert the prettier pass (no PR, branch mirror-gshhg-release)
+
+### 20261104t042324z
+- GSHHG check step summary is one bullet per output Undo: revert the out() summary line ([#67](https://github.com/mark-brannan/coastlines/pull/67))
