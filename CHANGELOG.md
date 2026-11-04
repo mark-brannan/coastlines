@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.14-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.13-alpha.0...v0.0.14-alpha.0) (2026-11-04)
+
+
+### Added
+
+* **catalogue:** ship Natural Earth's 10m region polygons ([#61](https://github.com/mark-brannan/coastlines/issues/61)) ([0a8940e](https://github.com/mark-brannan/coastlines/commit/0a8940e8a4bf26929b7d6ea25ddb660fb0e7ef32))
+
 ## [0.0.13-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.12-alpha.0...v0.0.13-alpha.0) (2026-11-04)
 
 
