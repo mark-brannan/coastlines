@@ -75,3 +75,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261104t024806z
 - Upstream URL derived from sources.gshhg.site plus the newest gshhg-shp zip linked there; no new manifest field Undo: add an upstream field to manifest.json (no PR, branch mirror-gshhg-release)
+
+### 20261104t024808z
+- Changed opens an issue, not a PR: the zip cannot ride in a PR and adopting it needs a re-upload first Undo: switch the step to gh pr create (no PR, branch mirror-gshhg-release)
