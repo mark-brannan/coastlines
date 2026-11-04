@@ -87,3 +87,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261104t024817z
 - Unreachable passes with a warning annotation and files no issue Undo: make the unreachable path exit 1 (no PR, branch mirror-gshhg-release)
+
+### 20261104t024820z
+- Ran prettier on catalogue.json after the URL change, which rewrapped the longer lines Undo: revert the prettier pass (no PR, branch mirror-gshhg-release)
