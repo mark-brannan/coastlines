@@ -69,3 +69,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261104t024756z
 - Data release tag data-gshhg-2.3.7, a prerelease, not latest Undo: move to a tag the release-please config ignores (no PR, branch mirror-gshhg-release)
+
+### 20261104t024803z
+- catalogue.json upstream fields point at the mirror too, since sync checks they match the manifest url Undo: edit catalogue.json back (no PR, branch mirror-gshhg-release)
