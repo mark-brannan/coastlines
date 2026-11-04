@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Does the GSHHG zip upstream still match the one coastlines mirrors?
 #
-#   bash scripts/check-gshhg-upstream.sh
+#   bash scripts/check-gshhg-upstream.sh    (Linux: Debian CA path, GNU stat and sort)
 #
 # sync fetches the zip from this repository's data release (manifest.json
 # sources.gshhg.url), so a slow or broken upstream host no longer breaks CI.
@@ -31,13 +31,20 @@ out() { [[ -n "${GITHUB_OUTPUT:-}" ]] && echo "$1=$2" >>"$GITHUB_OUTPUT"; echo "
 
 # The upstream host has served its certificate without the emSign intermediate
 # (curl: unable to get local issuer certificate). Fetch that intermediate from
-# its AIA URL and trust it alongside the system store; if the fetch fails, try
-# with the system store alone.
+# its AIA URL and trust it alongside the system store. The AIA URL is plain HTTP
+# and curl treats every certificate in --cacert as an anchor, so the file is
+# trusted only when its sha256 matches the pin; otherwise, or if the fetch fails,
+# try with the system store alone.
+EMSIGN_P7C_SHA256=11c02b4b591a54aa057621e97e3aab79889c2d8ee3af50fdd3fcfa0fa6738521
 bundle="$work/ca.pem"
 cat /etc/ssl/certs/ca-certificates.crt >"$bundle"
 if curl -fsS --connect-timeout 10 --max-time 20 -o "$work/em.p7c" \
   http://repository.emsign.com/certs/EMIncommonOVG2C.p7c; then
-  openssl pkcs7 -inform DER -in "$work/em.p7c" -print_certs >>"$bundle" || true
+  if [[ "$(sha256sum "$work/em.p7c" | cut -d' ' -f1)" == "$EMSIGN_P7C_SHA256" ]]; then
+    openssl pkcs7 -inform DER -in "$work/em.p7c" -print_certs >>"$bundle" || true
+  else
+    echo "::warning::emSign intermediate does not match its pin; using the system store alone."
+  fi
 fi
 
 # Bounded so a hung host reads as unreachable before the job timeout (4 min) fires:
