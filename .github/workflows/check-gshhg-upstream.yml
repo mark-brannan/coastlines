@@ -1,0 +1,86 @@
+name: check-gshhg-upstream
+# Weekly: does upstream GSHHG still serve the zip coastlines mirrors as the
+# data-gshhg-<version> release? sync reads the mirror, so this job is the only
+# thing that talks to the upstream host.
+#
+#   same         pass; the mirror stands
+#   changed      open an issue naming the candidate version and its hash; a 149 MB
+#                zip cannot ride in a PR, and adopting it is a review, not a merge
+#   unreachable  pass with a warning; an outage says nothing about the data
+#
+# Cost: one job a week (plus one on a PR that edits this check), ~37 s measured
+# for a whole run, one 149 MB download.
+on:
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/check-gshhg-upstream.yml
+      - scripts/check-gshhg-upstream.sh
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    # The script bounds its fetches at 200 s, so a hung host reads as unreachable first.
+    timeout-minutes: 4
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v7
+        with: { persist-credentials: false }
+      - id: check
+        run: bash scripts/check-gshhg-upstream.sh
+      - name: Summary
+        env:
+          VERDICT: ${{ steps.check.outputs.verdict }}
+          PINNED: ${{ steps.check.outputs.pinned }}
+          CANDIDATE: ${{ steps.check.outputs.candidate }}
+          SHA256: ${{ steps.check.outputs.sha256 }}
+          BYTES: ${{ steps.check.outputs.bytes }}
+        run: |
+          {
+            echo "GSHHG upstream: **$VERDICT**"
+            if [[ -n "$CANDIDATE" ]]; then
+              echo "pinned $PINNED; upstream $CANDIDATE, $BYTES bytes, sha256 $SHA256"
+            fi
+          } >>"$GITHUB_STEP_SUMMARY"
+      # Issues only from the schedule or a dispatch: a PR run is a test of the check.
+      - name: Open a release-candidate issue
+        if: steps.check.outputs.verdict == 'changed' && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PINNED: ${{ steps.check.outputs.pinned }}
+          PINNED_BYTES: ${{ steps.check.outputs.pinned_bytes }}
+          PINNED_SHA256: ${{ steps.check.outputs.pinned_sha256 }}
+          CANDIDATE: ${{ steps.check.outputs.candidate }}
+          URL: ${{ steps.check.outputs.url }}
+          SHA256: ${{ steps.check.outputs.sha256 }}
+          BYTES: ${{ steps.check.outputs.bytes }}
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          title="GSHHG upstream changed: $CANDIDATE, sha256 ${SHA256:0:12}"
+          if gh issue list --state open --search "\"$title\" in:title" --json number -q '.[].number' | grep -q .; then
+            echo "already open: $title"; exit 0
+          fi
+          gh issue create --title "$title" --body "$(cat <<EOF
+          Upstream GSHHG no longer matches the mirrored pin, found by $RUN.
+
+          | | version | bytes | sha256 |
+          |---|---|---|---|
+          | pinned (manifest.json) | $PINNED | $PINNED_BYTES | \`$PINNED_SHA256\` |
+          | upstream candidate | $CANDIDATE | $BYTES | \`$SHA256\` |
+
+          Upstream zip: $URL
+
+          A release candidate, not adopted. To try it: download the zip, upload it to a
+          new \`data-gshhg-$CANDIDATE\` prerelease, point manifest.json sources.gshhg at
+          that asset with these bytes and sha256 (\`npm run sync:refresh\` re-pins the
+          entries), and open a PR whose CI and diff decide whether it is a valid update.
+          EOF
+          )"
