@@ -115,15 +115,17 @@ test('paths and URLs derive from the entry alone', () => {
   assert.equal(find('gshhg-l1'), undefined, 'an id this package does not mint');
 });
 
-test('the Natural Earth share: every 50m and 110m file; at 10m, coastline, land and what fits a 5 MB body', () => {
+test('the Natural Earth share: every 50m and 110m file; at 10m, coastline, land, region polygons and what fits a 5 MB body', () => {
   // Design 2026-10-10 §2e: the 10m files over the 5 MB body cap and the
-  // bathymetry set belong to the companion packages, not here.
+  // bathymetry set belong to the companion packages, not here. The region
+  // polygons (5.58 MB) ship here anyway: Portolani needs them and
+  // coastlines-10m does not exist yet (#61).
   for (const entry of atScale('10m')) {
     assert.ok(
       !entry.layer.startsWith('bathymetry'),
       `${entry.id} belongs to coastlines-bathymetry`,
     );
-    if (!['coastline', 'land'].includes(entry.layer)) {
+    if (!['coastline', 'land', 'geography_regions_polys'].includes(entry.layer)) {
       assert.ok(
         entry.bytes <= 5 * MB,
         `${entry.id} is over the 5 MB body cap; it belongs to coastlines-10m`,
