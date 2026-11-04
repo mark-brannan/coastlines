@@ -13,21 +13,27 @@
 #   unreachable  the site or the zip could not be fetched: says nothing about the data
 #
 # Exit status is 0 for every verdict; 2 only when the script itself is broken.
-# In GitHub Actions the verdict and the candidate go to $GITHUB_OUTPUT.
+# In GitHub Actions the verdict and the candidate go to $GITHUB_OUTPUT and the
+# step summary, and on "changed" the issue body to $RUNNER_TEMP/gshhg-issue.md.
 set -euo pipefail
 
 root=$(cd "$(dirname "$0")/.." && pwd)
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
 
-pin() { node -e "process.stdout.write(String(require('$root/manifest.json').sources.gshhg.$1))"; }
-version=$(pin version)
-bytes=$(pin bytes)
-sha256=$(pin sha256)
-sha256=${sha256#sha256:}
-site=$(pin site)
+read -r version bytes sha256 site < <(node -e "
+  const g = require('$root/manifest.json').sources.gshhg;
+  for (const k of ['version', 'bytes', 'sha256', 'site']) if (g[k] == null) throw new Error('sources.gshhg.' + k + ' missing');
+  console.log(g.version, g.bytes, g.sha256.replace(/^sha256:/, ''), g.site);") \
+  || { echo "cannot read sources.gshhg from manifest.json" >&2; exit 2; }
 
-out() { [[ -n "${GITHUB_OUTPUT:-}" ]] && echo "$1=$2" >>"$GITHUB_OUTPUT"; echo "$1: $2"; }
+out() {
+  if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
+    echo "$1=$2" >>"$GITHUB_OUTPUT"
+    echo "- $1: $2" >>"${GITHUB_STEP_SUMMARY:-/dev/null}"
+  fi
+  echo "$1: $2"
+}
 
 # The upstream host has served its certificate without the emSign intermediate
 # (curl: unable to get local issuer certificate). Fetch that intermediate from
@@ -47,8 +53,8 @@ if curl -fsS --connect-timeout 10 --max-time 20 -o "$work/em.p7c" \
   fi
 fi
 
-# Bounded so a hung host reads as unreachable before the job timeout (4 min) fires:
-# 20 + 30 + 150 s at most, against ~37 s measured for a whole run.
+# Bounded so a hung host reads as unreachable before the workflow's job timeout
+# fires: 20 + 30 + 150 s at most, against ~37 s measured for a whole run.
 get() { local max=$1; shift; curl -fsSL --cacert "$bundle" --connect-timeout 20 --max-time "$max" "$@"; }
 
 unreachable() {
@@ -69,14 +75,32 @@ got_bytes=$(stat -c %s "$work/$newest")
 got_sha256=$(sha256sum "$work/$newest" | cut -d' ' -f1)
 
 out pinned "$version"
-out pinned_bytes "$bytes"
-out pinned_sha256 "$sha256"
 out candidate "$candidate"
 out url "$zip_url"
 out bytes "$got_bytes"
 out sha256 "$got_sha256"
 if [[ "$candidate" == "$version" && "$got_bytes" == "$bytes" && "$got_sha256" == "$sha256" ]]; then
   out verdict same
-else
-  out verdict changed
+  exit 0
 fi
+out verdict changed
+
+# The issue the workflow files on "changed": its title (the dedupe key) and body.
+out title "GSHHG upstream changed: $candidate, sha256 ${got_sha256:0:12}"
+[[ -n "${GITHUB_ACTIONS:-}" ]] || exit 0
+run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+cat >"$RUNNER_TEMP/gshhg-issue.md" <<EOF
+Upstream GSHHG no longer matches the mirrored pin, found by $run.
+
+| | version | bytes | sha256 |
+|---|---|---|---|
+| pinned (manifest.json) | $version | $bytes | \`$sha256\` |
+| upstream candidate | $candidate | $got_bytes | \`$got_sha256\` |
+
+Upstream zip: $zip_url
+
+A release candidate, not adopted. To try it: download the zip, upload it to a
+new \`data-gshhg-$candidate\` prerelease, point manifest.json sources.gshhg at
+that asset with these bytes and sha256 (\`npm run sync:refresh\` re-pins the
+entries), and open a PR whose CI and diff decide whether it is a valid update.
+EOF
