@@ -23,13 +23,14 @@ trap 'rm -rf "$work"' EXIT
 
 read -r version bytes sha256 site < <(node -e "
   const g = require('$root/manifest.json').sources.gshhg;
-  console.log(g.version, g.bytes, g.sha256.replace(/^sha256:/, ''), g.site);")
-[[ -n "$site" ]] || { echo "cannot read sources.gshhg from manifest.json" >&2; exit 2; }
+  for (const k of ['version', 'bytes', 'sha256', 'site']) if (g[k] == null) throw new Error('sources.gshhg.' + k + ' missing');
+  console.log(g.version, g.bytes, g.sha256.replace(/^sha256:/, ''), g.site);") \
+  || { echo "cannot read sources.gshhg from manifest.json" >&2; exit 2; }
 
 out() {
   if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
     echo "$1=$2" >>"$GITHUB_OUTPUT"
-    echo "- $1: $2" >>"$GITHUB_STEP_SUMMARY"
+    echo "- $1: $2" >>"${GITHUB_STEP_SUMMARY:-/dev/null}"
   fi
   echo "$1: $2"
 }
