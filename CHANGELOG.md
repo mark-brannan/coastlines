@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.13-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.12-alpha.0...v0.0.13-alpha.0) (2026-11-04)
+
+
+### Fixed
+
+* **sync:** fetch the GSHHG zip from a data release, and check upstream weekly ([#64](https://github.com/mark-brannan/coastlines/issues/64)) ([1e22aac](https://github.com/mark-brannan/coastlines/commit/1e22aac3e486117cf3849b0b3a7ff95aa3e9f8ce))
+
 ## [0.0.12-alpha.0](https://github.com/mark-brannan/coastlines/compare/v0.0.11-alpha.0...v0.0.12-alpha.0) (2026-10-21)
 
 
