@@ -11,7 +11,7 @@
     "gshhg": {
       "name": "GSHHG",
       "version": "2.3.7",
-      "url": "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
+      "url": "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip",
       "bytes": 149157845,
       "sha256": "sha256:8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41",
       "licence": "LGPL-3.0-or-later",

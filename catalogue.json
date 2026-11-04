@@ -1148,9 +1148,9 @@
     },
     "provenance": {
       "upstream": [
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip"
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip",
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip",
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip"
       ],
       "member": ["GSHHS_shp/h/GSHHS_h_L1.shp", "LICENSE.TXT", "COPYING.LESSERv3"],
       "sha256": [
@@ -1190,7 +1190,9 @@
       "marginDeg": 0.25
     },
     "provenance": {
-      "upstream": ["https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip"],
+      "upstream": [
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip"
+      ],
       "member": ["GSHHS_shp/f/GSHHS_f_L1.shp"],
       "sha256": ["sha256:8dbbe7e071e77e9e75f2d639239099ebca8d5c16d6a07df8169729d49f15cf41"],
       "licence": "LGPL-3.0-or-later",
@@ -1311,10 +1313,10 @@
     },
     "provenance": {
       "upstream": [
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip"
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip",
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip",
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip",
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip"
       ],
       "member": [
         "GSHHS_shp/h/GSHHS_h_L2.shp",
@@ -1378,10 +1380,10 @@
     },
     "provenance": {
       "upstream": [
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip",
-        "https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip"
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip",
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip",
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip",
+        "https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip"
       ],
       "member": [
         "GSHHS_shp/f/GSHHS_f_L2.shp",

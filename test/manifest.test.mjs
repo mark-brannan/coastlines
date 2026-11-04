@@ -41,7 +41,12 @@ test('Natural Earth is one pinned release, not a branch', () => {
 test('GSHHG is one pinned zip, its own bytes and sha256 promised, under the LGPL', () => {
   const { gshhg } = manifest.sources;
   assert.equal(gshhg.version, '2.3.7');
-  assert.equal(gshhg.url, 'https://www.soest.hawaii.edu/pwessel/gshhg/gshhg-shp-2.3.7.zip');
+  // The zip is mirrored as a data release: the upstream host has failed CI on its
+  // certificate chain and on connect timeouts. check-gshhg-upstream.yml watches upstream.
+  assert.equal(
+    gshhg.url,
+    'https://github.com/mark-brannan/coastlines/releases/download/data-gshhg-2.3.7/gshhg-shp-2.3.7.zip',
+  );
   assert.ok(gshhg.url.includes(gshhg.version), 'the URL carries the version');
   assert.ok(Number.isInteger(gshhg.bytes) && gshhg.bytes > 100 * MB);
   assert.match(gshhg.sha256, /^sha256:[0-9a-f]{64}$/);
