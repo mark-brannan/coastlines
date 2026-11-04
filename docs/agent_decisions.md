@@ -66,3 +66,6 @@ heading is the UTC stamp, so `agent_decisions.md#<stamp>` links one entry.
 
 ### 20261020t213100z
 - A GSHHG lake Feature's GeoJSON id is '<source>-<scale>:<id>' (gshhg-h:145417): the band's id space from the catalogue grammar, then GSHHG's own polygon number, because GSHHG numbers polygons afresh per resolution (Caspian: 145417 in h, 180506 in f) and the shapefiles carry no ancestor id, so the PR's bare 'gshhg:<id>' named a different lake in each lake band Undo: change lakeId in lib/provider.js; nothing stores the id yet (portolani#200 not started) ([#56](https://github.com/mark-brannan/coastlines/pull/56))
+
+### 20261104t024756z
+- Data release tag data-gshhg-2.3.7, a prerelease, not latest Undo: move to a tag the release-please config ignores (no PR, branch mirror-gshhg-release)
